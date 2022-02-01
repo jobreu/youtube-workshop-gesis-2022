@@ -29,7 +29,34 @@ Participants should at least have some basic knowledge of `R` and, ideally, also
 
 ## Timetable
 
-| Time        | Topic       |
-| ----------- | ----------- |
-| Header      | Title       |
-| Paragraph   | Text        | 
+### Day 1
+
+| Time          | Topic                                   |
+| ------------- | --------------------------------------- |
+| 10:00 - 11:00 | Introduction                            |
+| 11:00 - 11:30 | *Break*                                 |
+| 11:00 - 11:30 | The *YouTube* API                       | 
+| 11:00 - 11:30 | *Lunch Break*                           | 
+| 11:00 - 11:30 | Collecting data with `tuber` for `R`    | 
+| 11:00 - 11:30 | *Break*                                 | 
+| 11:00 - 11:30 | Processing and cleaning user comments   | 
+
+### Day 2
+
+| Time          | Topic                                   |
+| ------------- | --------------------------------------- |
+| 10:00 - 11:00 | Basic text analysis of user comments    |
+| 11:00 - 11:30 | *Break*                                 |
+| 11:00 - 11:30 | Sentiment analysis of user comments     | 
+| 11:00 - 11:30 | *Lunch Break*                           | 
+| 11:00 - 11:30 | Excursus: Retrieving video subtitles    | 
+| 11:00 - 11:30 | *Break*                                 | 
+| 11:00 - 11:30 | Practice session, questions, & outlook  | 
+
+## Materials
+
+### Slides
+
+### Exercises
+
+### Solutions
