@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Automatic Sampling and Analysis of YouTube Data</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Julian Kohne Johannes Breuer M. Rohangis Mohseni" />
+    <meta name="date" content="2022-02-21" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <script src="libs/clipboard/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="libs/twitter-widget/widgets.js"></script>
+    <link rel="stylesheet" href="../workshop.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Automatic Sampling and Analysis of YouTube Data
+## Introduction
+### Julian Kohne<br />Johannes Breuer<br />M. Rohangis Mohseni
+### 2022-02-21
+
+---
+
+
+layout: true
+
+
+
+&lt;div class="my-footer"&gt;
+  &lt;div style="float: left;"&gt;&lt;span&gt;Julian Kohne, Johannes Breuer, M. Rohangis Mohseni&lt;/span&gt;&lt;/div&gt;
+  &lt;div style="float: right;"&gt;&lt;span&gt;GESIS, online, 2022-02-21&lt;/span&gt;&lt;/div&gt;
+  &lt;div style="text-align: center;"&gt;&lt;span&gt;Introduction&lt;/span&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+---
+
+# Goals of this course
+
+After this course you should be able to...
+  - automatically collect *YouTube* data
+  - process/clean it
+  - do some basic (exploratory) analyses of user comments
+
+---
+
+# About us
+
+### Julian Kohne
+
+- M.Sc. in Social Psychology, University of Groningen (NL)
+
+- Scientific Advisor in GESIS presidentidal staff / CSS department
+  - Main area: developments of GESIS in the area of digital behavioral data
+
+- PhD Student at University of Ulm / Stanford Social Media Lab
+  - Field: Social Psychology
+  - Topic: Quantifying interpersonal relationships with chat log data (*WhatsApp*)
+
+[julian.kohne@gesis.org](mailto:julian.kohne@gesis.org), [personal website](https://www.juliankohne.com/)
+
+---
+
+# About us
+
+### Johannes Breuer
+
+.small[
+- Senior researcher in the team *Data Augmentation* in the department *Survey Data Curation* at *GESIS*
+    - digital trace data for social science research
+    - data linking (surveys + digital trace data) 
+    
+- (Co-) Team leader of the team *Research Data &amp; Methods* at the *Center for Advanced Internet Studies* (CAIS)
+    
+- Ph.D. in Psychology, University of Cologne  
+
+- Previously worked in several research projects investigating the use and effects of digital media (Cologne, Hohenheim, Münster, Tübingen)  
+
+- Other research interests
+    - Computational methods
+    - Data management
+    - Open science
+
+[johannes.breuer@gesis.org](mailto:johannes.breuer@gesis.org), [@MattEagle09](https://twitter.com/MattEagle09), [personal website](https://www.johannesbreuer.com/)
+]
+
+---
+
+# About us
+
+### M. Rohangis Mohseni 
+
+- Postdoctoral researcher (Media Psychology) at TU Ilmenau
+
+- Ph.D. in Psychology, University Osnabrueck
+
+- Ongoing habilitation "sexist online hate speech" 👿
+
+- Other research interests
+  - Electronic media effects
+  - Moral behavior
+
+[rohangis.mohseni@tu-ilmenau.de](mailto:rohangis.mohseni@tu-ilmenau.de), [@romohseni](https://twitter.com/romohseni)
+
+---
+
+# About you
+
+- What's your name?  
+
+- Where do you work?  
+
+- What is your experience with `R`?
+
+- Why/how do you want to use *YouTube* for your research?
+
+
+---
+
+# Prerequisites for this course
+
+- Working version of `R` &gt;= 4.0.0 and a recent version of [RStudio](https://rstudio.com/products/rstudio/download/#download)
+
+- Some basic knowledge of `R`  
+
+- Interest in working with *YouTube* data
+
+---
+
+# Workshop Structure &amp; Materials
+
+- The workshop consists of a combination of lectures and hands-on exercises
+
+- Slides and other materials are available at
+
+[https://github.com/jobreu/youtube-workshop-gesis-2022](https://github.com/jobreu/youtube-workshop-gesis-2022)
+
+We also put the PDF versions of the slides and some other materials on the GESIS Ilias repository for this course.
+
+---
+
+# Zoom Etiquette
+
+- If possible, we invite you to turn on your camera (during the lecture and exercise parts); feel free to use a virtual background if you want to
+
+<blockquote class="twitter-tweet" align="center" data-width="400" data-lang="en" data-dnt="true" data-theme="dark"><p lang="en" dir="ltr">What presenting on Zoom feels like 😭 <a href="https://t.co/kZiPEwvH2g">pic.twitter.com/kZiPEwvH2g</a></p>&mdash; Not so Exhausted Anymore, Ph.D. (@PhdExhausted) <a href="https://twitter.com/PhdExhausted/status/1331956737683853318?ref_src=twsrc%5Etfw">November 26, 2020</a></blockquote>
+
+
+---
+
+# Zoom Etiquette
+
+- Please mute your microphones unless you are asking a question
+
+- Asking questions:
+  - If you have an immediate question, feel free to ask it via video/audio using the "raise hand" function in *Zoom* or via the text chat (private or public)
+  - If you have a question that is not urgent and might be interesting for everybody, please wait until the end of the lecture part, then use the "raise hand" function and ask your question via audio/video
+  - During the exercises you can also use "raise hand" + audio/video (if you have a question that might be interesting for others as well) or public or private text chat messages to ask questions
+
+- We will also try to provide (one-on-one) "tech support" during the exercises if that is needed (please contact us via the text chat in case you have any technical issues/questions that we can solve)
+
+---
+
+# Preliminaries: Base `R` vs. `tidyverse`
+
+In this course, we will use a mixture of base `R` and `tidyverse` code as Julian prefers base `R`, Johannes prefers the `tidyverse`, and Ro is agnostic.
+
+ICYC, here are some opinions [for](http://varianceexplained.org/r/teach-tidyverse/) and [against](https://blog.ephorie.de/why-i-dont-use-the-tidyverse) using/teaching the `tidyverse`.
+
+--
+
+Johannes' experience with learning and teaching the `tidyverse` is something like this...
+&lt;img src="./images/tidyverse_vs_baseR_meme.jpg" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+
+# The `tidyverse`
+
+If you've never seen `tidyverse` code, the most important thing to know is the `%&gt;%` [(pipe) operator](https://magrittr.tidyverse.org/reference/pipe.html). Put briefly, the pipe operator takes an object (which can be the result of a previous function) and pipes it as the first argument into the next function. This means that `function(data = x, value = y)` is equivalent to `x %&gt;% function(y)`.
+
+It may also be worthwhile to know/remember that `tidyverse` functions normally produce [`tibbles`](https://tibble.tidyverse.org/) which are a special type of dataframe (and most `tidyverse` functions also expect dataframes/tibbles as input to their first argument).
+
+--
+
+If you want a short primer (or need a quick refresher) on the `tidyverse`, you can check out the blog posts by [Martin Frigaard](http://www.storybench.org/getting-started-with-tidyverse-in-r/) or [Dominic Royé](https://dominicroye.github.io/en/2020/a-very-short-introduction-to-tidyverse/).
+
+---
+
+# Preliminaries: What's in a name?
+
+Another thing you might notice when looking at our code is that we love 🐍 as much as 🐫.
+
+&lt;img src="./images/camel_snake_kebab.jpg" width="75%" style="display: block; margin: auto;" /&gt;
+.center[
+&lt;small&gt;&lt;small&gt;Artwork by [Allison Horst](https://github.com/allisonhorst/stats-illustrations)&lt;/small&gt;&lt;/small&gt;
+]
+---
+# Course schedule
+
+.center[**Monday, February 21st, 2022**]
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:center;"&gt; When? &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; What? &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 10:00 - 11:00 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Introduction &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 11:00 - 11:30 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; &lt;i&gt;Coffee break&lt;/i&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 11:30 - 12:30 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; The YouTube API &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 12:30 - 13:30 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; &lt;i&gt;Lunch break&lt;/i&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 13:30 - 15:00 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Collecting data with the tuber package for R &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 15:00 - 15:30 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; &lt;i&gt;Coffee break&lt;/i&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 15:30 - 17:00 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Processing and cleaning user comments (in R) &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+# Course schedule
+
+.center[**Tuesday, February 22nd, 2022**]
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:center;"&gt; When? &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; What? &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 09:00 - 10:30 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Basic text analysis of user comments &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 10:30 - 11:00 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; &lt;i&gt;Coffee break&lt;/i&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 11:00 - 12:00 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Sentiment analysis of user comments &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 12:00 - 13:00 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; &lt;i&gt;Lunch break&lt;/i&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 13:00 - 14:00 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Excursus: Retrieving video subtitles &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 14:00 - 14:30 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; &lt;i&gt;Coffee break&lt;/i&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 14:30 - 16:00 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Practice session, questions, and outlook &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+# Why is *YouTube* relevant?
+
+- Largest / most important online video platform&lt;br /&gt;&lt;small&gt;([Alexa Traffic Ranks, 2019](https://www.alexa.com/topsites); [Konijn, Veldhuis, &amp; Plaisier, 2013](https://doi.org/10.1089/cyber.2012.0357))&lt;/small&gt;
+
+- Esp. popular among adolescents who use it to watch movies &amp; shows, listen to music, and retrieve information&lt;br /&gt;&lt;small&gt;([Feierabend, Plankenhorn, &amp; Rathgeb, 2016](https://www.mpfs.de/studien/kim-studie/2016/))&lt;/small&gt;
+
+- For adolescents, *YouTube* partly replaces TV&lt;br /&gt;&lt;small&gt;([Defy Media, 2017](http://www.newsroom-publicismedia.fr/wp-content/uploads/2017/06/Defi-media-acumen-Youth_Video_Diet-mai-2017.pdf))&lt;/small&gt;
+
+---
+
+# Why is *YouTube* data interesting for research?
+
+- Content producers and users generate huge amounts of data
+
+- Useful for research on media content, communicators, and user interaction
+
+- Data publicly available 
+
+- Relatively easy to retrieve via *YouTube* API
+
+---
+
+# Research Examples
+
+- What do people write (content)?
+  - Sexist Online Hate Speech&lt;br /&gt;&lt;small&gt;([Doering &amp; Mohseni, 2019a](https://doi.org/10.1080/14680777.2018.1467945), [2019b](https://doi.org/10.1080/08824096.2019.1634533),[2020](https://doi.org/10.5771/2192-4007-2020-1-62); [Thelwall &amp; Mas-Bleda, 2018](https://doi.org/10.1108/AJIM-09-2017-0204); [Wotanis &amp; McMillan, 2014](https://doi.org/10.1080/14680777.2014.882373))&lt;/small&gt;
+
+  - Comment characteristics&lt;br /&gt;&lt;small&gt;([Thelwall, Sud, &amp; Vis, 2012]( https://doi.org/10.1002/asi.21679))&lt;/small&gt;
+
+  - Subtopics, sentiments, &amp; gender differences&lt;br /&gt;&lt;small&gt;([Thelwall, 2017](https://doi.org/10.1080/13645579.2017.1381821); [Röchert, Neubaum, Ross, Brachten, &amp; Stieglitz, 2020](https://computationalcommunication.org/ccr/article/view/15/7))&lt;/small&gt;
+
+---
+
+# Research Examples
+
+- Who writes it (communicator)?
+    - User experiences&lt;br /&gt;&lt;small&gt;([Defy Media, 2017](http://www.newsroom-publicismedia.fr/wp-content/uploads/2017/06/Defi-media-acumen-Youth_Video_Diet-mai-2017.pdf); [Lange, 2007](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.170.3808&amp;rep=rep1&amp;type=pdf); [Moor, Heuvelman, &amp; Verleur, 2010](https://doi.org/10.1016/j.chb.2010.05.023); [Oksanen, Hawdon, Holkeri, Naesi, &amp; Raesaenen, 2014](https://doi.org/10.1108/S1537-466120140000018021); [Szostak, 2013](https://journals.mcmaster.ca/mjc/article/view/280); [Yang, Hsu, &amp; Tan, 2010](https://doi.org/10.1089/cyber.2009.0105))&lt;/small&gt;
+    
+    - Radicalization&lt;br /&gt;&lt;small&gt;([Ribeiro et al., 2020](https://doi.org/10.1145/3351095.3372879))&lt;/small&gt;
+    
+    - Filter bubble/Structural hierarchy&lt;br /&gt;&lt;small&gt;([Kaiser &amp; Rauchfleisch, 2020](https://doi.org/10.1177/2056305120969914); [Rieder et al., 2020](https://doi.org/10.5210/fm.v25i8.10667))
+
+---
+
+# Tools for the Automatic Sampling of YouTube Data without `R`
+
+- [YouTube Data Tools](https://tools.digitalmethods.net/netvizz/youtube/)
+
+- [Facepager](https://github.com/strohne/Facepager/wiki)
+
+- [Webometric Analyst](http://lexiurl.wlv.ac.uk/)
+
+Overviews of tools for collecting *YouTube* data
+
+- [YouTube Tools](https://github.com/Leibniz-HBI/Social-Media-Observatory/wiki/YouTube-Tools) collected by the Leibniz-HBI Social Media Observatory
+
+- [Social Media Research Tookit](https://socialmediadata.org/social-media-research-toolkit/) by the Social Media Lab at Ryerson University
+
+---
+
+# Tools for the Automatic Sampling of YouTube Data with `R`
+
+- [`vosonSML`](https://cran.r-project.org/web/packages/vosonSML/) (formerly SocialMediaLab)
+
+- [`tuber`](https://cran.r-project.org/web/packages/tuber/)
+
+In this course, we will work with the `tuber` package.
+
+---
+
+# Comparisons of Approaches for Collecting *YouTube* Data
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:center;"&gt; Method &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Manual Coding &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Webometric Analyst &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; YouTube Data Tools &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; tuber &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; Type &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; n/a &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Program &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Web service &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Package for R &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; Platforms &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; All &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Win &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; All &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Win, Mac, Linux, Unix &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; Collected Features &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Depends on coding scheme &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Channel Info, Video Info, Comments, Video Search &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Channel Info, Video Info, Comments, Video List &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Channel Info, Video Info, Comments, Subtitles, All searches &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; Scoping &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Depends on coding scheme &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 100 most recent or all comments &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; All comments &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 20-100 most recent or all comments &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+# Pros and Cons of Different Approaches
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:center;"&gt; Method &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Manual Coding &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Webometric Analyst &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; YouTube Data Tools &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; tuber &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; Need API Key? &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; No &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Yes &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; No &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Yes &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; Disadvantages &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Time-consuming &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Only first 5 follow-up comments, no error feedback, undetectable time-outs &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Lacking flexibility, fewer infos &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Only first 5 follow-up comments due to bug &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; Ease of Use &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; High &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Low &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; High &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Low &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; License &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; n/a &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Free for n/c &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Open Source &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Open Source &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; Example: Dayum Video (22-02-2019, 2pm) &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 47,163 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 44,828 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 47,153 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 44,810 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+[Dayum Video](https://www.youtube.com/watch?v=DcJFdCmN98s) / [tuber issue](https://github.com/soodoku/tuber/issues/52)
+
+---
+
+class: center, middle
+
+# Any questions so far?
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
