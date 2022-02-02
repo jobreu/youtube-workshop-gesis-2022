@@ -42,7 +42,7 @@ layout: true
 
 ---
 
-# Goals of this course
+## Goals of this course
 
 After this course you should be able to...
   - automatically collect *YouTube* data
@@ -51,7 +51,7 @@ After this course you should be able to...
 
 ---
 
-# About us
+## About us
 
 ### Julian Kohne
 
@@ -64,11 +64,11 @@ After this course you should be able to...
   - Field: Social Psychology
   - Topic: Quantifying interpersonal relationships with chat log data (*WhatsApp*)
 
-[julian.kohne@gesis.org](mailto:julian.kohne@gesis.org), [personal website](https://www.juliankohne.com/)
+[julian.kohne@gesis.org](mailto:julian.kohne@gesis.org), [@JuuuuKoooo](https://twitter.com/JuuuuKoooo), [personal website](https://www.juliankohne.com/)
 
 ---
 
-# About us
+## About us
 
 ### Johannes Breuer
 
@@ -93,7 +93,7 @@ After this course you should be able to...
 
 ---
 
-# About us
+## About us
 
 ### M. Rohangis Mohseni 
 
@@ -111,7 +111,7 @@ After this course you should be able to...
 
 ---
 
-# About you
+## About you
 
 - What's your name?  
 
@@ -124,7 +124,7 @@ After this course you should be able to...
 
 ---
 
-# Prerequisites for this course
+## Prerequisites for this course
 
 - Working version of `R` &gt;= 4.0.0 and a recent version of [RStudio](https://rstudio.com/products/rstudio/download/#download)
 
@@ -134,7 +134,7 @@ After this course you should be able to...
 
 ---
 
-# Workshop Structure &amp; Materials
+## Workshop Structure &amp; Materials
 
 - The workshop consists of a combination of lectures and hands-on exercises
 
@@ -146,7 +146,7 @@ We also put the PDF versions of the slides and some other materials on the GESIS
 
 ---
 
-# Zoom Etiquette
+## Zoom Etiquette
 
 - If possible, we invite you to turn on your camera (during the lecture and exercise parts); feel free to use a virtual background if you want to
 
@@ -155,7 +155,7 @@ We also put the PDF versions of the slides and some other materials on the GESIS
 
 ---
 
-# Zoom Etiquette
+## Zoom Etiquette
 
 - Please mute your microphones unless you are asking a question
 
@@ -168,7 +168,7 @@ We also put the PDF versions of the slides and some other materials on the GESIS
 
 ---
 
-# Preliminaries: Base `R` vs. `tidyverse`
+## Preliminaries: Base `R` vs. `tidyverse`
 
 In this course, we will use a mixture of base `R` and `tidyverse` code as Julian prefers base `R`, Johannes prefers the `tidyverse`, and Ro is agnostic.
 
@@ -181,19 +181,19 @@ Johannes' experience with learning and teaching the `tidyverse` is something lik
 
 ---
 
-# The `tidyverse`
+## The `tidyverse`
 
-If you've never seen `tidyverse` code, the most important thing to know is the `%&gt;%` [(pipe) operator](https://magrittr.tidyverse.org/reference/pipe.html). Put briefly, the pipe operator takes an object (which can be the result of a previous function) and pipes it as the first argument into the next function. This means that `function(data = x, value = y)` is equivalent to `x %&gt;% function(y)`.
+If you've never seen `tidyverse` code, the most important thing to know is the `%&gt;%` [(pipe) operator](https://magrittr.tidyverse.org/reference/pipe.html). Put briefly, the pipe operator takes an object (which can be the result of a previous function) and pipes it (by default) as the first argument into the next function. This means that `function(arg1 = x)` is equivalent to `x %&gt;% function()`.
 
 It may also be worthwhile to know/remember that `tidyverse` functions normally produce [`tibbles`](https://tibble.tidyverse.org/) which are a special type of dataframe (and most `tidyverse` functions also expect dataframes/tibbles as input to their first argument).
 
 --
 
-If you want a short primer (or need a quick refresher) on the `tidyverse`, you can check out the blog posts by [Martin Frigaard](http://www.storybench.org/getting-started-with-tidyverse-in-r/) or [Dominic Royé](https://dominicroye.github.io/en/2020/a-very-short-introduction-to-tidyverse/).
+If you want a short primer (or need a quick refresher) on the `tidyverse`, you can check out the blog [post by Dominic Royé](https://dominicroye.github.io/en/2020/a-very-short-introduction-to-tidyverse/). For a more in-depth exploration of the `tidyverse`, you can, e.g., have a look at the [workshop by Olivier Gimenez](https://oliviergimenez.github.io/intro_tidyverse/#1). And the book [*R for Data Science*](https://r4ds.had.co.nz/) by Hadley Wickham and Garrett Grolemund (which is available for free online) provides a very comprehensive introduction to the `tidyverse`
 
 ---
 
-# Preliminaries: What's in a name?
+## Preliminaries: What's in a name?
 
 Another thing you might notice when looking at our code is that we love 🐍 as much as 🐫.
 
@@ -246,7 +246,7 @@ Another thing you might notice when looking at our code is that we love 🐍 as 
 
 ---
 
-# Course schedule
+## Course schedule
 
 .center[**Tuesday, February 22nd, 2022**]
 &lt;table&gt;
@@ -290,7 +290,7 @@ Another thing you might notice when looking at our code is that we love 🐍 as 
 
 ---
 
-# Why is *YouTube* relevant?
+## Why is *YouTube* relevant?
 
 - Largest / most important online video platform&lt;br /&gt;&lt;small&gt;([Alexa Traffic Ranks, 2019](https://www.alexa.com/topsites); [Konijn, Veldhuis, &amp; Plaisier, 2013](https://doi.org/10.1089/cyber.2012.0357))&lt;/small&gt;
 
@@ -300,7 +300,7 @@ Another thing you might notice when looking at our code is that we love 🐍 as 
 
 ---
 
-# Why is *YouTube* data interesting for research?
+## Why is *YouTube* data interesting for research?
 
 - Content producers and users generate huge amounts of data
 
@@ -312,7 +312,7 @@ Another thing you might notice when looking at our code is that we love 🐍 as 
 
 ---
 
-# Research Examples
+## Research Examples
 
 - What do people write (content)?
   - Sexist Online Hate Speech&lt;br /&gt;&lt;small&gt;([Doering &amp; Mohseni, 2019a](https://doi.org/10.1080/14680777.2018.1467945), [2019b](https://doi.org/10.1080/08824096.2019.1634533),[2020](https://doi.org/10.5771/2192-4007-2020-1-62); [Thelwall &amp; Mas-Bleda, 2018](https://doi.org/10.1108/AJIM-09-2017-0204); [Wotanis &amp; McMillan, 2014](https://doi.org/10.1080/14680777.2014.882373))&lt;/small&gt;
@@ -323,7 +323,7 @@ Another thing you might notice when looking at our code is that we love 🐍 as 
 
 ---
 
-# Research Examples
+## Research Examples
 
 - Who writes it (communicator)?
     - User experiences&lt;br /&gt;&lt;small&gt;([Defy Media, 2017](http://www.newsroom-publicismedia.fr/wp-content/uploads/2017/06/Defi-media-acumen-Youth_Video_Diet-mai-2017.pdf); [Lange, 2007](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.170.3808&amp;rep=rep1&amp;type=pdf); [Moor, Heuvelman, &amp; Verleur, 2010](https://doi.org/10.1016/j.chb.2010.05.023); [Oksanen, Hawdon, Holkeri, Naesi, &amp; Raesaenen, 2014](https://doi.org/10.1108/S1537-466120140000018021); [Szostak, 2013](https://journals.mcmaster.ca/mjc/article/view/280); [Yang, Hsu, &amp; Tan, 2010](https://doi.org/10.1089/cyber.2009.0105))&lt;/small&gt;
@@ -334,7 +334,19 @@ Another thing you might notice when looking at our code is that we love 🐍 as 
 
 ---
 
-# Tools for the Automatic Sampling of YouTube Data without `R`
+## How to collect *YouTube* data
+
+There are many different ways in which data from *YouTube* and other social media can be collected (see [Breuer et al., 2020](https://journals.sagepub.com/doi/10.1177/1461444820924622)):
+
+- Manually (e.g., via copy &amp; paste or manual content analysis)
+
+- Using existing data, such as [*YouNiverse: Large-Scale Channel and Video Metadata from English YouTube*](https://zenodo.org/record/4650046) (also see the accompanying preprint by [Ribeiro &amp; West, 2021](https://arxiv.org/abs/2012.10378))
+
+- Automatically via the *YouTube* API or web scraping
+
+---
+
+## Tools for the Automatic Sampling of *YouTube* Data without `R`
 
 - [YouTube Data Tools](https://tools.digitalmethods.net/netvizz/youtube/)
 
@@ -344,15 +356,17 @@ Another thing you might notice when looking at our code is that we love 🐍 as 
 
 Overviews of tools for collecting *YouTube* data
 
-- [YouTube Tools](https://github.com/Leibniz-HBI/Social-Media-Observatory/wiki/YouTube-Tools) collected by the Leibniz-HBI Social Media Observatory
+- [YouTube Tools](https://smo-wiki.leibniz-hbi.de/YouTube-Tools) collected by the Leibniz-HBI Social Media Observatory
 
 - [Social Media Research Tookit](https://socialmediadata.org/social-media-research-toolkit/) by the Social Media Lab at Ryerson University
 
 ---
 
-# Tools for the Automatic Sampling of YouTube Data with `R`
+# Tools for the Automatic Sampling of *YouTube* Data with `R`
 
 - [`vosonSML`](https://cran.r-project.org/web/packages/vosonSML/) (formerly SocialMediaLab)
+
+- [`VOSONDash`](https://vosonlab.github.io/VOSONDash/)
 
 - [`tuber`](https://cran.r-project.org/web/packages/tuber/)
 
@@ -360,7 +374,7 @@ In this course, we will work with the `tuber` package.
 
 ---
 
-# Comparisons of Approaches for Collecting *YouTube* Data
+## Comparisons of Approaches for Collecting *YouTube* Data
 
 &lt;table&gt;
  &lt;thead&gt;
@@ -406,7 +420,7 @@ In this course, we will work with the `tuber` package.
 
 ---
 
-# Pros and Cons of Different Approaches
+## Pros and Cons of Different Approaches
 
 &lt;table&gt;
  &lt;thead&gt;
@@ -458,6 +472,35 @@ In this course, we will work with the `tuber` package.
 &lt;/table&gt;
 
 [Dayum Video](https://www.youtube.com/watch?v=DcJFdCmN98s) / [tuber issue](https://github.com/soodoku/tuber/issues/52)
+
+---
+
+## A note on using FOSS
+
+The tools listed before are free and open source software (FOSS). Using FOSS has many advantages (availability, adaptability, etc.). However, one risk associated with using FOSS is that tools are not maintained anymore and, hence, cease to function. After all, people create and maintain these tools in their spare time or as side projects and this work is often not recognized enough (esp. within academia). For this reason it is especially important to acknowledge the work that goes into these tools, e.g., by properly citing them.
+
+.small[
+
+```r
+citation("tuber")
+```
+
+```
+## 
+## To cite package 'tuber' in publications use:
+## 
+##   Gaurav Sood (). tuber: Access YouTube from R. R package version
+##   0.9.9.
+## 
+## Ein BibTeX-Eintrag für LaTeX-Benutzer ist
+## 
+##   @Manual{,
+##     title = {tuber: Access YouTube from R},
+##     author = {Gaurav SOod},
+##     note = {R package version 0.9.9},
+##   }
+```
+]
 
 ---
 
