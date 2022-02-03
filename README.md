@@ -25,7 +25,7 @@ Participants will learn how they can use *YouTube* data for their research. They
 
 ## Prerequisites
 
-Participants should at least have some basic knowledge of `R` and, ideally, also the `tidyverse`. Basic `R` knowledge can, for example, be acquired through the [*swirl* course "R Programming"](see https://swirlstats.com/) or the [*RStudio* Primer "Programming basics"](https://rstudio.cloud/learn/primers/1.2), both of which are available for free. There also are many brief online introductions to the `tidyverse`, such as this [blog post by Dominic Royé](https://dominicroye.github.io/en/2020/a-very-short-introduction-to-tidyverse/) or this [workshop by Olivier Gimenez](https://oliviergimenez.github.io/intro_tidyverse/#1).
+Participants should at least have some basic knowledge of `R` and, ideally, also the `tidyverse`. Basic `R` knowledge can, for example, be acquired through the *swirl* course "R Programming" (see https://swirlstats.com/) or the [*RStudio* Primer "Programming basics"](https://rstudio.cloud/learn/primers/1.2), both of which are available for free. There also are many brief online introductions to the `tidyverse`, such as this [blog post by Dominic Royé](https://dominicroye.github.io/en/2020/a-very-short-introduction-to-tidyverse/) or this [workshop by Olivier Gimenez](https://oliviergimenez.github.io/intro_tidyverse/#1).
 
 ## Timetable
 
