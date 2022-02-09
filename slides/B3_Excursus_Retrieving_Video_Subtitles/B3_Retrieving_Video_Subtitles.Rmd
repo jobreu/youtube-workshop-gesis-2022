@@ -60,7 +60,7 @@ pre {
 ---
 
 
-# Retrieving *YouTube* Video Subtitles
+## Retrieving *YouTube* Video Subtitles
 
 - Instead of transcribing a video, you can retrieve its subtitles via the *YouTube* API
 
@@ -68,7 +68,7 @@ pre {
 
 ---
 
-# Types of *YouTube* Subtitles
+## Types of *YouTube* Subtitles
 
 - Videos with automatically created subtitles (<i>ASR</i>)
 
@@ -88,13 +88,13 @@ pre {
 
 ---
 
-# Disclaimer
+## Disclaimer
 
 Due to a recent change to the *YouTube* API, the `tuber` function for retrieving video subtitles seems to only work for videos that were created with the same account as the app used for the API access (see this [closed `tuber` issue on GitHub](https://github.com/soodoku/tuber/issues/78). We will still discuss this function, but recommend that you use the [`youtubecaption` package](https://github.com/jooyoungseo/youtubecaption) for collecting subtitles for videos that you have not created yourself. 
 
 ---
 
-# Retrieving Video Subtitles with `tuber`
+## Retrieving Video Subtitles with `tuber`
 
 - Retrieve a list of subtitles with
 
@@ -104,7 +104,7 @@ Due to a recent change to the *YouTube* API, the `tuber` function for retrieving
   
 ---
 
-# Retrieving Video Subtitles with `tuber`
+## Retrieving Video Subtitles with `tuber`
 
 - First, we need to get the list of subtitles for a video
 
@@ -126,7 +126,7 @@ Due to a recent change to the *YouTube* API, the `tuber` function for retrieving
 
 ---
 
-# Converting Subtitles
+## Converting Subtitles
 
 - Subtitles come in a special format called SBV
 
@@ -144,7 +144,7 @@ Due to a recent change to the *YouTube* API, the `tuber` function for retrieving
 
 ---
 
-# Retrieving Video Subtitles with `youtubecaption`
+## Retrieving Video Subtitles with `youtubecaption`
 
 - Alternatively, you can retrieve captions with the package [`youtubecaption`](https://github.com/jooyoungseo/youtubecaption)
 
@@ -162,7 +162,7 @@ Due to a recent change to the *YouTube* API, the `tuber` function for retrieving
 
 ---
 
-# Time for a Short Live Demo
+## Time for a Short Live Demo
 
 ```{r cases, out.width = "75%"}
 include_graphics("./Images/youtubesubtitles.jpg")
