@@ -62,9 +62,9 @@ After this course you should be able to...
 - M.Sc. in Social Psychology, University of Groningen (NL)
 
 - Scientific Advisor in GESIS presidentidal staff / CSS department
-  - Main area: developments of GESIS in the area of digital behavioral data
+  - Main area: New developments of GESIS in the area of digital behavioral data
 
-- PhD Student at University of Ulm / Stanford Social Media Lab
+- PhD Student at University of Ulm
   - Field: Social Psychology
   - Topic: Quantifying interpersonal relationships with chat log data (*WhatsApp*)
 
