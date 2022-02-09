@@ -1,0 +1,330 @@
+---
+title: "Automatic Sampling and Analysis of YouTube Data"
+subtitle: "Setting Up Access to the YouTube API"
+author: "Julian Kohne<br />Johannes Breuer<br />M. Rohangis Mohseni"
+date: "2022-02-21"
+location: "GESIS, online"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: ["default", "default-fonts", "../workshop.css"]
+    nature:
+      highlightStyle: "github"
+      highlightLines: true
+      countIncrementalSlides: false
+      
+---
+layout: true
+
+<style>
+
+.center2 {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+</style>
+
+```{r setup, include = F}
+if (!require(easypackages)) install.packages("easypackages")
+library(easypackages)
+
+packages("knitr", "rmarkdown", "tidyverse", "kableExtra", "hadley/emo", "tuber", prompt = F)
+
+options(htmltools.dir.version = FALSE, stringsAsFactors = F)
+
+opts_chunk$set(echo = TRUE, fig.align = "center")
+
+xaringanExtra::use_xaringan_extra(c("tile_view", "clipboard"))
+xaringanExtra::use_extra_styles(hover_code_line = TRUE,
+                                mute_unhighlighted_code = FALSE)
+
+```
+
+<div class="my-footer">
+  <div style="float: left;"><span>`r gsub("<br />", ", ", gsub("<br /><br />|<a.+$", "", metadata$author))`</span></div>
+  <div style="float: right;"><span>`r metadata$location`, `r metadata$date`</span></div>
+  <div style="text-align: center;"><span>`r gsub(".+<br />", " ", metadata$subtitle)`</span></div>
+</div>
+
+---
+
+
+# Setting up API access to the *YouTube* API
+ 
+To effectively work with *YouTube* data, we need access to its Application Programming Interface (API). As this process, unfortunately, can be a bit tedious, we prepared this preliminary tutorial so you don't have to spend time setting up your API access during the workshop. Please follow this tutorial and check if the setup works before the workshop. If your setup does not work, feel free to contact us before the workshop (the sooner the better) and we'll try to assist you in setting up access to the *YouTube* API. If, for some reason, setting up access to the API does not work for you and we don't find a solution or if you cannot access the API during the workshop, we will have some data prepared that you can then work with in the workshop.
+
+Contact: [julian.kohne@gesis.org](mailto:julian.kohne@gesis.org)
+  
+[HINT](https://en.wikipedia.org/wiki/YouTube): Pink texts in the slides are hyperlinks that you can simply click on
+
+---
+# Setting up API Access
+  
+- For starters, you need a *Gmail* account
+- We suggest that you create a new account specifically for this workshop, so you don't mess up or accidentally share the credentials of your private or work account 
+
+- You can create a new account [here](https://accounts.google.com/signup/v2/webcreateaccount?service=mail&continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&ltmpl=googlemail&gmb=exp&biz=false&flowName=GlifWebSignIn&flowEntry=SignUp)
+
+- Next, you need to:
+  - Sign up for the *Google Developer Console*
+  - Create a new project
+  - Activate the Youtube Data API v3
+  - Create authentication credentials
+  - Test the credentials from R
+
+We will explain these steps in detail on the following slides.
+
+---
+# Google Developer Console
+  
+- Go to the [Developer Console](https://console.developers.google.com) and log in with your (new) *Google* Account
+- You need to accept the Google Developer ToS, can deselect the email updates, and click "Agree and continue".
+
+![plot](Images/0.png)
+---
+# Creating a Project
+
+-  After that, you can click on "select project" on the top left of the screen.
+
+![plot](Images/1.png)
+---
+# Creating a Project
+
+- In the pop-up window, click on "new project" to start a new project
+
+![plot](Images/2.png)
+---
+# Creating a Project
+
+- Enter a project name and click on "create"; you don't need to specify an organization
+
+![plot](Images/3.png)
+---
+# Activating YouTube Data API v3
+
+- On the next screen, go to your project by clicking on "Select Project" in the pop-up window on the top right
+
+![plot](Images/4.png)
+---
+# Activating YouTube Data API v3
+
+- On your project site, scroll down and click on "Explore and enable APIs"
+
+![plot](Images/5.png)
+---
+# Activating YouTube Data API v3
+
+- Next, click on the blue "Enable APIs and services" button on the top left side 
+
+![plot](Images/6.png)
+
+---
+# Activating YouTube Data API v3
+
+- On the next page, search for "youtube data api v3" and hit enter
+
+![plot](Images/7.png)
+---
+# Activating YouTube Data API v3
+
+- Select "YouTube Data API v3"
+
+![plot](Images/8.png)
+
+---
+# Activating YouTube Data API v3
+
+- On the next screen, click "enable" to activate the YouTube data API v3
+
+![plot](Images/9.png)
+
+---
+# Creating Credentials
+
+- On the next screen, click on "Create Credentials" on  the top right
+
+![plot](Images/10.png)
+
+---
+# Creating Credentials
+
+- On the next screen, select "YouTube Data API v3" and click on the "User Data" radio button, then click "next"
+
+![plot](Images/11.png)
+
+---
+# Creating Credentials
+
+- Next, specify an arbitrary App name and enter your own new Gmail address as the user support email and developer contact email. "Save and continue" afterwards
+![plot](Images/12.png)
+---
+# Creating Credentials
+
+- Click on "Add or removes scopes" next
+
+![plot](Images/13.png)
+
+---
+# Creating Credentials
+
+- Use the uppermost checkbox to select all scopes. Do that for every page of scopes using the arrow on the bottom right of the table. Afterwards, click on "update"
+
+![plot](Images/14.png)
+---
+# Creating Credentials
+
+- Next, click on "save and continue" to confirm your selection of scopes
+
+![plot](Images/15.png)
+---
+# Creating Credentials
+
+- Select "Desktop App" as the application type and specify the name of you set of crendentials (can be any name). Click on "Create" to confirm
+
+![plot](Images/16.png)
+---
+# Creating Credentials
+
+- On the bottom of the page, click on "Done" to finalize your changes
+
+![plot](Images/17.png)
+---
+# Creating Credentials
+
+- This should automatically bring you to the "OAuth Consent Screen" tab, where you should click on "Add Test Users"
+
+![plot](Images/18.png)
+---
+# Creating Credentials
+
+- In the sidebar panel opening from the right, enter your Gmail address as a test user and click on "save"
+
+![plot](Images/19.png)
+---
+# Creating Credentials
+
+- Next, go back to the credentials page using the menu on the left side
+
+![plot](Images/20.png)
+
+---
+# Creating Credentials
+
+- Click on the "Oauth 2.0 Client ID" name that you specified before
+
+![plot](Images/21.png)
+
+---
+# Creating Credentials
+
+- Congratulations! You now have your credentials! You can see your client ID and secret on the top right of the screen.
+
+![plot](Images/22.png)
+---
+# Testing Access
+
+- You can now safely try whether your *YouTube* API access works as intended by running the 
+  following commands in `R`. Please do *NOT* save an access token when prompted by R (see instructions in code comments)
+
+```{r eval = FALSE}
+# installing the tuber package if not installed already
+if("tuber" %in% installed.packages() != TRUE) {
+  install.packages("tuber")
+}
+
+# loading tuber package
+library(tuber)
+
+# Your Credentials (NEVER SHARE THIS INFORMATION)
+ID <- "ENTER-YOUR-CLIENT-ID-HERE"
+secret <- "ENTER-YOUR-CLIENT-SECRET-HERE"
+
+# authentication
+yt_oauth(ID,secret)
+
+# You will be asked in the R-console to
+# save an access token: Select "NO" by entering 2
+# You will be sent to your browser to log in
+
+```
+---
+# Grant yourself access
+
+- In the browser window that was opened from your R session, select your new Gmail account
+
+![plot](Images/23.png)
+---
+# Grant yourself access
+
+- Google warns you that the app has not been verified, you can trust yourself and click on "continue"
+
+![plot](Images/24.png)
+---
+# Grant yourself access
+
+- Allow the app (and hence yourself) to make changes to the account you created
+
+![plot](Images/25.png)
+---
+# Grant yourself access
+
+- confirm your choices once more by clicking on "Allow". Your browser should now display the following message:
+`Authentication complete. Please close this page and return to R`.
+
+![plot](Images/26.png)
+
+---
+# Test API call
+
+- To easily check if everything worked, let's try to collect some simple data for a video.
+
+```{r eval = FALSE}
+
+# get statistics of https://www.youtube.com/watch?v=HluANRwPyNo
+get_stats(video_id="HluANRwPyNo")
+
+```
+
+---
+# Output
+
+- If everything worked correctly, your output structure should look something like this.
+  The actual numbers will vary because they might change in the meantime.
+
+```{r eval = FALSE}
+$id
+[1] "HluANRwPyNo"
+
+$viewCount
+[1] "21275354"
+
+$likeCount
+[1] "1043372"
+
+$favoriteCount
+[1] "0"
+
+$commentCount
+[1] "37859"
+```
+---
+# A Few Words of Advice on Handling Your *YouTube API Access*
+
+- Have one account and project ready for the workshop for which you know that it works
+- Do not use your API access too excessively before the workshop to avoid any risk of it being suspended
+  
+- Never share your OAuth login credentials! This can easily happen by accident when:
+  - saving code in a GitHub Repo
+  - sending scripts to colleagues
+  - troubleshooting someone elses code
+  - for added security you can use the [`keyring` package](https://cran.r-project.org/web/packages/keyring/keyring.pdf) (we'll say a bit more about this in the workshop)
+ 
+---
+class: center, middle
+
+# We hope that you are now all set up and look forward to seeing you online!

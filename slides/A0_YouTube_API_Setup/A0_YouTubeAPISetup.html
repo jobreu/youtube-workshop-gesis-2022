@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Automatic Sampling and Analysis of YouTube Data</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Julian Kohne Johannes Breuer M. Rohangis Mohseni" />
+    <meta name="date" content="2022-02-21" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <script src="libs/clipboard/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../workshop.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Automatic Sampling and Analysis of YouTube Data
+## Setting Up Access to the YouTube API
+### Julian Kohne<br />Johannes Breuer<br />M. Rohangis Mohseni
+### 2022-02-21
+
+---
+
+layout: true
+
+&lt;style&gt;
+
+.center2 {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+&lt;/style&gt;
+
+
+
+&lt;div class="my-footer"&gt;
+  &lt;div style="float: left;"&gt;&lt;span&gt;Julian Kohne, Johannes Breuer, M. Rohangis Mohseni&lt;/span&gt;&lt;/div&gt;
+  &lt;div style="float: right;"&gt;&lt;span&gt;GESIS, online, 2022-02-21&lt;/span&gt;&lt;/div&gt;
+  &lt;div style="text-align: center;"&gt;&lt;span&gt;Setting Up Access to the YouTube API&lt;/span&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+---
+
+
+# Setting up API access to the *YouTube* API
+ 
+To effectively work with *YouTube* data, we need access to its Application Programming Interface (API). As this process, unfortunately, can be a bit tedious, we prepared this preliminary tutorial so you don't have to spend time setting up your API access during the workshop. Please follow this tutorial and check if the setup works before the workshop. If your setup does not work, feel free to contact us before the workshop (the sooner the better) and we'll try to assist you in setting up access to the *YouTube* API. If, for some reason, setting up access to the API does not work for you and we don't find a solution or if you cannot access the API during the workshop, we will have some data prepared that you can then work with in the workshop.
+
+Contact: [julian.kohne@gesis.org](mailto:julian.kohne@gesis.org)
+  
+[HINT](https://en.wikipedia.org/wiki/YouTube): Pink texts in the slides are hyperlinks that you can simply click on
+
+---
+# Setting up API Access
+  
+- For starters, you need a *Gmail* account
+- We suggest that you create a new account specifically for this workshop, so you don't mess up or accidentally share the credentials of your private or work account 
+
+- You can create a new account [here](https://accounts.google.com/signup/v2/webcreateaccount?service=mail&amp;continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&amp;ltmpl=googlemail&amp;gmb=exp&amp;biz=false&amp;flowName=GlifWebSignIn&amp;flowEntry=SignUp)
+
+- Next, you need to:
+  - Sign up for the *Google Developer Console*
+  - Create a new project
+  - Activate the Youtube Data API v3
+  - Create authentication credentials
+  - Test the credentials from R
+
+We will explain these steps in detail on the following slides.
+
+---
+# Google Developer Console
+  
+- Go to the [Developer Console](https://console.developers.google.com) and log in with your (new) *Google* Account
+- You need to accept the Google Developer ToS, can deselect the email updates, and click "Agree and continue".
+
+![plot](Images/0.png)
+---
+# Creating a Project
+
+-  After that, you can click on "select project" on the top left of the screen.
+
+![plot](Images/1.png)
+---
+# Creating a Project
+
+- In the pop-up window, click on "new project" to start a new project
+
+![plot](Images/2.png)
+---
+# Creating a Project
+
+- Enter a project name and click on "create"; you don't need to specify an organization
+
+![plot](Images/3.png)
+---
+# Activating YouTube Data API v3
+
+- On the next screen, go to your project by clicking on "Select Project" in the pop-up window on the top right
+
+![plot](Images/4.png)
+---
+# Activating YouTube Data API v3
+
+- On your project site, scroll down and click on "Explore and enable APIs"
+
+![plot](Images/5.png)
+---
+# Activating YouTube Data API v3
+
+- Next, click on the blue "Enable APIs and services" button on the top left side 
+
+![plot](Images/6.png)
+
+---
+# Activating YouTube Data API v3
+
+- On the next page, search for "youtube data api v3" and hit enter
+
+![plot](Images/7.png)
+---
+# Activating YouTube Data API v3
+
+- Select "YouTube Data API v3"
+
+![plot](Images/8.png)
+
+---
+# Activating YouTube Data API v3
+
+- On the next screen, click "enable" to activate the YouTube data API v3
+
+![plot](Images/9.png)
+
+---
+# Creating Credentials
+
+- On the next screen, click on "Create Credentials" on  the top right
+
+![plot](Images/10.png)
+
+---
+# Creating Credentials
+
+- On the next screen, select "YouTube Data API v3" and click on the "User Data" radio button, then click "next"
+
+![plot](Images/11.png)
+
+---
+# Creating Credentials
+
+- Next, specify an arbitrary App name and enter your own new Gmail address as the user support email and developer contact email. "Save and continue" afterwards
+![plot](Images/12.png)
+---
+# Creating Credentials
+
+- Click on "Add or removes scopes" next
+
+![plot](Images/13.png)
+
+---
+# Creating Credentials
+
+- Use the uppermost checkbox to select all scopes. Do that for every page of scopes using the arrow on the bottom right of the table. Afterwards, click on "update"
+
+![plot](Images/14.png)
+---
+# Creating Credentials
+
+- Next, click on "save and continue" to confirm your selection of scopes
+
+![plot](Images/15.png)
+---
+# Creating Credentials
+
+- Select "Desktop App" as the application type and specify the name of you set of crendentials (can be any name). Click on "Create" to confirm
+
+![plot](Images/16.png)
+---
+# Creating Credentials
+
+- On the bottom of the page, click on "Done" to finalize your changes
+
+![plot](Images/17.png)
+---
+# Creating Credentials
+
+- This should automatically bring you to the "OAuth Consent Screen" tab, where you should click on "Add Test Users"
+
+![plot](Images/18.png)
+---
+# Creating Credentials
+
+- In the sidebar panel opening from the right, enter your Gmail address as a test user and click on "save"
+
+![plot](Images/19.png)
+---
+# Creating Credentials
+
+- Next, go back to the credentials page using the menu on the left side
+
+![plot](Images/20.png)
+
+---
+# Creating Credentials
+
+- Click on the "Oauth 2.0 Client ID" name that you specified before
+
+![plot](Images/21.png)
+
+---
+# Creating Credentials
+
+- Congratulations! You now have your credentials! You can see your client ID and secret on the top right of the screen.
+
+![plot](Images/22.png)
+---
+# Testing Access
+
+- You can now safely try whether your *YouTube* API access works as intended by running the 
+  following commands in `R`. Please do *NOT* save an access token when prompted by R (see instructions in code comments)
+
+
+```r
+# installing the tuber package if not installed already
+if("tuber" %in% installed.packages() != TRUE) {
+  install.packages("tuber")
+}
+
+# loading tuber package
+library(tuber)
+
+# Your Credentials (NEVER SHARE THIS INFORMATION)
+ID &lt;- "ENTER-YOUR-CLIENT-ID-HERE"
+secret &lt;- "ENTER-YOUR-CLIENT-SECRET-HERE"
+
+# authentication
+yt_oauth(ID,secret)
+
+# You will be asked in the R-console to
+# save an access token: Select "NO" by entering 2
+# You will be sent to your browser to log in
+```
+---
+# Grant yourself access
+
+- In the browser window that was opened from your R session, select your new Gmail account
+
+![plot](Images/23.png)
+---
+# Grant yourself access
+
+- Google warns you that the app has not been verified, you can trust yourself and click on "continue"
+
+![plot](Images/24.png)
+---
+# Grant yourself access
+
+- Allow the app (and hence yourself) to make changes to the account you created
+
+![plot](Images/25.png)
+---
+# Grant yourself access
+
+- confirm your choices once more by clicking on "Allow". Your browser should now display the following message:
+`Authentication complete. Please close this page and return to R`.
+
+![plot](Images/26.png)
+
+---
+# Test API call
+
+- To easily check if everything worked, let's try to collect some simple data for a video.
+
+
+```r
+# get statistics of https://www.youtube.com/watch?v=HluANRwPyNo
+get_stats(video_id="HluANRwPyNo")
+```
+
+---
+# Output
+
+- If everything worked correctly, your output structure should look something like this.
+  The actual numbers will vary because they might change in the meantime.
+
+
+```r
+$id
+[1] "HluANRwPyNo"
+
+$viewCount
+[1] "21275354"
+
+$likeCount
+[1] "1043372"
+
+$favoriteCount
+[1] "0"
+
+$commentCount
+[1] "37859"
+```
+---
+# A Few Words of Advice on Handling Your *YouTube API Access*
+
+- Have one account and project ready for the workshop for which you know that it works
+- Do not use your API access too excessively before the workshop to avoid any risk of it being suspended
+  
+- Never share your OAuth login credentials! This can easily happen by accident when:
+  - saving code in a GitHub Repo
+  - sending scripts to colleagues
+  - troubleshooting someone elses code
+  - for added security you can use the [`keyring` package](https://cran.r-project.org/web/packages/keyring/keyring.pdf) (we'll say a bit more about this in the workshop)
+ 
+---
+class: center, middle
+
+# We hope that you are now all set up and look forward to seeing you online!
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
