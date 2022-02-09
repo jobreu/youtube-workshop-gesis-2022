@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Automatic Sampling and Analysis of YouTube Data</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Julian Kohne Johannes Breuer M. Rohangis Mohseni" />
+    <meta name="date" content="2022-02-21" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <script src="libs/clipboard/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../workshop.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Automatic Sampling and Analysis of YouTube Data
+## Excursus: Retrieving Video Subtitles
+### Julian Kohne<br />Johannes Breuer<br />M. Rohangis Mohseni
+### 2022-02-21
+
+---
+
+
+layout: true
+
+
+
+&lt;div class="my-footer"&gt;
+  &lt;div style="float: left;"&gt;&lt;span&gt;Julian Kohne, Johannes Breuer, M. Rohangis Mohseni&lt;/span&gt;&lt;/div&gt;
+  &lt;div style="float: right;"&gt;&lt;span&gt;GESIS, online, 2022-02-21&lt;/span&gt;&lt;/div&gt;
+  &lt;div style="text-align: center;"&gt;&lt;span&gt;Excursus: Retrieving Video Subtitles&lt;/span&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;style type="text/css"&gt;
+
+pre {
+  font-size: 10px
+}
+&lt;/style&gt;
+
+---
+
+
+# Retrieving *YouTube* Video Subtitles
+
+- Instead of transcribing a video, you can retrieve its subtitles via the *YouTube* API
+
+- What research would you conduct with video subtitles?
+
+---
+
+# Types of *YouTube* Subtitles
+
+- Videos with automatically created subtitles (&lt;i&gt;ASR&lt;/i&gt;)
+
+  - Always in English, even if video language is not English
+
+  - Can be downloaded, but text quality can be bad (especially if translated)
+
+- Videos without any subtitles
+
+  - Not sure if even possible because there always seems to be an &lt;i&gt;ASR&lt;/i&gt;
+  
+- Videos with more than one set of subtitles
+
+  - Examples: &lt;i&gt;ASR&lt;/i&gt; and regular subtitle, more than one language, more than one subtitle for the same language
+
+  - Can be downloaded, but subtitle for analysis must be selected
+
+---
+
+# Disclaimer
+
+Due to a recent change to the *YouTube* API, the `tuber` function for retrieving video subtitles seems to only work for videos that were created with the same account as the app used for the API access (see this [closed `tuber` issue on GitHub](https://github.com/soodoku/tuber/issues/78). We will still discuss this function, but recommend that you use the [`youtubecaption` package](https://github.com/jooyoungseo/youtubecaption) for collecting subtitles for videos that you have not created yourself. 
+
+---
+
+# Retrieving Video Subtitles with `tuber`
+
+- Retrieve a list of subtitles with
+
+  - `tuber::list_caption_tracks()`
+  
+- Quota costs ~ 50
+  
+---
+
+# Retrieving Video Subtitles with `tuber`
+
+- First, we need to get the list of subtitles for a video
+
+  `caption_list &lt;- list_caption_tracks(video_id = "nI_OfkQOG6Q")`
+
+- Next, we need to get the ID of the subtitles we want to collect
+
+  `ID &lt;- caption_list[1,"id"]`
+  
+- Adapt the number to select the subtitle that you want (ASR = automatic sub)
+
+- After that, we need to retrieve the subtitles and convert them from raw to char
+
+  `text &lt;- rawToChar(get_captions(id = ID, format = "sbv"))`
+
+- Now we can save the subtitles to a subtitle file
+
+  `write(text, file = "Captions.sbv", sep="\n")`
+
+---
+
+# Converting Subtitles
+
+- Subtitles come in a special format called SBV
+
+- The format contains time stamps etc. that we do not need for text analysis
+
+- We can read the format with the package [`subtools`](https://github.com/fkeck/subtools)
+
+ `subs &lt;- read_subtitles("Captions.sbv", format = "subviewer")`
+ 
+- With subtools, we can also retrieve the text from the subtitles
+
+  `subtext &lt;- get_raw_text(Subs)`
+
+- Now the text is ready for text analysis
+
+---
+
+# Retrieving Video Subtitles with `youtubecaption`
+
+- Alternatively, you can retrieve captions with the package [`youtubecaption`](https://github.com/jooyoungseo/youtubecaption)
+
+- **Pros**:
+
+  - No credentials necessary, therefore no quota reduction
+  
+  - Subtitles are automatically converted into a dataframe including texts and timestamps, so no manual conversion is needed
+  
+- **Cons**:
+
+  - If there is more than one subtitle version per language, there is no way to select a specific one
+  
+  - You need to install [*Anaconda*](https://www.anaconda.com/products/individual)
+
+---
+
+# Time for a Short Live Demo
+
+&lt;img src="./Images/youtubesubtitles.jpg" width="75%" style="display: block; margin: auto;" /&gt;
+
+**Note**: You can find the code for collecting subtitles for *YouTube* videos in the `YouTubeSubtitles.R` file in the `scripts` folder.
+
+---
+
+class: center, middle
+
+# Any (further) questions?
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
