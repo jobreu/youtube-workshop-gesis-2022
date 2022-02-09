@@ -361,7 +361,7 @@ Overviews of tools for collecting *YouTube* data
 
 - [`youtubecaption`](https://cran.r-project.org/web/packages/youtubecaption/)
 
-In this course, we will work with the `tuber` package.
+In this course, we will work with the `tuber` package. The *voson* packages focus more on network data (and analysis) and the `youtubecaption` is for collecting captions (which we will also briefly discuss later on in the workshop).
 
 ---
 
@@ -387,7 +387,7 @@ knitr::kable(
 
 ---
 
-## Pros and Cons of Different Approaches
+## Exemplary Comparison of the Different Tools
 
 ```{r tools table 2, echo = F}
 usability <- data.frame(

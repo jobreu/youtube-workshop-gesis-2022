@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Automatic Sampling and Analysis of YouTubeData</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Julian Kohne Johannes Breuer M. Rohangis Mohseni" />
+    <meta name="date" content="2022-02-21" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <script src="libs/clipboard/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="libs/twitter-widget/widgets.js"></script>
+    <script src="libs/kePrint/kePrint.js"></script>
+    <link href="libs/lightable/lightable.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../workshop.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Automatic Sampling and Analysis of YouTubeData
+## Collecting Data With the tuber Package for R
+### Julian Kohne<br /><b><i>Johannes Breuer</b></i><br />M. Rohangis Mohseni
+### 2022-02-21
+
+---
+
+
+layout: true
+
+
+
+&lt;div class="my-footer"&gt;
+  &lt;div style="float: left;"&gt;&lt;span&gt;Julian Kohne, &lt;b&gt;&lt;i&gt;Johannes Breuer&lt;/b&gt;&lt;/i&gt;, M. Rohangis Mohseni&lt;/span&gt;&lt;/div&gt;
+  &lt;div style="float: right;"&gt;&lt;span&gt;GESIS, online, 2022-02-21&lt;/span&gt;&lt;/div&gt;
+  &lt;div style="text-align: center;"&gt;&lt;span&gt;Collecting Data With the tuber Package for R&lt;/span&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+---
+
+## Collecting *YouTube* Data with `R`
+
+As stated in the Introduction, there are several packages for collecting *YouTube* data in `R`: [`tuber`](https://cran.r-project.org/web/packages/tuber/), [`vosonSML`](https://cran.r-project.org/web/packages/vosonSML/), [`VOSONDash`](https://vosonlab.github.io/VOSONDash/), and [`youtubecaption`](https://cran.r-project.org/web/packages/youtubecaption/).
+
+In this session, we will focus on working with the `tuber` package.
+
+---
+
+## The `tuber` Package
+
+With the [`tuber` package](https://github.com/soodoku/tuber) you can access the *YouTube* API via `R`. The author of the package has written a short [vignette](https://cran.r-project.org/web/packages/tuber/vignettes/tuber-ex.html) to introduce some of its main functions.
+
+*Note*: You can also access/open this vignette in `R`/*RStudio* with the following command:
+
+```r
+vignette("tuber-ex")
+```
+
+--
+
+Essentially, there are three main units of analysis for which you can access data with the `tuber` package:
+
+1. Videos
+1. Channels
+1. Playlists
+
+In this workshop, we will focus on accessing and working with data for individual **videos**.
+
+---
+
+## Setup
+
+
+```r
+remotes::install_github("soodoku/tuber", build_vignettes = TRUE)
+# this installs the development version of tuber from GitHub
+install.packages("tidyverse")
+library(tuber)
+library(tidyverse)
+```
+
+**NB**: If your version of `R` is &lt; 4.0.0, you should also run the following command before collecting data from the *YouTube* API:
+
+
+```r
+options(stringsAsFactors = FALSE)
+```
+
+---
+
+## Excursus: Keep Your Secrets Secret
+
+If you save your API credentials in an `R` script, anyone who has that script can potentially use your API key. This can affect your quota and might even cause costs for you (if you have billing enabled for your project).
+
+*Sidenote*: If you use [environment variables](https://stat.ethz.ch/R-manual/R-devel/library/base/html/EnvVar.html) in `R` and store your app ID and secret there, your credentials won't be shared if you share your scripts. However, the information is still stored locally in a plain text file. You can run `usethis::edit_r_environ()` to see its contents.
+
+---
+
+## Excursus: Keep Your Secrets Secret
+
+<blockquote class="twitter-tweet" align="center" data-width="400" data-lang="en" data-dnt="true" data-theme="dark"><p lang="en" dir="ltr">Sometimes google is protecting you...⤵️<br>(I forgot to delete my API key from my code 😱) <a href="https://t.co/7va0o19YmT">pic.twitter.com/7va0o19YmT</a></p>&mdash; Sil Aarts (@sil_aarts) <a href="https://twitter.com/sil_aarts/status/1187352423796477953?ref_src=twsrc%5Etfw">October 24, 2019</a></blockquote>
+
+
+---
+
+## Excursus: Keep Your Secrets Secret
+
+One way of keeping your credentials safe(r) is using the `keyring` package.
+
+
+```r
+install.packages("keyring")
+library(keyring)
+```
+
+---
+
+## Excursus: The `keyring` Package
+
+To store your credentials in an encrypted password-protected keyring you first need to create a new keyring.
+
+
+```r
+keyring_create("YouTube_API")
+```
+
+You will then be prompted to set a password for this keyring. As always: This password should be easy to remember (for you) but hard to guess (for anyone else). You might want to write it down or store it in your password manager. In the next step, you can store your *YouTube* app secret in the keyring (*Note*: If you want to, you can also store your app ID the same way).
+
+```r
+key_set("app_secret", 
+        keyring ="YouTube_API")
+```
+
+When you are prompted to enter the password this time you should enter your app secret. After that - as well as whenever you unlock a keyring to use the credentials stored inside - you should lock the keyring again.
+
+```r
+keyring_lock("YouTube_API")
+```
+
+---
+
+## Authenticate Your App
+
+
+```r
+yt_oauth(app_id = "my_app_id", # paste your app ID here
+         app_secret = "my_app_secret", # paste your app secret here
+         token="") # this indicates that thete is no .httr-oauth yet
+```
+or, if you stored your app secret in a keyring
+
+
+```r
+yt_oauth(app_id = "my_app_id",  # paste your app ID here
+         app_secret = key_get("app_secret", keyring ="YouTube_API"),
+         token="")
+```
+
+*Note*: If you use a keyring (and have not unlocked it before), you will be prompted to enter the password for that keyring in `R`/*RStudio*.
+
+---
+
+## Authentication
+
+When running the `yt_oauth()` function, there will be a prompt in the console asking you whether you want to save the access token in a file. If you select "Yes", `tuber` will create a local file (in your working directory) called `.httr-oauth` to cache [OAuth](https://en.wikipedia.org/wiki/OAuth) access credentials between `R` sessions. The token stored in this file will be valid for one hour (and can be automatically refreshed). Doing this makes sense if you know you will be running multiple `R` sessions that need your credentials (example: knitting an `R Markdown` document). Otherwise, you probably want to choose "No" here.
+
+*Note*: If you use `git` in combination with *GitHub* or *GitLab* for your *YouTube* data project, you might also want to add the `.httr-oauth` file (if you create one) to your `.gitignore`.
+
+---
+
+## Authentication
+
+Similar to the app key and secret, you should never share the `.httr-oauth` as the file contains a list with your app ID and the access token. If you have created a `.httr-oauth` file and want to check its contents, you can do so as follows in `R`:
+
+
+```r
+# read the .httr-oauth file
+token &lt;- readRDS("~/.httr-oauth") # this assumes the file is stored in your home directory; you may have to change the path
+# app ID
+token$`0123456789abcdefghij`$app$key # the token object is a list of tokens; the token for your app should be the only or last entry (the token name here is just a placeholder so you would need to replace it with the correct string)
+# app secret
+token$`0123456789abcdefghij`$app$secret
+# If you are unsure which token is the correct one, you can check out the name of the service it is for
+token$`0123456789abcdefghij`$app$appname
+```
+
+---
+
+## App Authorization (1)
+
+After making your choice regarding the `.httr-oauth` file, a browser window should open, prompting you to log in with your *Google* account and to give permissions.
+
+![plot](images/20.png)
+
+---
+
+## App Authorization (2)
+
+ *Google* will mark the app as unsecure as it has not been verified. However, since you created the app and presumably are its sole user, you can go ahead and trust yourself: Click "Extended".
+
+![plot](images/21.png)
+---
+
+## App Authorization (3)
+
+Click "Go to Name_of_your_app(unsafe)".
+
+![plot](images/22.png)
+
+---
+
+## App Authorization (4)
+
+Click "Allow" to grant the app the required permissions for this/your account.
+
+![plot](images/23.png)
+
+---
+
+## App Authorization (5)
+
+Click "Allow" again to confirm your choice
+
+![plot](images/24.png)
+
+---
+
+## App Authorization (6)
+
+After that, you can close the browser tab/window and return to `R`/*RStudio*.
+
+![plot](images/25.png)
+
+---
+
+## Channel Statistics (1)
+
+After authorizing your app, you can test if everything works by getting some statistics for a channel. You can find the channel ID by clicking on the user name for a video on the *YouTube* website (the channel ID is at the end of the URL, after "/channel/"), by using the [*Commentpicker* tool](https://commentpicker.com/youtube-channel-id.php) or directly through the API (see [this Stackoverflow discussion](https://stackoverflow.com/questions/14366648/how-can-i-get-a-channel-id-from-youtube/18665812#18665812)).
+
+
+
+
+```r
+gesis_stats &lt;- get_channel_stats("UCiQ98odXlAkX63EaFWNjH0g")
+```
+
+```
+## Channel Title: GESIS - Leibniz-Institut für Sozialwissenschaften 
+## No. of Views: 17259 
+## No. of Subscribers: 446 
+## No. of Videos: 71
+```
+
+*Note*: If you want additional data on channels/video creators and their performance on *YouTube*, you can also check out the statistics provided by [*Socialblade*](https://socialblade.com/youtube/).
+
+---
+
+## Channel Statistics (2)
+
+`get_channel_stats()` returns a list which can then be wrangled into a dataframe (or a [tibble](https://tibble.tidyverse.org/) as in the code below).
+
+.small[
+
+```r
+gesis_stats_df &lt;- gesis_stats$statistics %&gt;% 
+  as_tibble() %&gt;% 
+  mutate(
+    across(where(is.character), as.numeric),
+    channel_id = gesis_stats$id,
+    channel_name = gesis_stats$snippet$title,
+    channel_published = gesis_stats$snippet$publishedAt)
+
+gesis_stats_df
+```
+
+```
+## # A tibble: 1 x 7
+##   viewCount subscriberCount hiddenSubscriber~ videoCount channel_id channel_name
+##       &lt;dbl&gt;           &lt;dbl&gt; &lt;lgl&gt;                  &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       
+## 1     17259             446 FALSE                     71 UCiQ98odX~ GESIS - Lei~
+## # ... with 1 more variable: channel_published &lt;chr&gt;
+```
+]
+
+*Note*: You may also want to transform the `channel_published` column to a date variable. You can, e.g., do that using the [`lubridate`](https://lubridate.tidyverse.org/) or the [`anytime`](https://eddelbuettel.github.io/anytime/) package.
+
+---
+
+## Video Statistics
+
+To get statistics for a video you need its ID. The video IDs are the characters after the "v=" URL parameter. For example, for the video https://www.youtube.com/watch?v=DcJFdCmN98s the ID is "DcJFdCmN98s".
+
+
+```r
+dayum_stats &lt;- get_stats("DcJFdCmN98s")
+
+dayum_stats_df &lt;- dayum_stats %&gt;%
+  as_tibble() %&gt;% 
+  mutate(across(c(2:5), as.numeric))
+
+dayum_stats_df
+```
+
+```
+## # A tibble: 1 x 5
+##   id          viewCount likeCount favoriteCount commentCount
+##   &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;        &lt;dbl&gt;
+## 1 DcJFdCmN98s  43470486    635674             0        52617
+```
+
+*Note*: Until July 2021 it was also possible to get the dislike counts for videos. However, [access to that via the *YouTube* API has been disabled since then](https://support.google.com/youtube/thread/134791097/update-to-youtube-dislike-counts?hl=en). Those are also not visible anymore on the public video pages, only for the content creators.
+
+---
+
+## Video Details
+
+Using its ID, you can also get other information about a particular video, such as its description, using the `tuber` function `get_video_details()`.
+
+.small[
+
+```r
+dayum_details &lt;- get_video_details("DcJFdCmN98s",
+                                   as.data.frame = TRUE)
+# NB: The as.data.frame argument is only available in the development version of tuber
+
+names(dayum_details)
+```
+
+```
+##  [1] "response_kind"              "response_etag"             
+##  [3] "items_kind"                 "items_etag"                
+##  [5] "id"                         "publishedAt"               
+##  [7] "channelId"                  "title"                     
+##  [9] "description"                "thumbnails_default_url"    
+## [11] "thumbnails_default_width"   "thumbnails_default_height" 
+## [13] "thumbnails_medium_url"      "thumbnails_medium_width"   
+## [15] "thumbnails_medium_height"   "thumbnails_high_url"       
+## [17] "thumbnails_high_width"      "thumbnails_high_height"    
+## [19] "thumbnails_standard_url"    "thumbnails_standard_width" 
+## [21] "thumbnails_standard_height" "thumbnails_maxres_url"     
+## [23] "thumbnails_maxres_width"    "thumbnails_maxres_height"  
+## [25] "channelTitle"               "tags"                      
+## [27] "categoryId"                 "liveBroadcastContent"      
+## [29] "defaultLanguage"            "localized_title"           
+## [31] "localized_description"      "defaultAudioLanguage"      
+## [33] "pageInfo_totalResults"      "pageInfo_resultsPerPage"
+```
+]
+
+---
+
+## Video Details &amp; Statistics
+
+Using `get_video_details()` and specifying one additional argument, you can also get a dataframe including the video details as well as the video stats.
+
+.small[
+
+```r
+dayum_full_info &lt;- get_video_details("DcJFdCmN98s",
+                                   part = c("snippet", "statistics"),
+                                   as.data.frame = TRUE)
+
+names(dayum_full_info)
+```
+
+```
+##  [1] "response_kind"              "response_etag"             
+##  [3] "items_kind"                 "items_etag"                
+##  [5] "id"                         "publishedAt"               
+##  [7] "channelId"                  "title"                     
+##  [9] "description"                "thumbnails_default_url"    
+## [11] "thumbnails_default_width"   "thumbnails_default_height" 
+## [13] "thumbnails_medium_url"      "thumbnails_medium_width"   
+## [15] "thumbnails_medium_height"   "thumbnails_high_url"       
+## [17] "thumbnails_high_width"      "thumbnails_high_height"    
+## [19] "thumbnails_standard_url"    "thumbnails_standard_width" 
+## [21] "thumbnails_standard_height" "thumbnails_maxres_url"     
+## [23] "thumbnails_maxres_width"    "thumbnails_maxres_height"  
+## [25] "channelTitle"               "tags"                      
+## [27] "categoryId"                 "liveBroadcastContent"      
+## [29] "defaultLanguage"            "localized_title"           
+## [31] "localized_description"      "defaultAudioLanguage"      
+## [33] "statistics_viewCount"       "statistics_likeCount"      
+## [35] "statistics_favoriteCount"   "statistics_commentCount"   
+## [37] "pageInfo_totalResults"      "pageInfo_resultsPerPage"
+```
+]
+
+---
+
+## Viewer Comments
+
+There are two `tuber` functions for collecting viewer comments for specific videos (both return a dataframe by default):
+
+1. `get_comment_threads()` collects comments for a video. By default, it collects the 100 most recent comments. The number of comments can be changed with the argument `max_results` (needs to be &gt;= 20). If the number is &gt; 100, the function fetches all results (see `?get_comment_threads`). **NB:** This function does not collect replies to comments. Also, when we tested it, the resulting dataframe only contained repetitions of the 100 most recent comments when `max_results` &gt; 100.
+
+--
+
+2. `get_all_comments()` collects all comments for a video, including replies to comments. **NB:** This function only collects up to 5 replies per comment (the related [issue in the `tuber` GitHub repo](https://github.com/soodoku/tuber/issues/52) is still open). Depending on the number of comments for a video, running this function can take some time and might also deplete your API quota limit (more on that later).
+
+--
+
+Our recommendation is that if you want more than the most recent 100 comments, you should use `get_all_comments()`, even if you do not want to analyze replies to comments (you can simply filter those out later on).
+
+---
+
+class: center, middle
+
+# [Exercise](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/A3_tuber_exercises_question.html) time 🏋️‍♀️💪🏃🚴
+
+## [Solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/A3_tuber_exercises_solution.html)
+
+---
+
+## Collecting Comments for Multiple Videos
+
+If you want to collect comments for multiple videos, you need a vector with all video IDs (in the code example below, this vector is named `video_ids`). If you have that, you can use `map_df()` from the [`purrr` package](https://purrr.tidyverse.org/) to iterate over video IDs and create a combined dataframe (of course, you could also do this with a for-loop).
+
+
+```r
+comments &lt;- purrr::map_df(.x = video_ids,
+                          .f = get_all_comments)
+```
+
+**Important notice:** Be aware that your daily API quota limit very likely won't allow you to collect all comments for videos with a high number of comments (more on the API quota limit in a bit).
+
+---
+
+## Searching Video IDs with `tuber`
+
+`tuber` provides the function `yt_search()` for using the API to search *YouTube*. However, using this function is extremely costly in terms of API queries/quotas. 
+
+A single search query with the `yt_search()` function can easily exceed your daily quota limit as, by default, it returns data for all search results (you can check the number of results for a search query via the [*YouTube* Data API Explorer](https://developers.google.com/youtube/v3/docs/search/list)). Hence, if you want to use the `yt_search()` function, we would strongly recommend setting the `get_all` argument to `FALSE`. This returns up to 50 results.
+
+
+```r
+yt_search(term = "tidyverse",
+*         get_all = F)
+```
+
+---
+
+## Multiple search result pages (1)
+
+If you want to use `yt_search()` and want more than 50 search results, you can use the `page_token` argument to get more than one page of results.
+
+
+```r
+search_p1 &lt;- yt_search(term = "search term",
+*                      simplify = F,
+                       get_all = F)
+
+page_token &lt;-search_p1$nextPageToken
+
+search_p2 &lt;- yt_search(term = "search term",
+                       get_all = F,
+*                      page_token = page_token)
+```
+
+---
+
+## Multiple search result pages (2)
+
+.small[
+
+```r
+# turn search_p1 from a list into a dataframe
+search_p1_snippet &lt;- lapply(search_p1$items, function(x) unlist(x$snippet))
+search_p1_ids &lt;- lapply(search_p1$items, function(x) unlist(x$id))
+ids_p1_df&lt;- purrr::map_dfr(search_p1_ids, bind_rows)
+search_p1_df &lt;- purrr::map_dfr(search_p1_snippet, bind_rows)
+
+# combine search results from different pages into one dataframe
+search_results &lt;- bind_rows(search_p1_df, search_p2) %&gt;% 
+  mutate(videoId = case_when(is.na(videoId) ~ as.character(video_id),
+                             TRUE ~ as.character(videoId))) %&gt;% 
+  select(-video_id) %&gt;% 
+  relocate(videoId)
+```
+]
+
+---
+
+## Example: Two pages of search results
+
+.small[
+
+```r
+search_p1 &lt;- yt_search(term = "tidyverse",
+                       simplify = F,
+                       get_all = F)
+
+page_token &lt;-search_p1$nextPageToken
+
+search_p2 &lt;- yt_search(term = "tidyverse",
+                       get_all = F,
+                       page_token = page_token)
+
+search_p1_snippet &lt;- lapply(search_p1$items, function(x) unlist(x$snippet))
+search_p1_ids &lt;- lapply(search_p1$items, function(x) unlist(x$id))
+ids_p1_df&lt;- purrr::map_dfr(search_p1_ids, bind_rows) %&gt;% 
+  select(videoId)
+search_p1_df &lt;- purrr::map_dfr(search_p1_snippet, bind_rows) %&gt;% 
+  bind_cols(ids_p1_df)
+search_results &lt;- bind_rows(search_p1_df, search_p2) %&gt;% 
+  mutate(videoId = case_when(is.na(videoId) ~ as.character(video_id),
+                             TRUE ~ as.character(videoId))) %&gt;% 
+  select(-video_id) %&gt;% 
+  relocate(videoId)
+
+glimpse(search_results)
+```
+]
+
+---
+
+## Example: Two pages of search results
+
+.small[
+
+```
+## Rows: 100
+## Columns: 17
+## $ videoId                   &lt;chr&gt; "MKwyauo8nSI", "JtQfXY0lIzc", "1ELALQlO-yM",~
+## $ publishedAt               &lt;chr&gt; "2019-07-24T20:44:07Z", "2019-07-01T20:12:36~
+## $ channelId                 &lt;chr&gt; "UCHSE2ppBqDNPWH0ZHeqPotw", "UCsrrSPRVwOGDt1~
+## $ title                     &lt;chr&gt; "Intro to the Tidyverse", "Introduction to R~
+## $ description               &lt;chr&gt; "A quick walkthrough the Tidyverse: Includes~
+## $ thumbnails.default.url    &lt;chr&gt; "https://i.ytimg.com/vi/MKwyauo8nSI/default.~
+## $ thumbnails.default.width  &lt;chr&gt; "120", "120", "120", "120", "120", "120", "1~
+## $ thumbnails.default.height &lt;chr&gt; "90", "90", "90", "90", "90", "90", "90", "9~
+## $ thumbnails.medium.url     &lt;chr&gt; "https://i.ytimg.com/vi/MKwyauo8nSI/mqdefaul~
+## $ thumbnails.medium.width   &lt;chr&gt; "320", "320", "320", "320", "320", "320", "3~
+## $ thumbnails.medium.height  &lt;chr&gt; "180", "180", "180", "180", "180", "180", "1~
+## $ thumbnails.high.url       &lt;chr&gt; "https://i.ytimg.com/vi/MKwyauo8nSI/hqdefaul~
+## $ thumbnails.high.width     &lt;chr&gt; "480", "480", "480", "480", "480", "480", "4~
+## $ thumbnails.high.height    &lt;chr&gt; "360", "360", "360", "360", "360", "360", "3~
+## $ channelTitle              &lt;chr&gt; "Thomas Mock", "Mark Gingrass", "RStudio", "~
+## $ liveBroadcastContent      &lt;chr&gt; "none", "none", "none", "none", "none", "non~
+## $ publishTime               &lt;chr&gt; "2019-07-24T20:44:07Z", "2019-07-01T20:12:36~
+```
+]
+
+---
+
+## Searching Video IDs: Alternatives
+
+There are two alternatives to using the `yt_search()` function from the `tuber` package to search for *YouTube* video IDs:
+
+1. Manual search via the *YouTube* website: This works well for a small number of videos but is not really feasible if you want a large number of video IDs for your analyses.
+
+--
+
+2. Web scraping: [Freelon (2018)](https://www.tandfonline.com/doi/abs/10.1080/10584609.2018.1477506?journalCode=upcp20) argues that researchers interested in social media and other internet data should know/learn how to scrape the web in what he calls the "post-API age" (and a [paper by Mancosu &amp; Vegetti, 2020](https://dx.doi.org/10.1177/2056305120940703) makes a similar point). However, you should use this method with caution. The [robots.txt of *YouTube*](https://www.youtube.com/robots.txt) disallows the scraping of results pages. In practical terms, the (over)use of web scraping might, e.g., get your IP address blocked (at least temporarily). A complete introduction to web scraping would be beyond the scope of this workshop, but we have created some slides with a short tutorial (in the folder with the slides on the *YouTube* API) and there are many online tutorials on this (e.g., [this one](https://blog.rsquaredacademy.com/web-scraping/)). 
+
+---
+
+## Other Useful `tuber` Functions
+
+&lt;table class="table" style="font-size: 14px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Function &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Output &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; get_all_channel_video_stats('channel_id') &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; list with statistics for all videos in a channel &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; get_playlists(filter=c(channel_id='channel_id')) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; list with playlists for a channel &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; get_playlist_items(filter=c(playlist_id='playlist_id')) &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; dataframe with items from a playlist &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+For the full list of functions in the package, see the [`tuber` reference manual](https://cran.r-project.org/web/packages/tuber/tuber.pdf).
+
+--
+
+As always when using `R` (packages), it helps to check the documentation for the functions that you (want to) use. For example:
+
+```r
+?get_video_details
+?get_all_comments
+```
+
+---
+
+## YouTube API Quota Limits
+
+In order to be able to estimate the quota costs of a specific API call via the `tuber` package, you need to know the specific queries that the function you use produces. If you want to do this, you can print the function code (you can do this in `R` by executing the function name without `()` at the end: e.g., `get_stats`). You can then use the information from that code for the [Quota Calculator](https://developers.google.com/youtube/v3/determine_quota_cost) or the API Explorer (by checking the respective method in the [YouTube API documentation](https://developers.google.com/youtube/v3/docs/)). The help file for the function of interest can also be useful here (`?get_stats`).
+
+---
+
+## `tuber` Function Code
+
+
+```r
+get_stats
+```
+
+```
+## function (video_id = NULL, ...) 
+## {
+##     if (!is.character(video_id)) 
+##         stop("Must specify a video ID.")
+##     querylist &lt;- list(part = "statistics", id = video_id)
+##     raw_res &lt;- tuber_GET("videos", querylist, ...)
+##     if (length(raw_res$items) == 0) {
+##         warning("No statistics for this video are available.\n             Likely cause: Incorrect ID. \n")
+##         return(list())
+##     }
+##     res &lt;- raw_res$items[[1]]
+##     stat_res &lt;- res$statistics
+##     c(id = res$id, stat_res)
+## }
+## &lt;bytecode: 0x0000000029964b48&gt;
+## &lt;environment: namespace:tuber&gt;
+```
+
+---
+
+## Exemplary Quota Costs for `tuber` Functions
+
+&lt;table class="table" style="font-size: 14px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Function &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Costs &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; API resource &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; API method &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; API parts &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; get_channel_stats('channel_id') &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Channels &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; list &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; statistics,snippet &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; get_stats('video_id') &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Videos &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; list &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; statistics &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; get_comment_threads(filter = c(video_id = 'video_id'), max_results = 100) &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; CommentThreads &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; list &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; snippet &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+The costs increase with the number of returned items/results.
+
+For reference: `yt_search()` has a quota cost of 100 per page of results (with a default number of max. 50 results per page).
+
+---
+
+## How do I Know the Quota Costs When I use `tuber`?
+
+a) Estimate the costs based on costs for the specific query and the number of returned results. For example, if a video has 4000 comments and you wish to collect all of them, you can estimate your cost as follows: 100 results per page = 40 pages &amp; cost per page for `get_all_comments()` = 1 -&gt; overall cost = 40. In practice, this is a bit more difficult to estimate as both the website of the video and `get_stats()` give you the comment count including all replies, but `get_all_comments()` only returns up to 5 replies per comment.
+
+--
+
+b) If you want to check your API quota use, you can use the [*Google* Developer Console](https://console.developers.google.com): Choose your project, then on the *Dashboard* click on the name of the API in the list on the bottom (*YouTube Data API v3*), select *Quotas* from the menu on the left, and choose *Queries per minute* from the dropdown-menu for *Queries* as well as an appropriate timeframe (e.g., 6 hrs). **NB**: It takes a bit for the numbers to update after sending your API calls.
+
+---
+
+## Managing Your API Quota
+
+The daily quota for your app resets at midnight Pacific Time. There are 3 ways of dealing with the quota limit:
+
+1. Schedule your scripts. You can either do this manually (by splitting your data collection into batches and running the scripts on different days) or automatically (e.g., using the [taskScheduleR package](https://github.com/bnosac/taskscheduleR) for Windows or the [cronR package](https://github.com/bnosac/cronR) for Linux/Unix).
+
+2. Request an increase through the Quotas menu in the developer console for your app. However, this will quite likely cost money or might not work at all.
+
+3. Use multiple apps and/or accounts for your data collection. This requires some manual scheduling/planning. Keep in mind that there is a limited number of projects per account for the *Google* Cloud Platform. Note that - depending on your setup and use - this strategy might get your API quota, app(s), account(s) or IP address(es) suspended/blocked (at least temporarily) if employed excessively (and we can't put a number on what 'excessively' means here, so this is just a word of caution). 
+
+---
+
+## Alternatives to `tuber`
+
+If you want to collect user comments, an interesting alternative to `tuber` are the packages [`vosonSML`](https://github.com/vosonlab/vosonSML) and [`VOSONDash`](https://github.com/vosonlab/VOSONDash). The focus of both of those packages is on network analysis, but they can also be used to just collect user comments via the *YouTube* API. `VOSONDash` is essentially a graphical user interface (GUI) for `vosonSML` (note for the `R` nerds: it is an [`R Shiny`](https://shiny.rstudio.com/) web application). You can install these packages as follows:
+
+
+```r
+install.packages("vosonSML")
+install.packages("VOSONDash")
+```
+
+---
+
+## Authentication for the *voson* packages
+
+Unlike `tuber`, which requires the app/client ID and secret for authentication, the *voson* packages require an API key. You can create one via the *Google* Developer Console dashboard for your app.
+
+&lt;img src="./images/yt_api_key.png" width="1381" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Authentication for `vosonSML`
+
+Once you have created an API key for your app, you can authenticate as follows:
+
+
+```r
+library(vosonSML)
+
+youtube_auth &lt;- Authenticate("youtube", apiKey = "paste_your_api_key_here")
+```
+
+*Note*:  The `Authenticate()` function from the `vosonSML` package only creates a credential object in your local `R` environment.
+
+You can, of course, also use the functions from the `keyring` package for storing and accessing your API key.
+
+
+```r
+library(vosonSML)
+library(keyring)
+
+youtube_auth &lt;- Authenticate("youtube",
+                             apiKey = key_get("api_key",
+                                              keyring = "YouTube_API"))
+```
+
+---
+
+## Collecting comments with `vosonSML`
+
+With the `vosonSML` function `Collect()` you can collect comments for multiple videos.
+
+
+```r
+video_ids = c("-5wpm-gesOY", "8ZtInClXe1Q")
+
+comments &lt;- youtube_auth %&gt;%
+  Collect(videoIDs = video_ids,
+          maxComments = 100,
+          verbose = FALSE)
+```
+
+---
+
+## Collecting comments with `vosonSML`
+
+
+```
+## Collecting comment threads for youtube videos...
+## Video 1 of 2
+## ---------------------------------------------------------------
+## ** video Id: -5wpm-gesOY
+## -- API returned more than max comments. Results truncated to first 100 threads.
+## ** Collected threads: 100
+## 
+## Video 2 of 2
+## ---------------------------------------------------------------
+## ** video Id: 8ZtInClXe1Q
+## -- API returned more than max comments. Results truncated to first 100 threads.
+## ** Collected threads: 100
+## 
+## ** Total comments collected for all videos 200.
+## (Estimated API unit cost: 12)
+## Done.
+```
+
+---
+
+## Collecting comments with `vosonSML`
+
+
+```r
+glimpse(comments)
+```
+
+```
+## Rows: 200
+## Columns: 12
+## $ Comment               &lt;chr&gt; "this is still the best video on youtube", "i to~
+## $ AuthorDisplayName     &lt;chr&gt; "doomoftheend", "eggseventy", "Somnath Roy", "0x~
+## $ AuthorProfileImageUrl &lt;chr&gt; "https://yt3.ggpht.com/ytc/AKedOLTF_qufU1laYqnXw~
+## $ AuthorChannelUrl      &lt;chr&gt; "http://www.youtube.com/channel/UCpAZJFSj1rGvV1F~
+## $ AuthorChannelID       &lt;chr&gt; "UCpAZJFSj1rGvV1Fo9kNveng", "UCEcTr40Lpg6V-7I9Mt~
+## $ ReplyCount            &lt;chr&gt; "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"~
+## $ LikeCount             &lt;chr&gt; "0", "0", "0", "0", "1", "1", "0", "0", "1", "0"~
+## $ PublishedAt           &lt;chr&gt; "2022-01-20T16:02:13Z", "2022-01-20T06:25:06Z", ~
+## $ UpdatedAt             &lt;chr&gt; "2022-01-20T16:02:13Z", "2022-01-20T06:25:06Z", ~
+## $ CommentID             &lt;chr&gt; "UgzmGKtfrtfbAUUNb4p4AaABAg", "Ugyn9DaUJtePpNgEH~
+## $ ParentID              &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+## $ VideoID               &lt;chr&gt; "-5wpm-gesOY", "-5wpm-gesOY", "-5wpm-gesOY", "-5~
+```
+
+---
+
+## `VOSONDash`
+
+As stated before, `VOSONDash` provided a GUI for using the functionalities of `vosonSML`. You can simply launch it locally by loading the library and running a command to launch the `R Shiny` app.
+
+
+```r
+library(VOSONDash)
+
+runVOSONDash()
+```
+
+*Note*: You may have to install some additional libraries to run `VOSONDash`.
+
+---
+
+## Saving comment data
+
+Regardless of whether you collected *YouTube* comments using `tuber` or `vosonSML`, you can, of course, always export them into your format of choice, such as `.rds` or `.csv`.
+
+
+```r
+saveRDS(comments, file = "./data/comments.rds")
+
+readr::write_csv(comments, file = "./data/comments.csv")
+```
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
