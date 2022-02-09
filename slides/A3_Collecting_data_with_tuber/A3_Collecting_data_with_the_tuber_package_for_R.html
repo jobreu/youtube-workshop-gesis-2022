@@ -48,7 +48,7 @@ layout: true
 
 As stated in the Introduction, there are several packages for collecting *YouTube* data in `R`: [`tuber`](https://cran.r-project.org/web/packages/tuber/), [`vosonSML`](https://cran.r-project.org/web/packages/vosonSML/), [`VOSONDash`](https://vosonlab.github.io/VOSONDash/), and [`youtubecaption`](https://cran.r-project.org/web/packages/youtubecaption/).
 
-In this session, we will focus on working with the `tuber` package.
+In this session, we will focus on working with the `tuber` package. While `vosonSML` and `VOSONDash` are very powerful for generating (and analyzing) network data (and can also collect more comments per video as we will see later), `tuber` offers functions for collecting different types of data about channels, playlists, and videos.
 
 ---
 
@@ -194,48 +194,32 @@ token$`0123456789abcdefghij`$app$appname
 
 ## App Authorization (1)
 
-After making your choice regarding the `.httr-oauth` file, a browser window should open, prompting you to log in with your *Google* account and to give permissions.
-
-![plot](images/20.png)
-
----
-
-## App Authorization (2)
-
- *Google* will mark the app as unsecure as it has not been verified. However, since you created the app and presumably are its sole user, you can go ahead and trust yourself: Click "Extended".
-
-![plot](images/21.png)
----
-
-## App Authorization (3)
-
-Click "Go to Name_of_your_app(unsafe)".
-
-![plot](images/22.png)
-
----
-
-## App Authorization (4)
-
-Click "Allow" to grant the app the required permissions for this/your account.
+After making your choice regarding the `.httr-oauth` file, a browser window should open, prompting you to select/log in with your *Google* account and to give permissions.
 
 ![plot](images/23.png)
 
 ---
 
-## App Authorization (5)
+## App Authorization (2)
 
-Click "Allow" again to confirm your choice
+*Google* warns you that the app has not been verified, but you can trust yourself and click on "Continue".
 
 ![plot](images/24.png)
+---
+
+## App Authorization (3)
+
+Allow the app (and, hence, yourself) to make changes to the account.
+
+![plot](images/25.png)
 
 ---
 
-## App Authorization (6)
+## App Authorization (4)
 
 After that, you can close the browser tab/window and return to `R`/*RStudio*.
 
-![plot](images/25.png)
+![plot](images/26.png)
 
 ---
 
@@ -252,8 +236,8 @@ gesis_stats &lt;- get_channel_stats("UCiQ98odXlAkX63EaFWNjH0g")
 
 ```
 ## Channel Title: GESIS - Leibniz-Institut für Sozialwissenschaften 
-## No. of Views: 17259 
-## No. of Subscribers: 446 
+## No. of Views: 17293 
+## No. of Subscribers: 447 
 ## No. of Videos: 71
 ```
 
@@ -283,7 +267,7 @@ gesis_stats_df
 ## # A tibble: 1 x 7
 ##   viewCount subscriberCount hiddenSubscriber~ videoCount channel_id channel_name
 ##       &lt;dbl&gt;           &lt;dbl&gt; &lt;lgl&gt;                  &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       
-## 1     17259             446 FALSE                     71 UCiQ98odX~ GESIS - Lei~
+## 1     17293             447 FALSE                     71 UCiQ98odX~ GESIS - Lei~
 ## # ... with 1 more variable: channel_published &lt;chr&gt;
 ```
 ]
@@ -311,7 +295,7 @@ dayum_stats_df
 ## # A tibble: 1 x 5
 ##   id          viewCount likeCount favoriteCount commentCount
 ##   &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;        &lt;dbl&gt;
-## 1 DcJFdCmN98s  43470486    635674             0        52617
+## 1 DcJFdCmN98s  43472949    635721             0        52618
 ```
 
 *Note*: Until July 2021 it was also possible to get the dislike counts for videos. However, [access to that via the *YouTube* API has been disabled since then](https://support.google.com/youtube/thread/134791097/update-to-youtube-dislike-counts?hl=en). Those are also not visible anymore on the public video pages, only for the content creators.
@@ -404,9 +388,13 @@ There are two `tuber` functions for collecting viewer comments for specific vide
 
 2. `get_all_comments()` collects all comments for a video, including replies to comments. **NB:** This function only collects up to 5 replies per comment (the related [issue in the `tuber` GitHub repo](https://github.com/soodoku/tuber/issues/52) is still open). Depending on the number of comments for a video, running this function can take some time and might also deplete your API quota limit (more on that later).
 
---
+---
+
+## Viewer Comments
 
 Our recommendation is that if you want more than the most recent 100 comments, you should use `get_all_comments()`, even if you do not want to analyze replies to comments (you can simply filter those out later on).
+
+If you also care about replies to comments, a good alternative to `tuber::get_all_comments()` is the `Collect()` function from the `vosonSML` package (which we will talk about in a bit) as that collects up to 20 replies for each comment (instead of just 5 as the corresponding `tuber` function does).
 
 ---
 
@@ -627,7 +615,7 @@ get_stats
 ##     stat_res &lt;- res$statistics
 ##     c(id = res$id, stat_res)
 ## }
-## &lt;bytecode: 0x0000000029964b48&gt;
+## &lt;bytecode: 0x000000002994df58&gt;
 ## &lt;environment: namespace:tuber&gt;
 ```
 
@@ -682,7 +670,7 @@ a) Estimate the costs based on costs for the specific query and the number of re
 
 --
 
-b) If you want to check your API quota use, you can use the [*Google* Developer Console](https://console.developers.google.com): Choose your project, then on the *Dashboard* click on the name of the API in the list on the bottom (*YouTube Data API v3*), select *Quotas* from the menu on the left, and choose *Queries per minute* from the dropdown-menu for *Queries* as well as an appropriate timeframe (e.g., 6 hrs). **NB**: It takes a bit for the numbers to update after sending your API calls.
+b) If you want to check your API quota use, you can use the [*Google* Developer Console](https://console.developers.google.com): Choose your project, then select *IAM &amp; Admin* -&gt; *Quotas* from the menu on the left-hand side. The important information in the table is the one for the *YouTube Data API v3* quota for *Queries per day* (the limit should be 10000). If you want a more detailed visualizatioon, you can get that via the *Dashboard* in the *API &amp; Services*  menu: Click on the name of the API in the list on the bottom (*YouTube Data API v3*), select *Quotas* from the menu on the left, and choose *Queries per minute* from the dropdown-menu for *Queries* as well as an appropriate timeframe (e.g., 6 hrs). **NB**: It takes a bit for the numbers to update after sending your API calls.
 
 ---
 
@@ -759,10 +747,13 @@ comments &lt;- youtube_auth %&gt;%
           verbose = FALSE)
 ```
 
+*Note*: The `vosonSML::Collect()` function also gives you an estimated API cost.
+
 ---
 
 ## Collecting comments with `vosonSML`
 
+.small[
 
 ```
 ## Collecting comment threads for youtube videos...
@@ -782,11 +773,13 @@ comments &lt;- youtube_auth %&gt;%
 ## (Estimated API unit cost: 12)
 ## Done.
 ```
+]
 
 ---
 
 ## Collecting comments with `vosonSML`
 
+.small[
 
 ```r
 glimpse(comments)
@@ -808,6 +801,7 @@ glimpse(comments)
 ## $ ParentID              &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
 ## $ VideoID               &lt;chr&gt; "-5wpm-gesOY", "-5wpm-gesOY", "-5wpm-gesOY", "-5~
 ```
+]
 
 ---
 
