@@ -1,0 +1,76 @@
+---
+title: 'Exercises Excursus Screenscraping - Solutions'
+# title: 'Exercises Excursus Screenscraping' 
+author: 'Julian Kohne, Johannes Breuer, M. Rohangis Mohseni'
+date: 'Automatic sampling and analysis of YouTube data, February 24-25, 2021'
+output:
+  unilur::tutorial_html_solution: default
+  # unilur::tutorial_html: default
+---
+
+```{r knitr_init, echo=FALSE, cache=FALSE, include=FALSE}
+# custom boxes
+knitr::opts_template$set(clues = list(box.title = "Clues",
+                                      box.body = list(fill = "#fff9dc", colour = "black"),
+                                      box.header = list(fill = "#ffec8b", colour = "black"),
+                                      box.icon = "fa-search",
+                                      box.collapse = TRUE))
+
+```
+
+```{r klippy, echo=FALSE, include=TRUE}
+klippy::klippy()
+```
+
+```{block, box.title = "Exercise 1", box.body = list(fill = "white"), box.icon = "fa-star"}
+Install and load the `rvest` package. You can find more information about the package [here](https://cran.r-project.org/web/packages/rvest/rvest.pdf).
+```
+
+```{r, results = 'hide', solution = TRUE}
+
+# installing package
+install.packages("rvest", quiet = TRUE)
+
+# loading package
+library(rvest, warn.conflicts = FALSE, quietly = TRUE)
+
+```
+
+```{block, box.title = "Exercise 2", box.body = list(fill = "white"), box.icon = "fa-star"}
+Go to the Wikipedia entry for the most liked *YouTube* videos: https://en.wikipedia.org/wiki/List_of_most-liked_YouTube_videos and find the Xpath that corresponds to the whole table on the right side of the screen.
+```
+
+```{block, opts.label = "clues"}
+You can do this in Google Chrome by going to the website, right-clicking on the page and clicking on
+**inspect**. Alternatively, you can just press **Ctrl + Alt + I**. By expanding the containers and hovering your mouse over them, you can see which elements on the website they correspond to. To copy the Xpath of an element, right-click on the container and select **copy** -> **Copy full Xpath**. Be careful to select the HTML that encompasses the entire table and not only parts of it.
+```
+
+```{r, results = 'hide', solution = TRUE}
+TablePath <- "/html/body/div[3]/div[3]/div[5]/div[1]/table[1]"
+```
+
+```{block, box.title = "Exercise 3", box.body = list(fill = "white"), box.icon = "fa-star"}
+Using the Xpath, extract the information from the table.
+```
+
+```{block, opts.label = "clues"}
+Use the `read_html()`, `html_nodes()` and `html_table()` functions. You can read more about them in the Help panel in *RStudio* or by calling them preceded by a question mark (e.g., `?read_html()`).
+```
+
+```{r, results = 'hide' ,solution = TRUE}
+# Setting URL
+url <- "https://en.wikipedia.org/wiki/List_of_most-liked_YouTube_videos"
+
+# Reading HTML from URL
+html <- read_html(url)
+
+# Navigating to the HTML node with the table object
+Node <- html_nodes(html, xpath = TablePath)
+
+# Extracting the table and assigning it to an R object
+Table <- html_table(Node)
+
+# Unlisting the dataframe
+YouTubeData <- Table[[1]]
+
+```

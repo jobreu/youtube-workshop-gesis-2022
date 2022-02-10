@@ -273,7 +273,7 @@ class: center, middle
 
  We can construct all calls to the API according to the same logic
 
-.center[![plot](Images/API-call-construction.png)]
+![plot](Images/API-call-construction.png)
 
 ---
 # What is JSON?
@@ -323,7 +323,7 @@ class: center, middle
 
 - All possible resources for the *YouTube* API are listed [here](https://developers.google.com/youtube/v3/docs/)
 
-- For our workshop, the most important methods will be `search`, `Comments`, `CommentThreads`, and `videos`
+- For our workshop, the most important resources will be `search`, `Comments`, `CommentThreads`, and `videos`
 
 - Some information is only visible to owners of a channel or author of a video
 
@@ -332,7 +332,7 @@ class: center, middle
 - Public data requires an API key, getting user data requires OAuth2.0 authentication
 
 ---
-# Using it from R
+# Using the API from R
 
 - We can simplify the process of interacting with the YouTube API by using a dedicated `R` package
 
@@ -380,6 +380,29 @@ class: center, middle
 ![plot](Images/QuotaLimit_cut.png)
 
 #![plot](Images/Metrics.png)
+
+---
+# Exceeding the Rate Limit
+
+Once you reach your rate limit, the API will start to send back the following response until your rate limit is reset
+
+```
+{
+  "error": {
+    "code": 403,
+    "message": "The request cannot be completed because you have exceeded your \u003ca href=\"/youtube/v3/getting-started#quota\"\u003equota\u003c/a\u003e.",
+    "errors": [
+      {
+        "message": "The request cannot be completed because you have exceeded your \u003ca href=\"/youtube/v3/getting-started#quota\"\u003equota\u003c/a\u003e.",
+        "domain": "youtube.quota",
+        "reason": "quotaExceeded"
+      }
+    ]
+  }
+}
+
+```
+
 ---
 
 # Can I Increase my Rate Limit?
