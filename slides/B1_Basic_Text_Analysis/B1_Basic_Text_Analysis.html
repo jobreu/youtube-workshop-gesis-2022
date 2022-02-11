@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Automatic Sampling and Analysis of YouTubeData</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Julian Kohne Johannes Breuer M. Rohangis Mohseni" />
+    <meta name="date" content="2022-02-22" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <script src="libs/clipboard/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="libs/twitter-widget/widgets.js"></script>
+    <link rel="stylesheet" href="../workshop.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Automatic Sampling and Analysis of YouTubeData
+## Collecting Data With the tuber Package for R
+### Julian Kohne<br /><b><i>Johannes Breuer</b></i><br />M. Rohangis Mohseni
+### 2022-02-22
+
+---
+
+
+
+layout: true
+
+
+
+&lt;div class="my-footer"&gt;
+  &lt;div style="float: left;"&gt;&lt;span&gt;Julian Kohne, &lt;b&gt;&lt;i&gt;Johannes Breuer&lt;/b&gt;&lt;/i&gt;, M. Rohangis Mohseni&lt;/span&gt;&lt;/div&gt;
+  &lt;div style="float: right;"&gt;&lt;span&gt;GESIS, online, 2022-02-22&lt;/span&gt;&lt;/div&gt;
+  &lt;div style="text-align: center;"&gt;&lt;span&gt;Collecting Data With the tuber Package for R&lt;/span&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+---
+
+## Required Libraries for This Session
+
+
+```r
+library(tidyverse)
+library(lubridate)
+library(tuber)
+library(quanteda)
+library(quanteda.textstats)
+library(wordcloud)
+```
+
+We also need two libraries that are only available from *GitHub*. You can install them using the `install_github()` function from the `remotes` package.
+
+
+```r
+library(remotes)
+install_github("dill/emoGG")
+install_github("hadley/emo")
+library(emoGG)
+library(emo)
+```
+
+*Note*: [Emil Hvitfeldt](https://github.com/EmilHvitfeldt) has created the [`emoji` package](https://emilhvitfeldt.github.io/emoji/) which is based on the `emo` package and also available via *CRAN*.
+
+---
+
+## Collect &amp; Parse the Data
+
+*Note*: To save time and your *YouTube* API quota limit you might not want to "code along" in this session
+
+Step 1: Collecting the comments
+
+```r
+Comments &lt;- get_all_comments(video_id="r8pJt4dK_s4") # takes a while
+```
+
+--
+
+Step 2: Parse/process the comments
+
+For this to work, the script `yt_parse.R` as well as the ones containing the helper functions (`CamelCase.R`, `ExtractEmoji.R`, and `ReplaceEmoji.R`) need to be in the working directory (you can find those files in the `scripts` folder in the workshop materials).
+
+
+```r
+source("yt_parse.R")
+FormattedComments &lt;- yt_parse(Comments) # this will take a while
+```
+
+
+
+*Note*: As an alternative to sourcing the `yt_parse.R` file you can also "manually" run the code from the slides for the session on *Processing and Cleaning User Comments* on the collected comments.
+
+---
+
+## Comments Over Time: Data Wrangling 🤠
+
+For a first exploratory plot, we want to plot the development of the number of comments per week over time and show until when 50%, 75%, 90%, and 99% of the comments had been posted. This requires some data wrangling.
+
+
+```r
+FormattedComments &lt;- FormattedComments %&gt;% 
+  arrange(Published) %&gt;% 
+  mutate(date = date(Published),
+         week = floor_date(date, 
+                           unit = "week",
+                           week_start = getOption("lubridate.week.start", 1)),
+         counter = 1)
+
+weekly_comments &lt;- FormattedComments %&gt;% 
+  count(week) %&gt;% 
+  mutate(cumulative_count = cumsum(n))
+
+PercTimes &lt;- round(quantile(cumsum(FormattedComments$counter), 
+                            probs = c(0.5, 0.75, 0.9, 0.99)))
+```
+
+---
+
+## Comments Over Time: Plot
+
+
+```r
+weekly_comments %&gt;% 
+  ggplot(aes(x = week, y = n)) +
+  geom_bar(stat = "identity") +
+  scale_x_date(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0),
+                     limits = c(0,10000)) +
+  labs(title = "Number of comments over time",
+       subtitle = "THE EMOJI MOVIE - Official Trailer (HD)
+       \nhttps://www.youtube.com/watch?v=r8pJt4dK_s4",
+       x = "Week",
+       y = "# of comments") +
+  geom_vline(xintercept = FormattedComments$week[PercTimes],linetype = "dashed", colour = "red") +
+  geom_text(aes(x = FormattedComments$week[PercTimes][1], label = "50%", y = 3500),
+            colour="red", angle=90, vjust = 1.2) +
+  geom_text(aes(x = FormattedComments$week[PercTimes][2], label = "75%", y = 3500),
+            colour="red", angle=90, vjust = 1.2) +
+  geom_text(aes(x = FormattedComments$week[PercTimes][3], label = "90%", y = 3500),
+            colour="red", angle=90, vjust = 1.2) +
+  geom_text(aes(x = FormattedComments$week[PercTimes][4], label = "99%", y = 3500), 
+            colour="red", angle=90, vjust = 1.2)
+```
+
+---
+
+## Number of Comments Over Time: Plot
+
+&lt;img src="B1_Basic_Text_Analysis_files/figure-html/comments-over-time-plot-1.png" width="700px" height="500px" style="display: block; margin: auto;" /&gt;
+---
+
+## Most Popular Comments
+
+Which comments received the highest number of likes?
+
+
+```r
+FormattedComments %&gt;% 
+  arrange(-LikeCount) %&gt;% 
+  head(10) %&gt;% 
+  select(Text, LikeCount, Published)
+```
+
+---
+
+## Most Popular Comments
+
+Which comments received the highest number of likes?
+
+.smaller[
+
+```
+##                                                                                                          Text
+## 1                                                                 Will they show Snapchat nudes in the movie?
+## 2                                                                                 The Meme Movie: Coming 2020
+## 3                                             Lmao the egg plant emoji never gets used? Do your research lmao
+## 4                                                        The book is so much better because it doesn’t exist.
+## 5                                           This movie reeks of board room meetings on what kids find "cool".
+## 6                                               I believe everyone intentionally looked this up to dislike it
+## 7                                                                   The eggplant emoji never used? Suuuuuree.
+## 8  So, this thing is still a thing? Ugh, I can't really still believe that you cancelled that Popeye movie...
+## 9                                                                                  This is the best part 2:38
+## 10                                                                   They cancelled the popeye movie for this
+##    LikeCount           Published
+## 1       4344 2017-05-16 15:38:40
+## 2       3194 2017-10-16 04:08:12
+## 3       2968 2017-05-16 23:55:38
+## 4       2026 2020-10-30 15:08:17
+## 5       1598 2017-05-16 22:40:13
+## 6       1545 2020-12-23 18:32:29
+## 7       1413 2017-05-17 03:10:34
+## 8       1295 2017-05-16 15:32:41
+## 9        990 2020-06-08 18:29:03
+## 10       809 2020-09-29 14:18:44
+```
+]
+
+---
+
+## Text Mining
+
+An introduction to text mining and analysis (for the social sciences) is beyond the scope of this workshop, but there are many great introductions available (for free) online. For example:
+
+- [Text Mining with R - A Tidy Approach](https://www.tidytextmining.com/) by Julia Silge &amp; David Robinson: A tidy(verse) approach
+
+- [Tutorials for the package `quanteda`](https://tutorials.quanteda.io/)
+
+- [Text mining for humanists and social scientists in R](https://tm4ss.github.io/docs/) by Andreas Niekler &amp; Gregor Wiedemann
+
+- [Text Mining in R](https://www.kirenz.com/post/2019-09-16-r-text-mining/) by Jan Kirenz
+
+- [Computational Text Analysis](http://theresagessler.eu/eui_cta/) by Theresa Gessler
+
+--
+
+In the following, we will very briefly introduce some key terms and steps in text mining, and then go through some examples of exploring *YouTube* comments (text + emojis).
+
+---
+
+## Popular Text Mining Packages
+
+- [tm](http://tm.r-forge.r-project.org/): the first comprehensive text mining package for R
+
+- [tidytext](https://juliasilge.github.io/tidytext/): tidyverse tools &amp; tidy data principles
+
+- [**quanteda**](https://quanteda.io/): very powerful text mining package with extensive documentation
+
+---
+
+## Text as Data (in a 🌰)
+
+**Document** = collection of text strings (+ metadata about the documents)
+
+**Corpus** = collection of documents
+
+**Token** = part of a text that is a meaningful unit of analysis (often individual words)
+
+**Vocabulary** = list of all distinct words form a corpus (i.e., all types)
+
+**Document-term matrix (DTM)** or **Document-feature matrix (DFM)** = matrix with *n* = # of documents rows and *m* = size of vocabulary columns where each cell contains the count of a particular word for a particular document
+
+---
+
+## Preprocessing (in a 🌰)
+
+For our examples in this session, we will go through the following preprocessing steps:
+
+1. **Basic string operations**: 
+  - Transforming to lower case
+  - Detecting and removing certain patterns in strings (e.g., punctuation, numbers or URLs)
+  
+2. **Tokenization**: Splitting up strings into words (could also be combinations of multiple words: n-grams)
+
+3. **Stopword removal**: Stopwords are very frequent words that appear in almost all texts (e.g., "a","but","it", "the") but have low informational value for most analyses (at least in the social sciences)
+
+--
+
+**NB**: There are many other preprocessing options that we will not use for our examples, such as [stemming](https://en.wikipedia.org/wiki/Stemming), [lemmatization](https://en.wikipedia.org/wiki/Lemmatisation) or natural language processing pipelines (e.g., to detect and select specific word types, such as nouns and adjectives). Keep in mind that the choice and order of these preprocessing steps is important and should be informed by your research question.
+
+---
+
+## Tokenization
+
+Before we tokenize the comments, we want to remove newline commands from the strings.
+
+
+```r
+FormattedComments &lt;- FormattedComments %&gt;% 
+  mutate(TextEmojiDeleted = str_replace_all(TextEmojiDeleted,
+                                            pattern = "\\\n",
+                                            replacement = " "))
+```
+
+---
+
+## Tokenization
+
+Now we can tokenize the comments and remove punctuation, symbols, numbers, and URLs.
+
+
+```r
+toks &lt;- FormattedComments %&gt;% 
+  pull(TextEmojiDeleted) %&gt;% 
+  char_tolower() %&gt;% 
+  tokens(remove_numbers = TRUE,
+               remove_punct = TRUE,
+               remove_separators = TRUE,
+               remove_symbols = TRUE,
+               split_hyphens = TRUE,
+               remove_url = TRUE)
+```
+
+---
+
+## Document-Feature Matrix
+
+With the tokens we can create a [document-feature matrix](https://quanteda.io/reference/dfm.html) (DFM) and remove [stopwords](https://en.wikipedia.org/wiki/Stop_word).
+
+
+```r
+commentsDfm &lt;- dfm(toks, 
+                   remove = quanteda::stopwords("english"))
+```
+
+```
+## Warning: 'remove' is deprecated; use dfm_remove() instead
+```
+
+---
+
+## Most Frequent Words
+
+.small[
+
+```r
+TermFreq &lt;- textstat_frequency(commentsDfm)
+head(TermFreq, n = 20)
+```
+
+```
+##     feature frequency rank docfreq group
+## 1     movie      8086    1    6233   all
+## 2     emoji      2448    2    2104   all
+## 3       nom      2239    3       1   all
+## 4      like      1708    4    1481   all
+## 5      just      1534    5    1354   all
+## 6      sony      1246    6    1155   all
+## 7    people       970    7     834   all
+## 8       bad       879    8     806   all
+## 9  dislikes       804    9     787   all
+## 10     good       774   10     708   all
+## 11      see       765   11     664   all
+## 12 &lt;U+07D8&gt;       755   12       1   all
+## 13      one       746   13     659   all
+## 14   emojis       741   14     669   all
+## 15     hate       727   15     666   all
+## 16  trailer       679   16     640   all
+## 17     make       677   17     595   all
+## 18   popeye       670   18     625   all
+## 19      god       658   19     641   all
+## 20    watch       655   20     610   all
+```
+]
+
+---
+
+## Removing Tokens
+
+We may want to remove additional words (that are not included in the stopwords list) if we consider them irrelevant for our analyses.
+
+
+```r
+custom_stopwords &lt;- c("nom", "&lt;U+07D8&gt;")
+commentsDfm &lt;- dfm(toks, remove = c(quanteda::stopwords("english"),
+                                    custom_stopwords))
+```
+
+```
+## Warning: 'remove' is deprecated; use dfm_remove() instead
+```
+
+```r
+TermFreq &lt;- textstat_frequency(commentsDfm)
+```
+
+For more options for selecting or removing tokens, see the [quanteda documentation](https://tutorials.quanteda.io/basic-operations/tokens/tokens_select/).
+
+---
+
+## Wordclouds
+
+
+```r
+wordcloud(words = TermFreq$feature,
+          freq = TermFreq$frequency,
+          min.freq = 10,
+          max.words = 50,
+          random.order = FALSE,
+          rot.per = 0.35,
+          colors = brewer.pal(8, "Dark2"))
+```
+
+*Note*: You can adjust what is plotted by, e.g., changing the minimum frequency (`min.freq`) or the maximum # of words (`max.words`). Check `?wordcloud` for more customization options.
+
+---
+
+## Wordclouds
+
+&lt;img src="B1_Basic_Text_Analysis_files/figure-html/cloudy-plot-1.png" width="500px" height="500px" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Don't Let Your Words Cloud Your Plots!
+
+<blockquote class="twitter-tweet" align="center" data-width="550" data-lang="en" data-dnt="true" data-theme="dark"><p lang="en" dir="ltr">Wordclouds are awful.</p>&mdash; Chung-hong Chan (@chainsawriot) <a href="https://twitter.com/chainsawriot/status/1362370460294524931?ref_src=twsrc%5Etfw">February 18, 2021</a></blockquote>
+
+
+*Note*: To catch up with the state-of-the-art in text analysis, you can check out the [blog post "Top 5 most important textual analysis methods papers of the year 2020"](https://chainsawriot.com/mannheim/2021/12/22/most2020.html) by [Chung-hong Chan](https://github.com/chainsawriot). 
+
+---
+
+## Plot Most Frequent Words
+
+
+```r
+TermFreq %&gt;% 
+head(n = 20) %&gt;% 
+  ggplot(aes(x = reorder(feature, frequency), y = frequency)) +
+  geom_bar(stat="identity") +
+  labs(title = "Most frequent words in comments",
+       subtitle = "THE EMOJI MOVIE - Official Trailer (HD)
+       \nhttps://www.youtube.com/watch?v=r8pJt4dK_s4",
+       x = "",
+       y = "Frequency") +
+  scale_y_continuous(expand = c(0,0),
+                     limits = c(0,12000)) +
+  coord_flip()
+```
+
+---
+
+## Plot Most Frequent Words
+
+&lt;img src="B1_Basic_Text_Analysis_files/figure-html/word-freq-plot-1.png" width="700px" height="500px" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Plot Docfreq
+
+Instead of the raw frequency of words we can also look at the number of comments that a particular word appears in. This metric takes into account that words might be used multiple times in the same comment.
+
+
+```r
+TermFreq %&gt;% 
+head(n = 20) %&gt;% 
+  ggplot(aes(x = reorder(feature, docfreq), y = docfreq)) +
+  geom_bar(stat="identity") + 
+  labs(title = "Words that appear in the highest number of comments",
+       subtitle = "THE EMOJI MOVIE - Official Trailer (HD)
+       \nhttps://www.youtube.com/watch?v=r8pJt4dK_s4",
+       x = "",
+       y = "# of comments") +
+  scale_y_continuous(expand = c(0,0),
+                     limits = c(0,10000)) +
+  coord_flip()
+```
+
+---
+
+## Plot Docfreq
+
+&lt;img src="B1_Basic_Text_Analysis_files/figure-html/docfreq-plot-1.png" width="700px" height="500px" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Emojis
+
+In most of the research studying user-generated text from social media, emojis have, so far, been largely ignored. However, emojis convey emotions and meaning, and can, thus, provide additional information or context when working with textual data. 
+
+--
+
+In the following, we will do some exploratory analysis of emoji frequencies in *YouTube* comments. Before we can start, we first need to do some data cleaning again, then tokenize the emojis as some comments include more than one emoji, and create an emoji DFM.
+
+
+```r
+emoji_toks &lt;- FormattedComments %&gt;% 
+  mutate(Emoji = na_if(Emoji, "NA")) %&gt;% # define missings
+  mutate (Emoji = str_trim(Emoji)) %&gt;% # remove spaces
+  filter(!is.na(Emoji)) %&gt;% # only keep comments with emojis
+  pull(Emoji) %&gt;% # pull out column cotaining emoji labels
+  tokens(what = "fastestword") # tokenize emoji labels
+
+EmojiDfm &lt;- dfm(emoji_toks) # create DFM for emojis
+```
+
+---
+
+## Most Frequent Emojis
+
+
+```r
+EmojiFreq &lt;- textstat_frequency(EmojiDfm)
+head(EmojiFreq, n = 10)
+```
+
+```
+##                         feature frequency rank docfreq group
+## 1               emoji_pileofpoo      3914    1     464   all
+## 2                emoji_eggplant      3428    2     246   all
+## 3            emoji_unamusedface      2367    3     596   all
+## 4      emoji_facewithtearsofjoy      2262    4     620   all
+## 5      emoji_bbutton(bloodtype)      1848    5     115   all
+## 6            emoji_middlefinger      1660    6     257   all
+## 7            emoji_grinningface      1502    7     331   all
+## 8             emoji_flushedface      1188    8     217   all
+## 9              emoji_thumbsdown      1014    9     237   all
+## 10 emoji_facewithsymbolsonmouth       766   10      71   all
+```
+
+---
+
+## Plot Most Frequent Emojis
+
+
+```r
+EmojiFreq %&gt;% 
+head(n = 10) %&gt;% 
+  ggplot(aes(x = reorder(feature, frequency), y = frequency)) +
+  geom_bar(stat="identity") + 
+  labs(title = "Most frequent emojis in comments",
+       subtitle = "THE EMOJI MOVIE - Official Trailer (HD)
+       \nhttps://www.youtube.com/watch?v=r8pJt4dK_s4",
+       x = "",
+       y = "Frequency") +
+  scale_y_continuous(expand = c(0,0),
+                     limits = c(0,5000)) +
+ coord_flip()
+```
+
+*Note*: Similar to what we did for the comment text before we could replace `frequency` with `docfreq` in the above code to create a plot with the emojis that appear in the highest number of comments.
+
+---
+
+## Plot Most Frequent Emojis
+
+&lt;img src="B1_Basic_Text_Analysis_files/figure-html/emoji-barplot-1.png" width="700px" height="500px" style="display: block; margin: auto;" /&gt;
+
+---
+
+## 😎 Emoji Frequency Plot: Preparation (1)
+
+The previous emoji frequency plot was a bit 😪. To make things prettier, we can use the actual emojis instead of the text labels in our plot. Doing this takes a bit of preparation...&lt;sup&gt;1&lt;/sup&gt;
+
+As a first step, we need an emoji lookup table in which the values in the name column have the same format as the labels in the feature column of our `EmojiFreq` object.
+
+
+```r
+emoji_lookup &lt;- jis %&gt;% 
+  select(runes, name) %&gt;% 
+  mutate(runes = str_to_lower(runes),
+         name = str_to_lower(name)) %&gt;% 
+  mutate(name = str_replace_all(name, " ", "")) %&gt;% 
+  mutate(name = paste0("emoji_", name))
+```
+
+.footnote[
+[1] For an alternative approach to using emojis in `ggplot2` see this [blog post by Emil Hvitfeldt](https://www.hvitfeldt.me/blog/real-emojis-in-ggplot2/).
+]
+
+---
+
+## 😎 Emoji Frequency Plot: Preparation (2)
+
+The second step of preparation for the nicer emoji frequency plot is creating mappings of emojis to data points so that we can use emojis instead of points in a scatter plot.&lt;sup&gt;1&lt;/sup&gt;
+
+
+```r
+top_emojis &lt;- 1:10
+
+for(i in top_emojis){
+  name &lt;- paste0("mapping", i)
+  assign(name,
+         do.call(geom_emoji,list(data = EmojiFreq[i,],
+                                 emoji = gsub("^0{2}","", strsplit(tolower(emoji_lookup$runes[emoji_lookup$name == as.character(EmojiFreq[i,]$feature)])," ")[[1]][1]))))
+}
+```
+
+.footnote[
+[1] Please note that this code has not been tested systematically. We only used it with a few videos. Depending on which emojis are the most frequent for the video you look at, this might not work because (a) one of the emojis is not included in the emoji lookup table (which uses the `jis` data frame from the [`emo` package](https://github.com/hadley/emo)) or (b) the content in the `runes` column does not match the format/code that the `emoji` argument in the `geom_emoji` function from the [`emoGG` package](https://github.com/dill/emoGG) expects.
+]
+
+---
+
+## 😎 Emoji Frequency Plot
+
+.small[
+
+```r
+EmojiFreq %&gt;% 
+head(n = 10) %&gt;% 
+  ggplot(aes(x = reorder(feature, -frequency), y = frequency)) +
+  geom_bar(stat="identity",
+           color = "black",
+           fill = "#FF74A6",
+           alpha = 0.7) + 
+  geom_point() +
+  labs(title = "Most frequent emojis in comments",
+       subtitle = "THE EMOJI MOVIE - Official Trailer (HD)
+       \nhttps://www.youtube.com/watch?v=r8pJt4dK_s4",
+       x = "",
+       y = "Frequency") +
+  scale_y_continuous(expand = c(0,0),
+                     limits = c(0,5000)) +
+  theme(panel.grid.major.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +
+  mapping1 +
+  mapping2 +
+  mapping3 +
+  mapping4 +
+  mapping5 +
+  mapping6 +
+  mapping7 +
+  mapping8 +
+  mapping9 +
+  mapping10
+```
+]
+
+---
+
+## 😎 Emoji Frequency Plot
+
+&lt;img src="B1_Basic_Text_Analysis_files/figure-html/cool-emoji-plot-1.png" width="700px" height="500px" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: center, middle
+
+## [Exercise](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/B1_Basic_text_analysis_exercises_question.html) time 🏋️‍♀️💪🏃🚴
+
+## [Solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/B1_Basic_text_analysis_exercises_solution.html)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
