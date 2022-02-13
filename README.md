@@ -57,6 +57,12 @@ Participants should at least have some basic knowledge of `R` and, ideally, also
 
 ### Slides
 
+[A1 Introduction](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/A1_Introduction/A1_Intro.html)             
+
+[A2 The YouTube API](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/A2_The_YouTube_API/A2_The_YouTube_API.html)
+
+[A3 Collecting data with tuber](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/A3_Collecting_data_with_tuber/A3_Collecting_data_with_the_tuber_package_for_R.html)
+
 ### Exercises
 
 ### Solutions
