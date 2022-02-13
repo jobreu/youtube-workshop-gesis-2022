@@ -217,6 +217,8 @@ An introduction to text mining and analysis (for the social sciences) is beyond 
 
 - [Computational Text Analysis](http://theresagessler.eu/eui_cta/) by Theresa Gessler
 
+- [Automated Content Analysis](https://automatedcontentanalysis.com/) by Chung-hong Chan (*note*: currently work in progress)
+
 --
 
 In the following, we will very briefly introduce some key terms and steps in text mining, and then go through some examples of exploring *YouTube* comments (text + emojis).
@@ -235,9 +237,9 @@ In the following, we will very briefly introduce some key terms and steps in tex
 
 ## Text as Data (in a 🌰)
 
-**Document** = collection of text strings (+ metadata about the documents)
+**Document** = collection of text strings
 
-**Corpus** = collection of documents
+**Corpus** = collection of documents (+ metadata about the documents)
 
 **Token** = part of a text that is a meaningful unit of analysis (often individual words)
 
@@ -255,7 +257,11 @@ For our examples in this session, we will go through the following preprocessing
   - Transforming to lower case
   - Detecting and removing certain patterns in strings (e.g., punctuation, numbers or URLs)
   
+--
+  
 2. **Tokenization**: Splitting up strings into words (could also be combinations of multiple words: n-grams)
+
+--
 
 3. **Stopword removal**: Stopwords are very frequent words that appear in almost all texts (e.g., "a","but","it", "the") but have low informational value for most analyses (at least in the social sciences)
 
@@ -550,7 +556,7 @@ emoji_lookup &lt;- jis %&gt;%
 ```
 
 .footnote[
-[1] For an alternative approach to using emojis in `ggplot2` see this [blog post by Emil Hvitfeldt](https://www.hvitfeldt.me/blog/real-emojis-in-ggplot2/).
+[1] For an alternative approach to using emojis in `ggplot2` see this [blog post by Emil Hvitfeldt](https://www.emilhvitfeldt.com/post/2020-01-02-real-emojis-in-ggplot2/).
 ]
 
 ---
