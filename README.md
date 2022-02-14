@@ -63,6 +63,21 @@ Participants should at least have some basic knowledge of `R` and, ideally, also
 
 [A3 Collecting data with tuber](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/A3_Collecting_data_with_tuber/A3_Collecting_data_with_the_tuber_package_for_R.html)
 
+[B1 Basic text analysis](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/B1_Basic_Text_Analysis/B1_Basic_Text_Analysis.html)
+
+[B2 Sentiment analysis of user comments](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/B2_Sentiment_Analysis_of_User_Comments/B2_Sentiment_Analysis_of_User_Comments.html)
+
+[B3 Excurus: Retrieving video subtitles](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/B3_Excursus_Retrieving_Video_Subtitles/B3_Retrieving_Video_Subtitles.html)
+
+[B4 Outlook, Recap, Practice](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/B4_Recap_Outlook_Practice/B4_Recap_Outlook_Practice.html)
+
+
 ### Exercises
+
+[A2 YouTube API exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/A2_The_Youtube_API_question.html)
+
+[A3 tuber data collection exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/A3_tuber_exercises_question.html)
+
+[B1 Basic text analysis exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/B1_Basic_text_analysis_exercises_question.html)
 
 ### Solutions
