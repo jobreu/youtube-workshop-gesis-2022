@@ -71,7 +71,7 @@ For the exercises as well as for "coding along" with the slides, access to the *
 
 [B2 Sentiment analysis of user comments](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/B2_Sentiment_Analysis_of_User_Comments/B2_Sentiment_Analysis_of_User_Comments.html)
 
-[B3 Excurus: Retrieving video subtitles](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/B3_Excursus_Retrieving_Video_Subtitles/B3_Retrieving_Video_Subtitles.html)
+[B3 Excursus: Retrieving video subtitles](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/B3_Excursus_Retrieving_Video_Subtitles/B3_Retrieving_Video_Subtitles.html)
 
 [B4 Outlook, Recap, Practice](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/B4_Recap_Outlook_Practice/B4_Recap_Outlook_Practice.html)
 
