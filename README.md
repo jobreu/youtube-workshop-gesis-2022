@@ -65,6 +65,8 @@ For the exercises as well as for "coding along" with the slides, access to the *
 
 [A3 Collecting data with tuber](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/A3_Collecting_data_with_tuber/A3_Collecting_data_with_the_tuber_package_for_R.html)
 
+[A4 Processing and cleaning user comments](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/AA4_Processing_and_cleaning_user_comments/A4_Processing_and_Cleaning_User_Comments.html)
+
 [B1 Basic text analysis](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/B1_Basic_Text_Analysis/B1_Basic_Text_Analysis.html)
 
 [B2 Sentiment analysis of user comments](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/B2_Sentiment_Analysis_of_User_Comments/B2_Sentiment_Analysis_of_User_Comments.html)
