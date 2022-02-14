@@ -7,9 +7,9 @@ yt_parse <- function(data){
 
   #### Setup
 
-  # getting packages
-  if ("devtools" %in% installed.packages() != TRUE) {
-    install.packages("devtools")
+  # installing packages
+  if ("remotes" %in% installed.packages() != TRUE) {
+    install.packages("remotes")
   }
   if ("anytime" %in% installed.packages() != TRUE) {
     install.packages("anytime")
@@ -18,22 +18,22 @@ yt_parse <- function(data){
     install.packages("qdapRegex")
   }
   if ("emo" %in% installed.packages() != TRUE) {
-    devtools::install_github("hadley/emo")
+    remotes::install_github("hadley/emo")
   }
 
-  # attaching packages
+  # loading packages
   library(anytime)
   library(qdapRegex)
   library(emo)
 
-  # sourcing helper function
+  # sourcing helper functions
   source("CamelCase.R")
   source("ExtractEmoji.R")
   source("ReplaceEmoji.R")
 
   #### Data Preperation
 
-  # accounting for dataframes without "parentId" (those scraped with get_comments() instead of get_all_comments())
+  # accounting for dataframes without "parentId" column (those scraped with get_comments() instead of get_all_comments())
 
   if (is.null(data$parentId)) {
 

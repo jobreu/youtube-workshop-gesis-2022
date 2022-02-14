@@ -5,7 +5,7 @@
 # The function has two arguments: 
 # x = the data frame with the frequencies
 # n = the number of mappings to create
-# The data frame containing the frequencies should be created using the `textstat_frequency()` function from the `quanteda` package
+# The data frame containing the frequencies should be created using the `textstat_frequency()` function from the `quanteda.textstats` package
 # The emoji names in the `feature` column of the frequency df should have the format "emoji_facewithtearsofjoy"
 # Please note that this code has not been tested systematically. 
 # Depending on which emojis are the most frequent for the video you look at, this function might not work because

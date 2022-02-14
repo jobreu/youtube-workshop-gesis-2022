@@ -1,4 +1,4 @@
-# Camelcase function
+# CamelCase function
 
 ## convert emoji names to CamelCase (if you want to learn (more) about CamelCase: https://en.wikipedia.org/wiki/Camel_case)
 simpleCap <- function(x) {

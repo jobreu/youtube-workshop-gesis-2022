@@ -1,20 +1,20 @@
-# Function to replace Emoji in the comments
+# Function for replacing emojis in the comments
 
 ReplaceEmoji <- function(x) {
 
   # install packages
 
-  if ("devtools" %in% installed.packages() != TRUE) {
-    install.packages("devtools")
+  if ("remotes" %in% installed.packages() != TRUE) {
+    install.packages("remotes")
   }
   if ("qdapRegex" %in% installed.packages() != TRUE) {
     install.packages("qdapRegex")
   }
   if ("emo" %in% installed.packages() != TRUE) {
-    devtools::install_github("hadley/emo")
+    remotes::install_github("hadley/emo")
   }
 
-  # attach packages
+  # load packages
   library(qdapRegex)
   library(emo)
 
@@ -34,7 +34,7 @@ ReplaceEmoji <- function(x) {
   # assign x to a new variable so we can save the progress in the for-loop (see below)
   New <- x
 
-  # rm_default throws a useless warning on each iteration that we can ignore
+  # note: rm_default throws a warning on each iteration that we can ignore
   oldw <- getOption("warn")
   options(warn = -1)
 
