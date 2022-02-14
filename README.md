@@ -81,3 +81,9 @@ Participants should at least have some basic knowledge of `R` and, ideally, also
 [B1 Basic text analysis exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/B1_Basic_text_analysis_exercises_question.html)
 
 ### Solutions
+
+[A2 YouTube API exercise solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/A2_The_Youtube_API_solution.html)
+
+[A3 tuber data collection exercise solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/A3_tuber_exercises_solution.html)
+
+[B1 Basic text analysis exercise solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/B1_Basic_text_analysis_exercises_solution.html)
