@@ -308,7 +308,7 @@ After having formatted all our selected columns, we usually also want to create 
 
 ```{r, echo = TRUE}
 # Example comments with extractable information
-Selection$textOriginal[37445]
+strwrap(Selection$textOriginal[37445],79)
 Selection$textOriginal[26]
 ```
 There are two issues exemplified by these comments:
@@ -339,7 +339,7 @@ We get back a list where each element corresponds to one row in the Selection da
 links that were contained in the textOriginal column. At the same time, the link was removed from the Selection dataframe.
 
 ```{r, echo = TRUE}
-Selection$textOriginal[37445]
+strwrap(Selection$textOriginal[37445],79)
 ```
 
 ```{r, echo = TRUE}
@@ -369,14 +369,14 @@ First we want to replace the emoji with a textual description, so that we can tr
 
 Essentially, we want to replace this:
 
-```{r}
-emo::ji("monkey")
+```{r, echo = FALSE}
+emo::ji("smile")
 ```
 
 with this
 
-```{r}
-"EMOJI_Monkey"
+```{r, echo = FALSE}
+"EMOJI_GrinningFaceWithSmilingEyes"
 ```
 
 ---

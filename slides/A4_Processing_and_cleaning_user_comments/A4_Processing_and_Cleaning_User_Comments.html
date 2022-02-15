@@ -343,7 +343,7 @@ Sys.time() - testtime
 ```
 
 ```
-## Time difference of 11.33678 hours
+## Time difference of 5.323463 days
 ```
 
 This internal representation of time objects will be extremely important for plotting trends over time
@@ -378,7 +378,7 @@ sapply(list(Selection$publishedAt,Selection$updatedAt),class)
 ---
 # Formatting Timestamps (4)
 
-Be aware of how to interpret your timestamps. Note that the date was interpreted as UTC but converted to our local CET timezone which is 1 hour ahead of UTC. This comment was made at 21:55:19 in _our time_, we have no idea about the time at the location of the user.
+Be aware of how to interpret your timestamps. Note that the date was interpreted as UTC but converted to our local CET timezone which is 1 hour ahead of UTC. This comment was made at 07:38:33 in _our time_, we have no idea about the time at the location of the user.
 
 
 ```r
@@ -397,11 +397,12 @@ After having formatted all our selected columns, we usually also want to create 
 
 ```r
 # Example comments with extractable information
-Selection$textOriginal[37445]
+strwrap(Selection$textOriginal[37445],79)
 ```
 
 ```
-## [1] "Watch new Emoji movie [2017] Here:\nNew Emoji movie 2017\nhttps://www.clorox.com/"
+## [1] "Watch new Emoji movie [2017] Here: New Emoji movie 2017"
+## [2] "https://www.clorox.com/"
 ```
 
 ```r
@@ -452,11 +453,12 @@ links that were contained in the textOriginal column. At the same time, the link
 
 
 ```r
-Selection$textOriginal[37445]
+strwrap(Selection$textOriginal[37445],79)
 ```
 
 ```
-## [1] "Watch new Emoji movie [2017] Here:\nNew Emoji movie 2017\nhttps://www.clorox.com/"
+## [1] "Watch new Emoji movie [2017] Here: New Emoji movie 2017"
+## [2] "https://www.clorox.com/"
 ```
 
 
@@ -499,23 +501,15 @@ First we want to replace the emoji with a textual description, so that we can tr
 Essentially, we want to replace this:
 
 
-```r
-emo::ji("monkey")
 ```
-
-```
-## 🐒
+## 😄
 ```
 
 with this
 
 
-```r
-"EMOJI_Monkey"
 ```
-
-```
-## [1] "EMOJI_Monkey"
+## [1] "EMOJI_GrinningFaceWithSmilingEyes"
 ```
 
 ---
