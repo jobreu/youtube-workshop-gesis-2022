@@ -4,8 +4,8 @@ title: 'Exercises The _YouTube_ API - Solutions'
 author: 'Julian Kohne, Johannes Breuer, M. Rohangis Mohseni'
 date: 'Automatic sampling and analysis of YouTube data, February 21-22, 2022'
 output:
-  unilur::tutorial_html: default
   unilur::tutorial_html_solution: default
+  unilur::tutorial_html: default
 ---
 
 ```{r knitr_init, echo=FALSE, cache=FALSE, include=FALSE}
@@ -36,7 +36,7 @@ Go to the _YouTube_ API console and check the amount of requests you already mad
 ```
 
 ```{block, opts.label = "clues"}
-You can do this by going to the [Developer Console](www.console.developers.google.com) and logging in with the _Google_ account you used for creating the app for your API access. On the top left, next to the "Google Cloud Platform" logo, you can click the three lines to open up a menu. In this menu, go to "IAM & Admin" and click in the last item in the "IAM & Admin" section, called "Quotas". Make sure that you have selected the right project. 
+You can do this by going to the [Developer Console](https://console.developers.google.com/home) and logging in with the _Google_ account you used for creating the app for your API access. On the top left, next to the "Google Cloud Platform" logo, you can click the three lines to open up a menu. In this menu, go to "IAM & Admin" and click in the last item in the "IAM & Admin" section, called "Quotas". Make sure that you have selected the right project. 
 ```
 ```{block, solution = TRUE}
 ![](./images/Quotas.png)
@@ -81,21 +81,21 @@ Construct and make an API call to get data with the following parameters:
 
 ```{block, opts.label = "clues"}
 
-It's probably helpful to go back to the slide explaining the general structure of API calls.
+- It's probably helpful to go back to the slide explaining the general structure of API calls.
 
-You can look up the names and proper use of different API resources in the [documentation](https://developers.google.com/youtube/v3/docs) on the left side
+- You can look up the names and proper use of different API resources in the [documentation](https://developers.google.com/youtube/v3/docs) on the left side
 
-You need to use the _PlaylistItem_ resource, not the _Playlists_ resource
+- You need to use the _PlaylistItem_ resource, not the _Playlists_ resource
 
-You can check out the correct paramater names in the [documentation of the resource](https://developers.google.com/youtube/v3/docs/playlistItems/list)
+- You can check out the correct parameter names in the [documentation of the resource](https://developers.google.com/youtube/v3/docs/playlistItems/list)
 
 You can execute your API call:
 
- - directly in the console on Linux/Mac using curl
+ - directly in the console on Linux/Mac using [curl](https://linuxize.com/post/curl-command-examples/)
  
  - from R using the packages [curl](https://cran.r-project.org/web/packages/curl/vignettes/intro.html) and [jsonlite](https://cran.r-project.org/web/packages/jsonlite/index.html)
  
- - In your webbrowser by simply inserting the API call into the URL field
+ - In your browser by simply inserting the API call into the URL field
  
 Do not forget to authenticate your API request by adding your _API key_ at the end
 
@@ -103,12 +103,16 @@ Do not forget to authenticate your API request by adding your _API key_ at the e
 
 ```{block, solution = TRUE}
 
-API call from console:
+*In the Browser*
+
+Just enter "ht<!-- -->tps://youtube.<!-- -->googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=10&playlistId=PLv4AV-dc1b8UaR3BP0ldhTcy9p0ysTEwy&key=INSERT-API-KEY-HERE" in the URL window and insert your API key
+
+*API call from console:*
 
 curl "ht<!-- -->tps://youtube.<!-- -->googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=10&playlistId=PLv4AV-dc1b8UaR3BP0ldhTcy9p0ysTEwy&key=INSERT-API-KEY-HERE"
 
 
-API call from R: 
+*API call from R:* 
 
 library(curl) <br>
 library(jsonlite) <br>
