@@ -65,7 +65,7 @@ For the exercises as well as for "coding along" with the slides, access to the *
 
 [A3 Collecting data with tuber](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/A3_Collecting_data_with_tuber/A3_Collecting_data_with_the_tuber_package_for_R.html)
 
-[A4 Processing and cleaning user comments](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/AA4_Processing_and_cleaning_user_comments/A4_Processing_and_Cleaning_User_Comments.html)
+[A4 Processing and cleaning user comments](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/A4_Processing_and_cleaning_user_comments/A4_Processing_and_Cleaning_User_Comments.html)
 
 [B1 Basic text analysis](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/B1_Basic_Text_Analysis/B1_Basic_Text_Analysis.html)
 
@@ -82,7 +82,11 @@ For the exercises as well as for "coding along" with the slides, access to the *
 
 [A3 tuber data collection exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/A3_tuber_exercises_question.html)
 
+[A4 Processing and cleaning user comments exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/A4_Preprocessing_and_cleaning_data_question.html)
+
 [B1 Basic text analysis exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/B1_Basic_text_analysis_exercises_question.html)
+
+[B2 Sentiment analysis of user comments exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/B2_Sentiment_Analysis_of_User_Comments_question.html)
 
 ### Solutions
 
@@ -90,4 +94,8 @@ For the exercises as well as for "coding along" with the slides, access to the *
 
 [A3 tuber data collection exercise solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/A3_tuber_exercises_solution.html)
 
-[B1 Basic text analysis exercise solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/B1_Basic_text_analysis_exercises_solution.html)
+[A4 Processing and cleaning user comments exercise solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/A4_Preprocessing_and_cleaning_data_solution.html)
+
+[B1 Basic text analysis exercise solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/B1_Basic_text_analysis_exercises_solution.html)
+
+[B2 Sentiment analysis of user comments exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/B2_Sentiment_Analysis_of_User_Comments_solution.html)
