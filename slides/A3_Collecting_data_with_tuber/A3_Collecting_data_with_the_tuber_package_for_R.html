@@ -236,8 +236,8 @@ gesis_stats &lt;- get_channel_stats("UCiQ98odXlAkX63EaFWNjH0g")
 
 ```
 ## Channel Title: GESIS - Leibniz-Institut für Sozialwissenschaften 
-## No. of Views: 17293 
-## No. of Subscribers: 447 
+## No. of Views: 17445 
+## No. of Subscribers: 450 
 ## No. of Videos: 71
 ```
 
@@ -267,7 +267,7 @@ gesis_stats_df
 ## # A tibble: 1 x 7
 ##   viewCount subscriberCount hiddenSubscriber~ videoCount channel_id channel_name
 ##       &lt;dbl&gt;           &lt;dbl&gt; &lt;lgl&gt;                  &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       
-## 1     17293             447 FALSE                     71 UCiQ98odX~ GESIS - Lei~
+## 1     17445             450 FALSE                     71 UCiQ98odX~ GESIS - Lei~
 ## # ... with 1 more variable: channel_published &lt;chr&gt;
 ```
 ]
@@ -295,7 +295,7 @@ dayum_stats_df
 ## # A tibble: 1 x 5
 ##   id          viewCount likeCount favoriteCount commentCount
 ##   &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;        &lt;dbl&gt;
-## 1 DcJFdCmN98s  43472949    635721             0        52618
+## 1 DcJFdCmN98s  43504617    636477             0        52640
 ```
 
 *Note*: Until July 2021 it was also possible to get the dislike counts for videos. However, [access to that via the *YouTube* API has been disabled since then](https://support.google.com/youtube/thread/134791097/update-to-youtube-dislike-counts?hl=en). Those are also not visible anymore on the public video pages, only for the content creators.
@@ -395,6 +395,26 @@ There are two `tuber` functions for collecting viewer comments for specific vide
 Our recommendation is that if you want more than the most recent 100 comments, you should use `get_all_comments()`, even if you do not want to analyze replies to comments (you can simply filter those out later on).
 
 If you also care about replies to comments, a good alternative to `tuber::get_all_comments()` is the `Collect()` function from the `vosonSML` package (which we will talk about in a bit) as that collects up to 20 replies for each comment (instead of just 5 as the corresponding `tuber` function does).
+
+---
+
+## Viewer Comments with `tuber`: Example
+
+For example, if you want to collect comments for the [Emoji Movie Trailer](https://www.youtube.com/watch?v=r8pJt4dK_s4) (we will use those as examples in the later sessions), you could do that as follows:
+
+
+```r
+emoji_movie_comments &lt;- get_all_comments("r8pJt4dK_s4")
+```
+
+**NB**: To save time and your *YouTube* API quota limit you might not want to run this code now.
+
+You can then export the resulting dataframe in a format of your choice for later use.
+
+
+```r
+saveRDS(emoji_movie_comments, file = "./data/RawEmojiComments.rds")
+```
 
 ---
 
@@ -545,7 +565,7 @@ There are two alternatives to using the `yt_search()` function from the `tuber` 
 
 --
 
-2. Web scraping: [Freelon (2018)](https://www.tandfonline.com/doi/abs/10.1080/10584609.2018.1477506?journalCode=upcp20) argues that researchers interested in social media and other internet data should know/learn how to scrape the web in what he calls the "post-API age" (and a [paper by Mancosu &amp; Vegetti, 2020](https://dx.doi.org/10.1177/2056305120940703) makes a similar point). However, you should use this method with caution. The [robots.txt of *YouTube*](https://www.youtube.com/robots.txt) disallows the scraping of results pages. In practical terms, the (over)use of web scraping might, e.g., get your IP address blocked (at least temporarily). A complete introduction to web scraping would be beyond the scope of this workshop, but we have created some slides with a short tutorial (in the folder with the slides on the *YouTube* API) and there are many online tutorials on this (e.g., [this one](https://blog.rsquaredacademy.com/web-scraping/)). 
+2. Web scraping: [Freelon (2018)](https://www.tandfonline.com/doi/abs/10.1080/10584609.2018.1477506?journalCode=upcp20) argues that researchers interested in social media and other internet data should know/learn how to scrape the web in what he calls the "post-API age" (and a [paper by Mancosu &amp; Vegetti, 2020](https://dx.doi.org/10.1177/2056305120940703) makes a similar point). However, you should use this method with caution. The [robots.txt of *YouTube*](https://www.youtube.com/robots.txt) disallows the scraping of results pages. In practical terms, the (over)use of web scraping might, e.g., get your IP address blocked (at least temporarily). A complete introduction to web scraping would be beyond the scope of this workshop, but there are many online tutorials on this (e.g., [this one](https://blog.rsquaredacademy.com/web-scraping/)). 
 
 ---
 
@@ -615,7 +635,7 @@ get_stats
 ##     stat_res &lt;- res$statistics
 ##     c(id = res$id, stat_res)
 ## }
-## &lt;bytecode: 0x000000002994df58&gt;
+## &lt;bytecode: 0x00000000298f16f0&gt;
 ## &lt;environment: namespace:tuber&gt;
 ```
 
@@ -807,7 +827,7 @@ glimpse(comments)
 
 ## `VOSONDash`
 
-As stated before, `VOSONDash` provided a GUI for using the functionalities of `vosonSML`. You can simply launch it locally by loading the library and running a command to launch the `R Shiny` app.
+As stated before, `VOSONDash` provides a GUI for using the functionalities of `vosonSML`. You can simply launch it locally by loading the library and running a command to launch the `R Shiny` app.
 
 
 ```r
@@ -822,7 +842,7 @@ runVOSONDash()
 
 ## Saving comment data
 
-Regardless of whether you collected *YouTube* comments using `tuber` or `vosonSML`, you can, of course, always export them into your format of choice, such as `.rds` or `.csv`.
+As before for the comments collected with `tuber`, you can, of course, also export data collected with `vosonSML` into your format of choice, such as `.rds` or `.csv`.
 
 
 ```r

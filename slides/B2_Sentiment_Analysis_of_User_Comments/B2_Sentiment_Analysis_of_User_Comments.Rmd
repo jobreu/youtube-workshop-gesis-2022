@@ -1,7 +1,7 @@
 ---
 title: "Automatic Sampling and Analysis of YouTube Data"
 subtitle: "Sentiment Analysis of User Comments"
-author: "Julian Kohne<br />Johannes Breuer<br />M. Rohangis Mohseni"
+author: "<b><i>Julian Kohne</b></i><br />Johannes Breuer<br />M. Rohangis Mohseni"
 date: "2022-02-22"
 location: "GESIS, online"
 output:
@@ -23,7 +23,7 @@ library(easypackages)
 
 packages("knitr", "rmarkdown", "tidyverse", "kableExtra", "hadley/emo","devtools", "tm", "quanteda", "tuber","qdapRegex","rlang","purrr","ggplot2", "syuzhet", "lexicon", "dill/emoGG","ggcorrplot", prompt = F)
 
-remotes::install_github("R-CoderDotCom/ridgeline@main")
+remotes::install_github("R-CoderDotCom/ridgeline")
 
 options(htmltools.dir.version = FALSE)
 
@@ -56,44 +56,38 @@ pre {
 </style>
 
 ---
-class: center, middle
-
-# Sentiment Analysis of User Comments
-
----
 # Setup
 
-In previous versions of `R`, all strings were automatically translated to factors when reading data.
-This has been changed [recently](https://developer.r-project.org/Blog/public/2020/02/16/stringsasfactors/), but we still include the code to prevent this, in case you're working
-with an older version of `R`.
+*Note*: In previous versions of `R`, all strings were automatically translated to factors when reading data. This has been [changed with version 4.0.0](https://developer.r-project.org/Blog/public/2020/02/16/stringsasfactors/).
 
 ```{r, echo = TRUE}
 # Only necessary for R versions < 4.0.0
 options(stringsAsFactors = FALSE)
 
-# Loading dataset
+# Loading the data set
 comments <- readRDS("../../data/ParsedEmojiComments.rds")
 ```
----
-class: center, middle
-# Basic Sentiment Analysis
 
 ---
-# Sentiment Analysis
+
+## Sentiment Analysis
 
 - The basic task of sentiment analysis is to detect the _polarity_ of a sentence or a collection of sentences in terms of positivity and negativity
 
 - Sentiment is often used in market research for product reviews
 
-- For *YouTube* videos, look at the sentiment in the comments to quantify the valence of user reactions
+--
 
-- There are other methods for detecting:
+- For *YouTube* videos, we can look at the sentiment in the comments to quantify the valence of user reactions
+
+- *Note*: There are also other methods for detecting:
     - emotional states
     - political stances
     - objectivity/subjectivity
 
 ---
-# Basic Idea of Sentiment Analysis
+
+## Basic Idea of Sentiment Analysis
 
 We compare each word in a sentence with a predefined dictionary
 
@@ -105,7 +99,8 @@ We compare each word in a sentence with a predefined dictionary
 .center[![plot](Images/SAExample.png)]
 
 ---
-# Basic Sentiment Analysis
+
+## Basic Sentiment Analysis
 
 ```{r, echo = TRUE}
 lexicon::hash_sentiment_jockers[sample(1:10738,10),]
@@ -145,7 +140,8 @@ comments$TextEmojiDeleted[260]
 ```
 
 ---
-# Sentiment Analysis of _YouTube_ Comments
+
+## Sentiment Analysis of _YouTube_ Comments
 
 There are more sophisticated methods for sentiment analysis that yield  better results. However, their complexity is beyond the scope of this workshop. We will do three things in this session and compare the respective results
 
@@ -155,10 +151,11 @@ There are more sophisticated methods for sentiment analysis that yield  better r
 
 3) Extend the basic sentiment analysis to emoji
 
-<font color=red>Word of Advice:</font> Before using the more elaborate methods in your own research, make sure that you understand the underlying model, so you can make sense of your results. You should never blindly trust someone else's implementation without understanding it. Also: Always do sanity checks to see if you get any unexpected results.
+**Word of Advice:** Before using the more elaborate methods in your own research, make sure that you understand the underlying model, so you can make sense of your results. You should never blindly trust someone else's implementation without understanding it. Also: Always do sanity checks to see if you get any unexpected results.
 
 ---
-# 1) Basic Comment Sentiments
+
+## Basic Comment Sentiments
 
 First of all, we load the [`syuzhet` package](https://github.com/mjockers/syuzhet) and try out the built-in basic sentiment tagger with an example sentence
 
@@ -175,12 +172,13 @@ get_sentiment("Superb reasoning, you must be really smart!")
 ```
 
 ---
-# 1) Basic Comment Sentiments
 
-We can apply the basic sentiment tagger to the whole vector of comments. Remember that we need to use the text column without hyperlinks and emojis.
+## Basic Comment Sentiments
+
+We can apply the basic sentiment tagger to the whole vector of comments in our data set. Remember that we need to use the text column without hyperlinks and emojis.
 
 ```{r, echo = TRUE}
-# creating basic Sentiment scores
+# creating basic sentiment scores
 BasicSentiment <- get_sentiment(comments$TextEmojiDeleted)
 
 # summarizing basic sentiment scores
@@ -190,9 +188,10 @@ summary(BasicSentiment)
 Checking the documentation for the `get_sentiment()` function reveals that it can take different _methods_ as arguments. These methods correspond to different dictionaries and might yield different results. The function also allows using a custom dictionary by providing a dataframe to the _lexicon_ argument.
 
 ---
-# 1) Basic Comment Sentiments
 
-Lets compare the results of the different dictionaries
+## Basic Comment Sentiments
+
+Let's compare the results of the different dictionaries
 
 ```{r, echo = TRUE, message = FALSE, warning = FALSE}
 # computing sentiment scores with different dictionaries
@@ -206,7 +205,8 @@ BasicSentimentNRC <- get_sentiment(comments$TextEmojiDeleted,
                                    method = "nrc")
 ```
 ---
-# 1) Basic Comment Sentiments
+
+## Basic Comment Sentiments
 
 ```{r, echo =TRUE}
 # combining them into a dataframe
@@ -223,10 +223,12 @@ colnames(Sentiments) <- c("Syuzhet",
                           "Comment")
 ```
 ---
-# 1) Basic Comment Sentiments
+
+## Basic Comment Sentiments
+
 .small.remark-code[
 ```{r, echo =TRUE,out.width="50%"}
-# Correlation Matrix
+# Correlation matrix
 library(ggcorrplot)
 ggcorrplot(cor(Sentiments[,c(-5)]),
            color=c("red","white","blue"),
@@ -234,70 +236,67 @@ ggcorrplot(cor(Sentiments[,c(-5)]),
            lab=TRUE)
 ```
 ]
----
-# 1) Basic Comment Sentiments
 
-```{r, echo = TRUE, results = 'hide', fig.show='hide'}
-# load library
+---
+
+## Basic Comment Sentiments: Jitter Plot
+
+```{r, echo = FALSE}
+# load libraries
 library(ggplot2)
+library(dplyr)
 
 # transform data into long format
-SentimentsLong <- reshape2::melt(Sentiments,
-                                 id.vars = c("Comment"))
+SentimentsLong <- pivot_longer(Sentiments, !Comment, names_to = "Dictionary", values_to = "Value")
 
-# Point Jitter plot
-ggplot(SentimentsLong, aes(x=variable,
-                            y=value,
-                            fill=variable)) + 
-   geom_jitter(position=position_jitter(0.2),size=0.5) +
-     ggtitle("Distributions of Sentiment Scores
+# Point jitter plot
+ggplot(SentimentsLong, aes(x=Dictionary,
+                            y=Value)) + 
+  geom_jitter(position=position_jitter(0.2),size=0.5) +
+  ggtitle("Distributions of Sentiment Scores
              for different Dictionaries")
 
-# ridgeline plot
-library(ridgeline)
-ridgeline(SentimentsLong$value,SentimentsLong$variable)
-```
----
-# 1) Basic Comment Sentiments
-
-```{r, echo = F}
-par(mfrow=c(1,2))
-# Violin Plot
- ggplot(SentimentsLong, aes(x=variable,
-                            y=value,
-                            fill=variable)) + 
-   geom_jitter(position=position_jitter(0.2),size=0.5) +
-     ggtitle("Distributions of Sentiment Scores
-             for different Dictionaries")
-
-# ridgeline plot
-library(ridgeline)
-ridgeline(SentimentsLong$value,SentimentsLong$variable)
 ```
 
 ---
-# 1) Basic Comment Sentiments
 
-The choice of the dictionary can have an impact on your sentiment analysis. For this reason, it's crucial to select the dictionary with care and to be aware of how, by whom and for which purpose it was constructed. You can find more information on the specifics of the differnt dictionaries [here](https://arxiv.org/pdf/1901.08319.pdf).
+## Basic Comment Sentiments: Ridgeline Plot
 
-```{r, echo = FALSE, results = 'hide', fig.show='hide'}
-# Scatterlplot
-ggplot(SentimentsLong, aes(x=Comment, y=value, col=variable)) + 
+```{r, echo = FALSE}
+# ridgeline plot
+library(ridgeline)
+ridgeline(SentimentsLong$Value,SentimentsLong$Dictionary)
+```
+
+---
+
+## Basic Comment Sentiments: Scatter Plot
+
+```{r, echo = FALSE}
+# scatter lplot
+ggplot(SentimentsLong, aes(x=Comment, y=Value, col=Dictionary)) + 
     geom_point(size =0.5) +
     ggtitle("Sentiment Scores for different Dictionaries")
 ```
 
+---
+
+## Basic Comment Sentiments
+
+The choice of the dictionary can have an impact on your sentiment analysis. For this reason, it's crucial to select the dictionary with care and to be aware of how, by whom and for which purpose it was constructed. You can find more information on the specifics of the differnt dictionaries [here](https://arxiv.org/pdf/1901.08319.pdf).
+
 In this session, we will continue with the `syuzhet` dictionary.
 
 ```{r, echo = TRUE, results = 'hide'}
-# Adding the Syuzhet Sentiments to our dataframe
+# Adding the Syuzhet sentiments to our dataframe
 comments$Sentiment <- Sentiments$Syuzhet
 ```
 
 ---
-# 1) Basic Comment Sentiments
 
-Another pitfall to be aware of is the length of the comments. Let's have a look at the distribution of words per comment
+## Basic Comment Sentiments
+
+Another pitfall to be aware of is the length of the comments. Let's have a look at the distribution of words per comment.
 
 ```{r, echo = TRUE, warning=FALSE}
 # Computing number of words per comment
@@ -308,7 +307,7 @@ comments$Words <- sapply(comments$TextEmojiDeleted,
 
 
 ```{r, echo = TRUE, results = 'hide', fig.show='hide',out.width="80%", warning=FALSE}
-# Histogram (mean words/comment = 10,6)
+# Histogram
 ggplot(comments, aes(x=Words)) + 
   geom_histogram(binwidth = 5) + 
   geom_vline(aes(xintercept=mean(Words)),
@@ -323,7 +322,8 @@ ggplot(comments, aes(x=Words)) +
 ```
 
 ---
-# 1) Basic Comment Sentiments
+
+## Basic Comment Sentiments
 
 ```{r, echo = FALSE, warning=FALSE}
 # Histogram
@@ -341,12 +341,13 @@ ggplot(comments, aes(x=Words)) +
 ```
 
 ---
-# 1) Basic Comment Sentiments
 
-Because longer comments also contain more words, they have a higher likelihood of getting more extreme sentiment scores. Lets' look at one of the most negatively scored and one of the most positivly scored comments.
+## Basic Comment Sentiments
+
+Because longer comments also contain more words, they have a higher likelihood of getting more extreme sentiment scores. Lets' look at one of the most negatively scored and one of the most positively scored comments.
 
 ```{r, echo = TRUE, results = 'hide'}
-# Very positivly scored comment
+# Very positively scored comment
 comments$TextEmojiDeleted[6704]
 
 # Very negatively scored comment
@@ -368,10 +369,11 @@ of the beast as it slowly bleeds out as our wicked and unwashed cries of agony f
 as death hadn't taken us first. Heh, I dunno... Emojis are pretty much a line of communication for minorities drug deals/hookups. [...]"
 
 ---
-# 1) Basic Comment Sentiments
+
+## Basic Comment Sentiments
 
 ```{r, echo = FALSE}
-# plotting Sentiment vs. Number of Words
+# plotting Sentiment vs. number of words
 ggplot(comments, aes(x = Words, y = Sentiment, col = Sentiment)) + 
     geom_point(size = 0.5) +
     ggtitle("Sentiment Scores vs. Comment length") +
@@ -382,12 +384,13 @@ ggplot(comments, aes(x = Words, y = Sentiment, col = Sentiment)) +
 ```
 
 ---
-# Basic Comment Sentiment
+
+## Basic Comment Sentiment
 
 To control for the effect of comment length, we can divide the sentiment score by the number of words in the comment to get a new indicator:  _SentimentPerWord_ 
 
 ```{r, echo = TRUE, results = 'hide'}
-# Normalizing for number of Words
+# Normalizing for number of words
 comments$SentimentPerWord <- comments$Sentiment / comments$Words
 
 # Most positive comment
@@ -400,8 +403,10 @@ head(comments$TextEmojiDeleted[comments$Sentiment ==
                                  min(comments$SentimentPerWord,
                                       na.rm = T)],1)
 ```
+
 ---
-# Basic Comment Sentiment
+
+## Basic Comment Sentiment
 
 ```{r, echo = FALSE, warning=F, message=F}
 # plotting SentimentPerWord vs. Number of Words
@@ -414,16 +419,13 @@ ggplot(comments, aes(x = Words, y = SentimentPerWord, col = Sentiment)) +
 ```
 
 ---
-class: center, middle
-# More elaborate Method(s)
 
----
-# 2) More elaborate Method(s)
+## More elaborate Method(s)
 
 Although no sentiment detection method is perfect, some are more sophisticated than others. Two of those options are
 
   - the [`sentimentR` package](https://github.com/trinker/sentimentr)
-  - the [**Stanford coreNLP**](https://stanfordnlp.github.io/CoreNLP/) utilities set
+  - the [*Stanford coreNLP*](https://stanfordnlp.github.io/CoreNLP/) utilities set
 
 
 `sentimentr` attempts to take into account:
@@ -433,21 +435,24 @@ Although no sentiment detection method is perfect, some are more sophisticated t
 - de-amplifiers (downtoners),
 - adversative conjunctions
 
-Negators appear ~20% of the time a polarized word appears in a sentence. Conversely, adversative conjunctions appear with polarized words ~10% of the time. Not accounting for the valence shifters could significantly impact the modeling of the text sentiment.
+Negators appear ~20% of the time a polarized word appears in a sentence. Conversely, adversative conjunctions appear with polarized words ~10% of the time. Not accounting for the valence shifters could, hence, significantly impact the modeling of the text sentiment.
 
 ---
-# 2) More elaborate Method(s)
+
+## More elaborate Method(s)
 
 **Stanford coreNLP** utilities set:
 - build in Java
 - very performant
-- tricky to get to work from `R`
-- [documentation](https://stanfordnlp.github.io/CoreNLP/)
+- good [documentation](https://stanfordnlp.github.io/CoreNLP/)
+- but tricky to get to work from `R`
+
 
 We will be using `sentimentR` for this session as it represents a good trade-off between usability, speed, and performance.
 
 ---
-# 2) `SentimentR`
+
+## `SentimentR`
 
 First, we need to install and load the package
 
@@ -471,7 +476,8 @@ colnames(comments)[c(15,16,17)] <- c("word_count",
 ```
 
 ---
-# 2) `SentimentR`
+
+## `SentimentR`
 
 Let's check if the sentiment scoring for sentimentR correlates with the simpler approach
 
@@ -485,7 +491,8 @@ ggplot(comments, aes(x=ave_sentiment, y=SentimentPerWord)) +
     geom_smooth(method=lm, se = TRUE)
 ```
 ---
-# 2) `SentimentR`
+
+## `SentimentR`
 
 ```{r, echo = FALSE, warning = F, message=F}
 # plotting SentimentPerWord vs. SentimentR
@@ -497,11 +504,11 @@ ggplot(comments, aes(x=ave_sentiment, y=SentimentPerWord)) +
     geom_smooth(method=lm, se = TRUE)
 ```
 
-
 ---
-# 2) `SentimentR`
 
-We can also look at the difference scores for the two methods
+## `SentimentR`
+
+We can also look at the difference scores for the two methods.
 
 ```{r, echo = TRUE, warning=F,message=F, results = 'hide', fig.show='hide'}
 #computing difference score
@@ -517,7 +524,8 @@ ggplot(comments, aes(x=SentiDiff)) +
 ```
 
 ---
-# `SentimentR`
+
+## `SentimentR`
 
 ```{r, echo=F, warning=F, message=F}
 #Difference score
@@ -530,10 +538,11 @@ ggplot(comments, aes(x=SentiDiff)) +
 
 
 ---
-# 2) `SentimentR`
+
+## `SentimentR`
 
 Let's check for which comments we get large differences between the two methods.
-*Note*: We are using an absolute difference score here for ordering and order from larget to smallest difference
+*Note*: We use an absolute difference score here and order from largest to smallest difference.
 
 ```{r, echo = TRUE}
 # Illustrating scoring differences
@@ -543,75 +552,78 @@ comments[c(4440,2839,37718,136),c(2, Syuzhet = 12, SentimentR = 17)]
 ```
 
 ---
-# 2) `SentimentR`
 
-`SentimentR` is:
+## `SentimentR`
+
+Compared to the basic approach, `SentimentR` is:
   - better at dealing with negations
   - better at detecting fixed expressions
   - better at detecting adverbs
   - better at detecting slang and abbreviations
-  - realtively easy to implement
+  - relatively easy to implement
   - quite fast
 
 ---
-class: center, middle
-# Sentiments for Emoji
 
----
-# 3) Sentiments for Emoji
+## Sentiments for Emojis
 
-Emoji are often used to confer emotions (hence the name), so they might be a valuable addition
+Emojis are often used to confer emotions (hence the name), so they might be a valuable addition
 to assess the sentiment of a comment. This is less straight-forward than assessing sentiments based on word dictionaries for multiple reasons:
 
-- Emoji can have multiple meanings: `r emo::ji("pray")`
+- Emojis can have multiple meanings: `r emo::ji("pray")`
 - They are highly context-dependent: `r emo::ji("eggplant")`
 - They are culture-dependent: `r emo::ji("peach")`
 - They are person-dependent: `r emo::ji("laugh")` `r emo::ji("tears")`
 
 
 ---
-# 3) Sentiments for Emoji
 
-In addition, emoji are rendered differently on different platforms, eliciting different
-emotions.
+## Sentiments for Emojis
+
+In addition, emojis are rendered differently on different platforms, meaning that they can potentially elicit different emotions.
 
 ![plot](Images/EmojiMisconstruals.png)
 
 Source: [Miller et al., 2016](https://jacob.thebault-spieker.com/papers/ICWSM16_emoji.pdf)
+
 ---
-# 3) Sentiments for Emoji
 
-Emoji are also notoriously difficult to deal with from the technical side due to the infamous [character encoding hell](https://dss.iq.harvard.edu/blog/escaping-character-encoding-hell-r-windows)
+## Sentiments for Emojis
 
-- Emoji can come in one of multiple completely different encodings
+Emojis are also notoriously difficult to deal with from a technical perspective due to the infamous [character encoding hell](https://dss.iq.harvard.edu/blog/escaping-character-encoding-hell-r-windows)
+
+- Emojis can come in one of multiple completely different encodings
 - Your operating system has a default encoding that is used when opening/writing files in a text editor
 - Your `R` installation has a default encoding that gets used when opening/writing files
 
-If either of those mismatch at any point, you can  accidentally overwrite the original encoding in a non-recoverable way. To us, this happened quite often with UTF-8 encoded files on Windows (the default encoding there is Latin-1252)
+If either of those mismatch at any point, you can  accidentally overwrite the original encoding in a non-recoverable way. For us, this happened quite often with UTF-8 encoded files on Windows (the default encoding there is Latin-1252).
 
 ![plot](Images/Encoding.png)
----
-# 3) Sentiments for Emoji
-
-Luckily, we already saved our emoji in a textual description format and can simply treat them as a character strings for our sentiment analysis. We can therefore proceed in 3 steps:
-
-1) Create a suitable sentiment dictionary for textual descriptions of emoji
-
-2) Compute sentiment scores for comments only based on emoji
-
-3) Compare the emoji sentiment scores with the text-based sentiments
 
 ---
-# Emoji Sentiment Dictionary
 
-We will use the emoji sentiment dictionary from the `lexicon` package. It only contains the 734 most frequent emoji, but since the distribution of emoji follows [Zipf's Law](https://en.wikipedia.org/wiki/Zipf%27s_law), it should cover most of the used emoji.
+## Sentiments for Emojis
+
+Luckily, we already saved our emojis in a textual description format and can simply treat them as a character strings for our sentiment analysis. We can therefore proceed in 3 steps:
+
+1) Create a suitable sentiment dictionary for textual descriptions of emojis
+
+2) Compute sentiment scores for comments only based on emojis
+
+3) Compare the emojis sentiment scores with the text-based sentiments
+
+---
+
+## Emoji Sentiment Dictionary
+
+We will use the emoji sentiment dictionary from the `lexicon` package. It only contains the 734 most frequent emojis, but since the distribution of emojis follows [Zipf's Law](https://en.wikipedia.org/wiki/Zipf%27s_law), it should cover most of the used emojis.
 
 ```{r, echo = TRUE}
 # emoji Sentiments
 EmojiSentiments <- lexicon::emojis_sentiment
 EmojiSentiments[1:5,c(1,2,4)]
 ```
-in comparison, our data looks like this:
+By comparison, our data looks like this:
   
 ```{r, echo = TRUE}
 # example from our data 
@@ -619,9 +631,10 @@ comments$TextEmojiReplaced[5546]
 ```
 
 ---
-# Emoji Sentiment Dictionary
 
-We bring the textual description in the dictionary in line with the formatting in our data so we can replace one with the other using standard text manipulation techniques
+## Emoji Sentiment Dictionary
+
+We bring the textual description in the dictionary in line with the formatting in our data so we can replace one with the other using standard text manipulation techniques.
 
 ```{r, echo = TRUE}
 # change formatting in the emoji dictionary
@@ -633,7 +646,8 @@ names(EmojiSentiment) <- c("word","sentiment","valence")
 EmojiSentiment[1:5,]
 ```
 ---
-# Emoji Sentiment Dictionary
+
+## Emoji Sentiment Dictionary
 
 ```{r, echo = TRUE}
 # tokenize the emoji-only column in our formatted dataframe
@@ -643,9 +657,10 @@ EmojiToks[11167]
 ```
 
 ---
-# Computing Sentiment Scores
 
-We can now replace the emojis that appear in the dictionary with the corresponding sentiment scores
+## Computing Sentiment Scores
+
+We can now replace the emojis that appear in the dictionary with the corresponding sentiment scores.
 
 ```{r, echo = TRUE}
 # Creating the dictionary object
@@ -660,7 +675,9 @@ EmojiToksSent[11167]
 
 
 ---
-# Computing Sentiment Scores
+
+## Computing Sentiment Scores
+
 .small.remark-code[
 ```{r, echo = TRUE}
 # only keep the assigned sentiment scores for the emoji vector
@@ -685,7 +702,9 @@ MeanEmojiSentiment[11167]
 ]
   
 ---
-# Emoji Sentiment Scores
+
+## Emoji Sentiment Scores
+
 ```{r, echo = FALSE, warning=F,message=F}
 # plot histogram to check distribution of emoji sentiment scores
 AES_df <- data.frame(MeanEmojiSentiment)
@@ -697,13 +716,14 @@ ggplot(AES_df, aes(x = AES_df[,1])) +
 ```
 
 ---
-# Emoji Sentiment vs. Word Sentiment
+
+## Emoji Sentiment vs. Word Sentiment
 
 ```{r, echo = TRUE}
 comments <- cbind.data.frame(comments,MeanEmojiSentiment)
 
-# correlation between averaged emoji sentiment score
-#   and averaged text sentiment score
+# correlation between average emoji sentiment score
+#   and average text sentiment score
 cor(comments$ave_sentiment,
     comments$MeanEmojiSentiment,
     use="complete.obs")
@@ -719,8 +739,11 @@ ggplot(comments, aes(x = ave_sentiment,
   scale_x_continuous(limits = c(-5,5)) +
   scale_y_continuous(limits = c(-1,1))
 ```
+
 ---
-# Emoji Sentiment vs. Word Sentiment
+
+## Emoji Sentiment vs. Word Sentiment
+
 ```{r, echo = FALSE, warning=F,message=F}
   # plot the relationship
 ggplot(comments, aes(x = ave_sentiment,
@@ -731,31 +754,34 @@ ggplot(comments, aes(x = ave_sentiment,
   scale_y_continuous(limits = c(-1,1))
 ```
 ---
-# Emoji Sentiment vs. Word Sentiment
+
+## Emoji Sentiment vs. Word Sentiment
 
 As we can see, there seems to be no  meaningful relationship between the sentiment scores of the text and the sentiment
 of the used emojis. This can have multiple reasons:
   - Comments that score very high (positive) on emoji sentiment typically contain very little text
   - Comments that score very low  (negative) on emoji sentiment typically contain very little text
-  - dictionary based bag-of-words/-emojis sentiment analysis is not perfect - there is a lot of room for error in both metrics
-  - most comment texts are scored as neutral
-  - emojis are very much context-dependent, but we only consider a single sentiment score for each emoji
-  - we only have sentiment scores for the most common emoji
+  - Dictionary-based bag-of-words/-emojis sentiment analysis is not perfect - there is a lot of room for error in both metrics
+  - Most comment texts are scored as neutral
+  - Wmojis are very much context-dependent, but we only consider a single sentiment score for each emoji
+  - We only have sentiment scores for the most common emoji
   - If comments contain an emoji, it's usually exactly one emoji
 
 ---
-# Takeaway
+
+## Takeaway
 
 From the examples in this data, we have seen multiple things:
 
- - Sentiment detection is not perfect. Bag-of-words approaches are often too simplistic
- - Even more sophisticated methods are misclassifying comments often
- - The choice of dictionary is highly important and can change the results substantially
- - Emoji seem to be even more complex for classifying sentiment
+ - Sentiment detection is not perfect 
+ - Bag-of-words approaches are often too simplistic
+ - Even more sophisticated methods can often misclassify comments
+ - The choice of dictionary and sentiment detection method is highly important and can change the results substantially
+ - Emojis seem to be even more challenging for classifying sentiment
 
 ---
 class: center, middle
 
-# [Exercise](https://jobreu.github.io/youtube-workshop-gesis-2021/exercises/B2_Sentiment_Analysis_of_User_Comments_question.html) time `r ji("weight_lifting_man")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+# [Exercise](https://jobreu.github.io/youtube-workshop-gesis-2/exercises/B2_Sentiment_Analysis_of_User_Comments_question.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
 
-## [Solutions](https://jobreu.github.io/youtube-workshop-gesis-2021/solutions/B2_Sentiment_Analysis_of_User_Comments_solution.html)
+## [Solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/B2_Sentiment_Analysis_of_User_Comments.html)

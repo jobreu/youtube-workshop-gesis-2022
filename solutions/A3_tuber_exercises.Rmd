@@ -28,13 +28,13 @@ Before we start with this exercise, three short notes on working with the exerci
 
 1. You can find the solutions for this exercise as well as all other exercises in the `solutions` folder in the repo/directory that contains the course materials. You can copy code from these exercise files by clicking on the small blue clipboard icon in the upper right corner of the code boxes.
 
-2. We would like to ask you to solve all coding tasks by writing them into your own `R` script files. This ensures that all of your solutions are reproducible, and that you can (re-)use solutions from earlier exercises in later ones.
+2. We would like to ask you to solve all `R` coding tasks by writing them into your own `R` script files. This ensures that all of your solutions are reproducible, and that you can (re-)use solutions from earlier exercises in later ones.
 
 3. All exercises and their solutions 'assume' they are in the `solutions` folder within the folder that contains the materials for this course. This way they can make use of files in other folders using relative paths. In order for your scripts to run properly, we suggest that you create (and save) them in the `scripts` folder. For the relative file paths to work, you will also need to set your working directory to the folder that contains the script. Otherwise, you may have to change the (relative) file paths in your scripts accordingly.
 
 Now let's get to it...
 
-```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+```{block, box.title = "Exercise 1", box.body = list(fill = "white"), box.icon = "fa-star"}
 Before we can start collecting data through the *YouTube* API, you first need to set up your API authorization. In case you have not already done that, please do so now.
 ```
 
@@ -54,8 +54,8 @@ yt_oauth(app_id = "my_app_id", # paste your app ID here
 
 While going through the following exercises you might want to monitor your API quota usage via the [*Google Cloud Platform*](https://console.cloud.google.com) dashboard for your app:  Select IAM & Admin -> Quotas and look for YouTube Data Api v3 - Queries per day.
 
-```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
-How many views, subscribers, and videos does the [Computerphile channel](https://www.youtube.com/user/GESIStv) currently have?
+```{block, box.title = "Exercise 2", box.body = list(fill = "white"), box.icon = "fa-star"}
+How many views, subscribers, and videos does the [Computerphile channel](https://www.youtube.com/user/Computerphile) currently have?
 ```
 
 ```{block, opts.label = "clues"}
@@ -66,8 +66,8 @@ To get channel statistics you can use the `get_channel_stats` function which req
 get_channel_stats("UC9-y-6csu5WGm29I7JiwpnA")
 ```
 
-```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
-How many views, likes, and comments does the music video "Data Science" by Baba Brinkman have?
+```{block, box.title = "Exercise 3", box.body = list(fill = "white"), box.icon = "fa-star"}
+How many views, likes, and comments does the music video ["Data Science" by Baba Brinkman](https://www.youtube.com/watch?v=uHGlCi9jOWY) have?
 ```
 
 ```{block, opts.label = "clues"}
@@ -78,8 +78,8 @@ To answer this question you can use `get_stats` and need the ID of the video.
 get_stats("uHGlCi9jOWY")
 ```
 
-```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
-Collect all comments (including replies) for the video on "The Census" by Last Week Tonight with John Oliver. As we want to use the comments for later exercises, please assign the results to an object called `comments_lwt_census`.
+```{block, box.title = "Exercise 4", box.body = list(fill = "white"), box.icon = "fa-star"}
+Collect all comments (including replies) for the [video on "The Census" by *Last Week Tonight* with John Oliver](https://www.youtube.com/watch?v=1aheRpmurAo&t=1s). As we want to use the comments for later exercises, please assign the results to an object called `comments_lwt_census`.
 ```
 
 ```{block, opts.label = "clues"}
@@ -90,7 +90,7 @@ To get all comments including replies you need to use the function `get_all_comm
 comments_lwt_census <- get_all_comments("1aheRpmurAo")
 ```
 
-```{block, box.title = "5", box.body = list(fill = "white"), box.icon = "fa-star"}
+```{block, box.title = "Exercise 5", box.body = list(fill = "white"), box.icon = "fa-star"}
 If you check the comment count on the website of the video you will see that there are more comments than in the dataframe you just created. This is because `get_all_comments` from `tuber` only collects up to 5 replies per comment. How many of the comments you just collected were replies?
 ```
 
@@ -102,8 +102,8 @@ There is a variable called `parentID` in the dataframe which you can use to answ
 sum(!is.na(comments_lwt_census$parentId))
 ```
 
-```{block, box.title = "6", box.body = list(fill = "white"), box.icon = "fa-star"}
-As a final step we want to save the comments we just collected so we can use them again in the exercises for the following sessions. Please save the the comments as an `.rds` named `RawComments` file in a folder named `data` within the workshop materials directory.
+```{block, box.title = "Exercise 6", box.body = list(fill = "white"), box.icon = "fa-star"}
+As a final step we want to save the comments we just collected so we can use them again in the exercises for the following sessions. Please save the the comments as an `.rds` named `RawLWTComments` file in a folder named `data` within the workshop materials directory.
 ```
 
 ```{block, opts.label = "clues"}
@@ -111,10 +111,10 @@ To save an .rds file you can use the `base R` function `saveRDS`. If you have no
 ```
 
 ```{r save, solution = TRUE, eval = F}
-saveRDS(comments_lwt_census, "../data/RawComments.rds")
+saveRDS(comments_lwt_census, "../data/RawLWTComments.rds")
 ```
 
-```{block, box.title = "Bonus", box.body = list(fill = "white"), box.icon = "fa-star"}
+```{block, box.title = "Exercise 7 (Bonus)", box.body = list(fill = "white"), box.icon = "fa-star"}
 If you are done with the other exercises or want to try out something else, you can collect all comments for the *Last Week Tonight* video on the US census again using the `vosonSML` package. If you do that, you can compare the data: How many comments were collected? Which variables do the two data sets contain? What do the data look like (especially the comment texts)?
 ```
 

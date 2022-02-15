@@ -334,6 +334,24 @@ If you also care about replies to comments, a good alternative to `tuber::get_al
 
 ---
 
+## Viewer Comments with `tuber`: Example
+
+For example, if you want to collect comments for the [Emoji Movie Trailer](https://www.youtube.com/watch?v=r8pJt4dK_s4) (we will use those as examples in the later sessions), you could do that as follows:
+
+```{r emoji-comments, eval=FALSE}
+emoji_movie_comments <- get_all_comments("r8pJt4dK_s4")
+```
+
+**NB**: To save time and your *YouTube* API quota limit you might not want to run this code now.
+
+You can then export the resulting dataframe in a format of your choice for later use.
+
+```{r save-comments-1, eval=FALSE}
+saveRDS(emoji_movie_comments, file = "./data/RawEmojiComments.rds")
+```
+
+---
+
 class: center, middle
 
 # [Exercise](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/A3_tuber_exercises_question.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
@@ -480,7 +498,7 @@ There are two alternatives to using the `yt_search()` function from the `tuber` 
 
 --
 
-2. Web scraping: [Freelon (2018)](https://www.tandfonline.com/doi/abs/10.1080/10584609.2018.1477506?journalCode=upcp20) argues that researchers interested in social media and other internet data should know/learn how to scrape the web in what he calls the "post-API age" (and a [paper by Mancosu & Vegetti, 2020](https://dx.doi.org/10.1177/2056305120940703) makes a similar point). However, you should use this method with caution. The [robots.txt of *YouTube*](https://www.youtube.com/robots.txt) disallows the scraping of results pages. In practical terms, the (over)use of web scraping might, e.g., get your IP address blocked (at least temporarily). A complete introduction to web scraping would be beyond the scope of this workshop, but we have created some slides with a short tutorial (in the folder with the slides on the *YouTube* API) and there are many online tutorials on this (e.g., [this one](https://blog.rsquaredacademy.com/web-scraping/)). 
+2. Web scraping: [Freelon (2018)](https://www.tandfonline.com/doi/abs/10.1080/10584609.2018.1477506?journalCode=upcp20) argues that researchers interested in social media and other internet data should know/learn how to scrape the web in what he calls the "post-API age" (and a [paper by Mancosu & Vegetti, 2020](https://dx.doi.org/10.1177/2056305120940703) makes a similar point). However, you should use this method with caution. The [robots.txt of *YouTube*](https://www.youtube.com/robots.txt) disallows the scraping of results pages. In practical terms, the (over)use of web scraping might, e.g., get your IP address blocked (at least temporarily). A complete introduction to web scraping would be beyond the scope of this workshop, but there are many online tutorials on this (e.g., [this one](https://blog.rsquaredacademy.com/web-scraping/)). 
 
 ---
 
@@ -664,7 +682,7 @@ glimpse(comments)
 
 ## `VOSONDash`
 
-As stated before, `VOSONDash` provided a GUI for using the functionalities of `vosonSML`. You can simply launch it locally by loading the library and running a command to launch the `R Shiny` app.
+As stated before, `VOSONDash` provides a GUI for using the functionalities of `vosonSML`. You can simply launch it locally by loading the library and running a command to launch the `R Shiny` app.
 
 ```{r voson-dash, eval=FALSE}
 library(VOSONDash)
@@ -678,9 +696,9 @@ runVOSONDash()
 
 ## Saving comment data
 
-Regardless of whether you collected *YouTube* comments using `tuber` or `vosonSML`, you can, of course, always export them into your format of choice, such as `.rds` or `.csv`.
+As before for the comments collected with `tuber`, you can, of course, also export data collected with `vosonSML` into your format of choice, such as `.rds` or `.csv`.
 
-```{r save-comments, eval=FALSE}
+```{r save-comments-2, eval=FALSE}
 saveRDS(comments, file = "./data/comments.rds")
 
 readr::write_csv(comments, file = "./data/comments.csv")

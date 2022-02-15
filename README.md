@@ -78,7 +78,7 @@ For the exercises as well as for "coding along" with the slides, access to the *
 
 ### Exercises
 
-[A2 YouTube API exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/A2_The_Youtube_API_question.html)
+[A2 YouTube API exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/A2_The_Youtube_API_exercises_question.html)
 
 [A3 tuber data collection exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/A3_tuber_exercises_question.html)
 
@@ -86,11 +86,11 @@ For the exercises as well as for "coding along" with the slides, access to the *
 
 [B1 Basic text analysis exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/B1_Basic_text_analysis_exercises_question.html)
 
-[B2 Sentiment analysis of user comments exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/B2_Sentiment_Analysis_of_User_Comments_question.html)
+[B2 Sentiment analysis of user comments exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/B2_Sentiment_analysis_of_user_comments_exercises_question.html)
 
 ### Solutions
 
-[A2 YouTube API exercise solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/A2_The_Youtube_API_solution.html)
+[A2 YouTube API exercise solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/A2_The_Youtube_API_exercises_solution.html)
 
 [A3 tuber data collection exercise solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/A3_tuber_exercises_solution.html)
 
@@ -98,4 +98,4 @@ For the exercises as well as for "coding along" with the slides, access to the *
 
 [B1 Basic text analysis exercise solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/B1_Basic_text_analysis_exercises_solution.html)
 
-[B2 Sentiment analysis of user comments exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/B2_Sentiment_Analysis_of_User_Comments_solution.html)
+[B2 Sentiment analysis of user comments exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/B2_Sentiment_analysis_of_user_comments_exercises_solution.html)

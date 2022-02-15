@@ -22,12 +22,12 @@ knitr::opts_template$set(clues = list(box.title = "Clues",
 klippy::klippy(position = c("top", "right"))
 ```
 
-In the following exercises, we will use the data you have collected in the previous session (all comments for the video ["The Census" by Last Week Tonight with John Oliver](https://www.youtube.com/watch?v=1aheRpmurAo). Please note that your results might look slightly different than the output in the solutions for these exercises as we collected the comments earlier. 
+In the following exercises, we will use the data you have collected and preprocessed in the previous sets of exercises (all comments for the video ["The Census" by Last Week Tonight with John Oliver](https://www.youtube.com/watch?v=1aheRpmurAo)). Please note that your results might look slightly different than the output in the solutions for these exercises as we collected the comments earlier. 
 
 First we need to load the parsed comments data (**NB**: You might have to adjust the following code to use the correct file path on your computer).
 
 ```{r load-data}
-comments <- readRDS("../data/ParsedComments.rds")
+comments <- readRDS("../data/ParsedLWTComments.rds")
 ```
 
 After loading the data, we go through the preprocessing steps described in the slides. In a first step, we remove newline commands from the comment strings (without emojis).
@@ -62,7 +62,7 @@ comments_dfm <- dfm(toks,
 
 **NB**: Your results might look a little different as we have collected the comments that the solutions in this exercise are based on a couple of days ago.
 
-```{block, box.title = "1", box.body = list(fill = "white"), box.icon = "fa-star"}
+```{block, box.title = "Exercise 1", box.body = list(fill = "white"), box.icon = "fa-star"}
 Which are the 20 most frequently used words in the comments on the video "The Census" by Last Week Tonight with John Oliver? Save the overall word ranking in a new object called `term_freq`.
 ```
 
@@ -77,7 +77,7 @@ term_freq <- textstat_frequency(comments_dfm)
 head(term_freq, 20)
 ```
 
-```{block, box.title = "2", box.body = list(fill = "white"), box.icon = "fa-star"}
+```{block, box.title = "Exercise 2", box.body = list(fill = "white"), box.icon = "fa-star"}
 Instead of the raw frequency we can also look at the number of comments that a particular word appears in. This metric takes into account that words might be used multiple times in the same comment. What are the 10 words that are used in the highest number of comments on the video "The Census" by Last Week Tonight with John Oliver?
 ```
 
@@ -104,7 +104,7 @@ emoji_toks <- comments %>%
 EmojiDfm <- dfm(emoji_toks)
 ```
 
-```{block, box.title = "3", box.body = list(fill = "white"), box.icon = "fa-star"}
+```{block, box.title = "Exercise 3", box.body = list(fill = "white"), box.icon = "fa-star"}
 What were the 10 most frequently used emojis comments on the video "The Census" by Last Week Tonight with John Oliver?
 ```
 
@@ -117,7 +117,7 @@ EmojiFreq <- textstat_frequency(EmojiDfm)
 head(EmojiFreq, n = 10)
 ```
 
-```{block, box.title = "4", box.body = list(fill = "white"), box.icon = "fa-star"}
+```{block, box.title = "Exercise 4", box.body = list(fill = "white"), box.icon = "fa-star"}
 The ranking based on raw counts of emojis might be affected by *YouTube* users "spamming" emojis in their comments (i.e., using the same emojis many times in the same comment). Hence, it makes sense to also look at the number of unique comments that an emoji appears in. What are the 10 emojis that appear in the highest number of comments on the video "The Census" by Last Week Tonight with John Oliver?
 ```
 
@@ -131,7 +131,7 @@ EmojiFreq  %>%
   head(10)
 ```
 
-```{block, box.title = "Bonus", box.body = list(fill = "white"), box.icon = "fa-star"}
+```{block, box.title = "Exercise 5 (Bonus)", box.body = list(fill = "white"), box.icon = "fa-star"}
 If you're finished with tasks 1-4 and/or want to do/try out something else, you can create an emoji plot similar to the one you saw in the lecture slides for the video "The Census" by Last Week Tonight with John Oliver. We have created a script containing a function for the emoji mapping which you can source with the following code (**NB**: you might have to adjust the path to the script in the code below). You might also want to have a look at the `emoji_mapping_function.R` file to see what this functions does.
 **Bonus Bonus**: Alternatively or additionally, you can also try to recreate the [emoji plot approach by Emil Hvitfeldt](https://www.emilhvitfeldt.com/post/2020-01-02-real-emojis-in-ggplot2/).
 ```

@@ -1,7 +1,7 @@
 ---
 title: "Automatic Sampling and Analysis of YouTube Data"
 subtitle: "The YouTube API"
-author: "Julian Kohne<br />Johannes Breuer<br />M. Rohangis Mohseni"
+author: "<b><i>Julian Kohne</b></i><br />Johannes Breuer<br />M. Rohangis Mohseni"
 date: "2022-02-21"
 location: "GESIS, online"
 output:

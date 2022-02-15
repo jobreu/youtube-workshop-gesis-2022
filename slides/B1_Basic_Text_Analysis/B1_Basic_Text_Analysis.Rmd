@@ -81,31 +81,45 @@ library(emo)
 
 ---
 
-## Collect & Parse the Data
+## Get the Data
 
-*Note*: To save time and your *YouTube* API quota limit you might not want to "code along" in this session
+As in the last session, we will be working with the - now processed and cleaned - comments for the [Emoji Movie Trailer](https://www.youtube.com/watch?v=r8pJt4dK_s4). In case you have collected and saved the comments before, you can just load them at this point.
+
+```{r load-comments, eval=FALSE}
+FormattedComments <- readRDS("./data/ParsedEmojiComments.rds") 
+```
+
+*Note*: Depending on where you saved the data, how you named the file, and what your current working directory is, you might have to adjust the file path.
+
+```{r load-data, echo=F}
+FormattedComments <- readRDS("../../data/ParsedEmojiComments.rds")
+```
+
+---
+
+## Repetition: Collecting Data
+
+If you have not collected and parsed the comments before, you, of course, need to do that before you can analyse any data.
+
+**NB**: To save time and your *YouTube* API quota limit you might not want to do this now.
 
 Step 1: Collecting the comments
 ```{r get-comments, eval=F}
 Comments <- get_all_comments(video_id="r8pJt4dK_s4") # takes a while
 ```
 
---
+---
 
-Step 2: Parse/process the comments
+## Repetition: Parsing the Comments
 
-For this to work, the script `yt_parse.R` as well as the ones containing the helper functions (`CamelCase.R`, `ExtractEmoji.R`, and `ReplaceEmoji.R`) need to be in the working directory (you can find those files in the `scripts` folder in the workshop materials).
+To run the following code the script `yt_parse.R` as well as the ones containing the helper functions (`CamelCase.R`, `ExtractEmoji.R`, and `ReplaceEmoji.R`) need to be in the working directory (you can find those files in the `scripts` folder in the workshop materials).
 
 ```{r parse-comments, eval=F}
 source("yt_parse.R")
 FormattedComments <- yt_parse(Comments) # this will take a while
 ```
 
-```{r load-data, echo=F}
-FormattedComments <- readRDS("../../data/ParsedEmojiComments.rds")
-```
-
-*Note*: As an alternative to sourcing the `yt_parse.R` file you can also "manually" run the code from the slides for the session on *Processing and Cleaning User Comments* on the collected comments.
+*Note*: As an alternative to sourcing the `yt_parse.R` file you could also "manually" run the code from the slides for the session on *Processing and Cleaning User Comments* on the collected comments.
 
 ---
 
@@ -339,7 +353,7 @@ head(TermFreq, n = 20)
 We may want to remove additional words (that are not included in the stopwords list) if we consider them irrelevant for our analyses.
 
 ```{r custom-stops}
-custom_stopwords <- c("nom", "<U+07D8>")
+custom_stopwords <- c("nom", "just", "one")
 commentsDfm <- dfm(toks, remove = c(quanteda::stopwords("english"),
                                     custom_stopwords))
 TermFreq <- textstat_frequency(commentsDfm)
