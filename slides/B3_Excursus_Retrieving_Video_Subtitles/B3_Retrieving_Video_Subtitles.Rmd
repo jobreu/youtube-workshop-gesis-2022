@@ -1,8 +1,8 @@
 --- 
 title: "Automatic Sampling and Analysis of YouTube Data"
 subtitle: "Excursus: Retrieving Video Subtitles"
-author: "Julian Kohne<br />Johannes Breuer<br />M. Rohangis Mohseni"
-date: "2022-02-21"
+author: "Julian Kohne<br />Johannes Breuer<br /><b><i>M. Rohangis Mohseni</b></i>"
+date: "2022-02-22"
 location: "GESIS, online" 
 output:
   xaringan::moon_reader:
@@ -36,7 +36,7 @@ packages("knitr",
 options(htmltools.dir.version = FALSE,
         htmltools.preserve.raw = FALSE)
 
-opts_chunk$set(echo = FALSE,
+opts_chunk$set(echo = TRUE,
                fig.align = "center")
 
 xaringanExtra::use_xaringan_extra(c("tile_view", "clipboard"))
@@ -90,39 +90,49 @@ pre {
 
 ## Disclaimer
 
-Due to a recent change to the *YouTube* API, the `tuber` function for retrieving video subtitles seems to only work for videos that were created with the same account as the app used for the API access (see this [closed `tuber` issue on GitHub](https://github.com/soodoku/tuber/issues/78). We will still discuss this function, but recommend that you use the [`youtubecaption` package](https://github.com/jooyoungseo/youtubecaption) for collecting subtitles for videos that you have not created yourself. 
-
----
-
-## Retrieving Video Subtitles with `tuber`
-
-- Retrieve a list of subtitles with
-
-  - `tuber::list_caption_tracks()`
-  
-- Quota costs ~ 50
+Due to a change to the *YouTube* API, the `tuber` function for retrieving video subtitles only work for videos that were created with the same account as the app used for the API access (see this [closed `tuber` issue on GitHub](https://github.com/soodoku/tuber/issues/78)). We will still discuss this function, but recommend that you use the [`youtubecaption` package](https://github.com/jooyoungseo/youtubecaption) for collecting subtitles for videos that you have not created yourself. 
   
 ---
 
 ## Retrieving Video Subtitles with `tuber`
 
-- First, we need to get the list of subtitles for a video
+First, we need to get the list of subtitles for a video.
 
-  `caption_list <- list_caption_tracks(video_id = "nI_OfkQOG6Q")`
+```{r caption-list, eval=FALSE}
+library(tuber)
 
-- Next, we need to get the ID of the subtitles we want to collect
+caption_list <- list_caption_tracks(video_id = "nI_OfkQOG6Q")
+```
 
-  `ID <- caption_list[1,"id"]`
+*Note*: The `tuber` function `list_caption_tracks()` has an API quota cost ~ 50.
+
+---
+
+## Retrieving Video Subtitles with `tuber`
+
+Next, we need to get the ID of the subtitles we want to collect.
+
+```{r caption-id, eval=FALSE}
+ID <- caption_list[1,"id"]
+```
   
-- Adapt the number to select the subtitle that you want (ASR = automatic sub)
+*Note*: You can adapt the number to select the subtitle that you want (ASR = automatic sub)
 
-- After that, we need to retrieve the subtitles and convert them from raw to char
+---
 
-  `text <- rawToChar(get_captions(id = ID, format = "sbv"))`
+## Retrieving Video Subtitles with `tuber`
 
-- Now we can save the subtitles to a subtitle file
+After that, we need to retrieve the subtitles and convert them from raw to char.
 
-  `write(text, file = "Captions.sbv", sep="\n")`
+```{r rawtochar, eval=FALSE}
+text <- rawToChar(get_captions(id = ID, format = "sbv"))
+```
+
+Now we can save the subtitles to a subtitle file.
+
+```{r write-file, eval=FALSE}
+write(text, file = "Captions.sbv", sep="\n")
+```
 
 ---
 
@@ -134,13 +144,23 @@ Due to a recent change to the *YouTube* API, the `tuber` function for retrieving
 
 - We can read the format with the package [`subtools`](https://github.com/fkeck/subtools)
 
- `subs <- read_subtitles("Captions.sbv", format = "subviewer")`
+---
+
+## Converting Subtitles
+
+```{r read-subs, eval=FALSE}
+library(subtools)
+
+subs <- read_subtitles("Captions.sbv", format = "subviewer")
+```
  
-- With subtools, we can also retrieve the text from the subtitles
+With `subtools`, we can also retrieve the text from the subtitles.
 
-  `subtext <- get_raw_text(Subs)`
+```{r get-text, eval=FALSE}
+subtext <- get_raw_text(subs)
+```
 
-- Now the text is ready for text analysis
+Now the text is ready for further analysis (see the previous sessions for examples).
 
 ---
 

@@ -56,7 +56,7 @@ xaringanExtra::use_extra_styles(hover_code_line = TRUE,
 
 As stated in the Introduction, there are several packages for collecting *YouTube* data in `R`: [`tuber`](https://cran.r-project.org/web/packages/tuber/), [`vosonSML`](https://cran.r-project.org/web/packages/vosonSML/), [`VOSONDash`](https://vosonlab.github.io/VOSONDash/), and [`youtubecaption`](https://cran.r-project.org/web/packages/youtubecaption/).
 
-In this session, we will focus on working with the `tuber` package.
+In this session, we will focus on working with the `tuber` package. While `vosonSML` and `VOSONDash` are very powerful for generating (and analyzing) network data (and can also collect more comments per video as we will see later), `tuber` offers functions for collecting different types of data about channels, playlists, and videos.
 
 ---
 
@@ -196,48 +196,32 @@ token$`0123456789abcdefghij`$app$appname
 
 ## App Authorization (1)
 
-After making your choice regarding the `.httr-oauth` file, a browser window should open, prompting you to log in with your *Google* account and to give permissions.
-
-![plot](images/20.png)
-
----
-
-## App Authorization (2)
-
- *Google* will mark the app as unsecure as it has not been verified. However, since you created the app and presumably are its sole user, you can go ahead and trust yourself: Click "Extended".
-
-![plot](images/21.png)
----
-
-## App Authorization (3)
-
-Click "Go to Name_of_your_app(unsafe)".
-
-![plot](images/22.png)
-
----
-
-## App Authorization (4)
-
-Click "Allow" to grant the app the required permissions for this/your account.
+After making your choice regarding the `.httr-oauth` file, a browser window should open, prompting you to select/log in with your *Google* account and to give permissions.
 
 ![plot](images/23.png)
 
 ---
 
-## App Authorization (5)
+## App Authorization (2)
 
-Click "Allow" again to confirm your choice
+*Google* warns you that the app has not been verified, but you can trust yourself and click on "Continue".
 
 ![plot](images/24.png)
+---
+
+## App Authorization (3)
+
+Allow the app (and, hence, yourself) to make changes to the account.
+
+![plot](images/25.png)
 
 ---
 
-## App Authorization (6)
+## App Authorization (4)
 
 After that, you can close the browser tab/window and return to `R`/*RStudio*.
 
-![plot](images/25.png)
+![plot](images/26.png)
 
 ---
 
@@ -340,9 +324,31 @@ There are two `tuber` functions for collecting viewer comments for specific vide
 
 2. `get_all_comments()` collects all comments for a video, including replies to comments. **NB:** This function only collects up to 5 replies per comment (the related [issue in the `tuber` GitHub repo](https://github.com/soodoku/tuber/issues/52) is still open). Depending on the number of comments for a video, running this function can take some time and might also deplete your API quota limit (more on that later).
 
---
+---
+
+## Viewer Comments
 
 Our recommendation is that if you want more than the most recent 100 comments, you should use `get_all_comments()`, even if you do not want to analyze replies to comments (you can simply filter those out later on).
+
+If you also care about replies to comments, a good alternative to `tuber::get_all_comments()` is the `Collect()` function from the `vosonSML` package (which we will talk about in a bit) as that collects up to 20 replies for each comment (instead of just 5 as the corresponding `tuber` function does).
+
+---
+
+## Viewer Comments with `tuber`: Example
+
+For example, if you want to collect comments for the [Emoji Movie Trailer](https://www.youtube.com/watch?v=r8pJt4dK_s4) (we will use those as examples in the later sessions), you could do that as follows:
+
+```{r emoji-comments, eval=FALSE}
+emoji_movie_comments <- get_all_comments("r8pJt4dK_s4")
+```
+
+**NB**: To save time and your *YouTube* API quota limit you might not want to run this code now.
+
+You can then export the resulting dataframe in a format of your choice for later use.
+
+```{r save-comments-1, eval=FALSE}
+saveRDS(emoji_movie_comments, file = "./data/RawEmojiComments.rds")
+```
 
 ---
 
@@ -492,7 +498,7 @@ There are two alternatives to using the `yt_search()` function from the `tuber` 
 
 --
 
-2. Web scraping: [Freelon (2018)](https://www.tandfonline.com/doi/abs/10.1080/10584609.2018.1477506?journalCode=upcp20) argues that researchers interested in social media and other internet data should know/learn how to scrape the web in what he calls the "post-API age" (and a [paper by Mancosu & Vegetti, 2020](https://dx.doi.org/10.1177/2056305120940703) makes a similar point). However, you should use this method with caution. The [robots.txt of *YouTube*](https://www.youtube.com/robots.txt) disallows the scraping of results pages. In practical terms, the (over)use of web scraping might, e.g., get your IP address blocked (at least temporarily). A complete introduction to web scraping would be beyond the scope of this workshop, but we have created some slides with a short tutorial (in the folder with the slides on the *YouTube* API) and there are many online tutorials on this (e.g., [this one](https://blog.rsquaredacademy.com/web-scraping/)). 
+2. Web scraping: [Freelon (2018)](https://www.tandfonline.com/doi/abs/10.1080/10584609.2018.1477506?journalCode=upcp20) argues that researchers interested in social media and other internet data should know/learn how to scrape the web in what he calls the "post-API age" (and a [paper by Mancosu & Vegetti, 2020](https://dx.doi.org/10.1177/2056305120940703) makes a similar point). However, you should use this method with caution. The [robots.txt of *YouTube*](https://www.youtube.com/robots.txt) disallows the scraping of results pages. In practical terms, the (over)use of web scraping might, e.g., get your IP address blocked (at least temporarily). A complete introduction to web scraping would be beyond the scope of this workshop, but there are many online tutorials on this (e.g., [this one](https://blog.rsquaredacademy.com/web-scraping/)). 
 
 ---
 
@@ -570,7 +576,7 @@ a) Estimate the costs based on costs for the specific query and the number of re
 
 --
 
-b) If you want to check your API quota use, you can use the [*Google* Developer Console](https://console.developers.google.com): Choose your project, then on the *Dashboard* click on the name of the API in the list on the bottom (*YouTube Data API v3*), select *Quotas* from the menu on the left, and choose *Queries per minute* from the dropdown-menu for *Queries* as well as an appropriate timeframe (e.g., 6 hrs). **NB**: It takes a bit for the numbers to update after sending your API calls.
+b) If you want to check your API quota use, you can use the [*Google* Developer Console](https://console.developers.google.com): Choose your project, then select *IAM & Admin* -> *Quotas* from the menu on the left-hand side. The important information in the table is the one for the *YouTube Data API v3* quota for *Queries per day* (the limit should be 10000). If you want a more detailed visualizatioon, you can get that via the *Dashboard* in the *API & Services*  menu: Click on the name of the API in the list on the bottom (*YouTube Data API v3*), select *Quotas* from the menu on the left, and choose *Queries per minute* from the dropdown-menu for *Queries* as well as an appropriate timeframe (e.g., 6 hrs). **NB**: It takes a bit for the numbers to update after sending your API calls.
 
 ---
 
@@ -645,10 +651,13 @@ comments <- youtube_auth %>%
           verbose = FALSE)
 ```
 
+*Note*: The `vosonSML::Collect()` function also gives you an estimated API cost.
+
 ---
 
 ## Collecting comments with `vosonSML`
 
+.small[
 ```{r voson-comments-message, echo=FALSE}
 video_ids = c("-5wpm-gesOY", "8ZtInClXe1Q")
 
@@ -657,20 +666,23 @@ comments <- youtube_auth %>%
           maxComments = 100,
           verbose = FALSE)
 ```
+]
 
 ---
 
 ## Collecting comments with `vosonSML`
 
+.small[
 ```{r voson-comments-glimpse}
 glimpse(comments)
 ```
+]
 
 ---
 
 ## `VOSONDash`
 
-As stated before, `VOSONDash` provided a GUI for using the functionalities of `vosonSML`. You can simply launch it locally by loading the library and running a command to launch the `R Shiny` app.
+As stated before, `VOSONDash` provides a GUI for using the functionalities of `vosonSML`. You can simply launch it locally by loading the library and running a command to launch the `R Shiny` app.
 
 ```{r voson-dash, eval=FALSE}
 library(VOSONDash)
@@ -684,9 +696,9 @@ runVOSONDash()
 
 ## Saving comment data
 
-Regardless of whether you collected *YouTube* comments using `tuber` or `vosonSML`, you can, of course, always export them into your format of choice, such as `.rds` or `.csv`.
+As before for the comments collected with `tuber`, you can, of course, also export data collected with `vosonSML` into your format of choice, such as `.rds` or `.csv`.
 
-```{r save-comments, eval=FALSE}
+```{r save-comments-2, eval=FALSE}
 saveRDS(comments, file = "./data/comments.rds")
 
 readr::write_csv(comments, file = "./data/comments.csv")

@@ -4,7 +4,7 @@
     <title>Automatic Sampling and Analysis of YouTube Data</title>
     <meta charset="utf-8" />
     <meta name="author" content="Julian Kohne Johannes Breuer M. Rohangis Mohseni" />
-    <meta name="date" content="2022-02-21" />
+    <meta name="date" content="2022-02-22" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
@@ -23,8 +23,8 @@ class: center, middle, inverse, title-slide
 
 # Automatic Sampling and Analysis of YouTube Data
 ## Excursus: Retrieving Video Subtitles
-### Julian Kohne<br />Johannes Breuer<br />M. Rohangis Mohseni
-### 2022-02-21
+### Julian Kohne<br />Johannes Breuer<br /><b><i>M. Rohangis Mohseni</b></i>
+### 2022-02-22
 
 ---
 
@@ -34,8 +34,8 @@ layout: true
 
 
 &lt;div class="my-footer"&gt;
-  &lt;div style="float: left;"&gt;&lt;span&gt;Julian Kohne, Johannes Breuer, M. Rohangis Mohseni&lt;/span&gt;&lt;/div&gt;
-  &lt;div style="float: right;"&gt;&lt;span&gt;GESIS, online, 2022-02-21&lt;/span&gt;&lt;/div&gt;
+  &lt;div style="float: left;"&gt;&lt;span&gt;Julian Kohne, Johannes Breuer, &lt;b&gt;&lt;i&gt;M. Rohangis Mohseni&lt;/b&gt;&lt;/i&gt;&lt;/span&gt;&lt;/div&gt;
+  &lt;div style="float: right;"&gt;&lt;span&gt;GESIS, online, 2022-02-22&lt;/span&gt;&lt;/div&gt;
   &lt;div style="text-align: center;"&gt;&lt;span&gt;Excursus: Retrieving Video Subtitles&lt;/span&gt;&lt;/div&gt;
 &lt;/div&gt;
 
@@ -79,39 +79,53 @@ pre {
 
 ## Disclaimer
 
-Due to a recent change to the *YouTube* API, the `tuber` function for retrieving video subtitles seems to only work for videos that were created with the same account as the app used for the API access (see this [closed `tuber` issue on GitHub](https://github.com/soodoku/tuber/issues/78). We will still discuss this function, but recommend that you use the [`youtubecaption` package](https://github.com/jooyoungseo/youtubecaption) for collecting subtitles for videos that you have not created yourself. 
-
----
-
-## Retrieving Video Subtitles with `tuber`
-
-- Retrieve a list of subtitles with
-
-  - `tuber::list_caption_tracks()`
-  
-- Quota costs ~ 50
+Due to a change to the *YouTube* API, the `tuber` function for retrieving video subtitles only work for videos that were created with the same account as the app used for the API access (see this [closed `tuber` issue on GitHub](https://github.com/soodoku/tuber/issues/78)). We will still discuss this function, but recommend that you use the [`youtubecaption` package](https://github.com/jooyoungseo/youtubecaption) for collecting subtitles for videos that you have not created yourself. 
   
 ---
 
 ## Retrieving Video Subtitles with `tuber`
 
-- First, we need to get the list of subtitles for a video
+First, we need to get the list of subtitles for a video.
 
-  `caption_list &lt;- list_caption_tracks(video_id = "nI_OfkQOG6Q")`
 
-- Next, we need to get the ID of the subtitles we want to collect
+```r
+library(tuber)
 
-  `ID &lt;- caption_list[1,"id"]`
+caption_list &lt;- list_caption_tracks(video_id = "nI_OfkQOG6Q")
+```
+
+*Note*: The `tuber` function `list_caption_tracks()` has an API quota cost ~ 50.
+
+---
+
+## Retrieving Video Subtitles with `tuber`
+
+Next, we need to get the ID of the subtitles we want to collect.
+
+
+```r
+ID &lt;- caption_list[1,"id"]
+```
   
-- Adapt the number to select the subtitle that you want (ASR = automatic sub)
+*Note*: You can adapt the number to select the subtitle that you want (ASR = automatic sub)
 
-- After that, we need to retrieve the subtitles and convert them from raw to char
+---
 
-  `text &lt;- rawToChar(get_captions(id = ID, format = "sbv"))`
+## Retrieving Video Subtitles with `tuber`
 
-- Now we can save the subtitles to a subtitle file
+After that, we need to retrieve the subtitles and convert them from raw to char.
 
-  `write(text, file = "Captions.sbv", sep="\n")`
+
+```r
+text &lt;- rawToChar(get_captions(id = ID, format = "sbv"))
+```
+
+Now we can save the subtitles to a subtitle file.
+
+
+```r
+write(text, file = "Captions.sbv", sep="\n")
+```
 
 ---
 
@@ -123,13 +137,25 @@ Due to a recent change to the *YouTube* API, the `tuber` function for retrieving
 
 - We can read the format with the package [`subtools`](https://github.com/fkeck/subtools)
 
- `subs &lt;- read_subtitles("Captions.sbv", format = "subviewer")`
+---
+
+## Converting Subtitles
+
+
+```r
+library(subtools)
+
+subs &lt;- read_subtitles("Captions.sbv", format = "subviewer")
+```
  
-- With subtools, we can also retrieve the text from the subtitles
+With `subtools`, we can also retrieve the text from the subtitles.
 
-  `subtext &lt;- get_raw_text(Subs)`
 
-- Now the text is ready for text analysis
+```r
+subtext &lt;- get_raw_text(subs)
+```
+
+Now the text is ready for further analysis (see the previous sessions for examples).
 
 ---
 
@@ -152,6 +178,11 @@ Due to a recent change to the *YouTube* API, the `tuber` function for retrieving
 ---
 
 ## Time for a Short Live Demo
+
+
+```r
+include_graphics("./Images/youtubesubtitles.jpg")
+```
 
 &lt;img src="./Images/youtubesubtitles.jpg" width="75%" style="display: block; margin: auto;" /&gt;
 

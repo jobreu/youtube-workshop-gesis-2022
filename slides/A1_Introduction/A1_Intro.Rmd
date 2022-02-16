@@ -61,10 +61,10 @@ After this course you should be able to...
 
 - M.Sc. in Social Psychology, University of Groningen (NL)
 
-- Scientific Advisor in GESIS presidentidal staff / CSS department
+- Scientific advisor in GESIS presidential staff / Computational Social Science (CSS) department
   - Main area: New developments of GESIS in the area of digital behavioral data
 
-- PhD Student at University of Ulm
+- Ph.D. student at University of Ulm
   - Field: Social Psychology
   - Topic: Quantifying interpersonal relationships with chat log data (*WhatsApp*)
 
@@ -130,7 +130,7 @@ After this course you should be able to...
 
 ## Prerequisites for this course
 
-- Working version of `R` >= 4.0.0 including RTools4 and a recent version of [RStudio](https://rstudio.com/products/rstudio/download/#download)
+- Working version of `R` >= 4.0.0 and a recent version of [RStudio](https://rstudio.com/products/rstudio/download/#download)
 
 - Some basic knowledge of `R`  
 
@@ -146,7 +146,7 @@ After this course you should be able to...
 
 [https://github.com/jobreu/youtube-workshop-gesis-2022](https://github.com/jobreu/youtube-workshop-gesis-2022)
 
-We also put the PDF versions of the slides and some other materials on the GESIS Ilias repository for this course.
+We also put the PDF versions of the slides and some other materials on the [GESIS Ilias](https://ilias.gesis.org/) repository for this course.
 
 ---
 
@@ -258,11 +258,11 @@ knitr::kable(
 
 - Important online video platform<br /><small>([Alexa Traffic Ranks, 2019](https://www.alexa.com/topsites); [Konijn, Veldhuis, & Plaisier, 2013](https://doi.org/10.1089/cyber.2012.0357))</small>
 
-- Esp. popular among adolescents who use it to watch movies & shows, listen to music, and retrieve information<br /><small>([Feierabend, Plankenhorn, & Rathgeb, 2016](https://www.mpfs.de/studien/kim-studie/2016/))</small>
+- Esp. popular among adolescents who use it to, e.g., watch movies & shows, listen to music, and retrieve information<br /><small>([Feierabend, Plankenhorn, & Rathgeb, 2016](https://www.mpfs.de/studien/kim-studie/2016/))</small>
 
 - For adolescents, *YouTube* partly replaces TV<br /><small>([Defy Media, 2017](http://www.newsroom-publicismedia.fr/wp-content/uploads/2017/06/Defi-media-acumen-Youth_Video_Diet-mai-2017.pdf))</small>
 
-- YouTubers can be Social Media stars<br /><small>([Budzinski & Gaenssle, 2018](https://doi.org/10.1080/08997764.2020.1849228))</small>
+- YouTubers can be social media stars<br /><small>([Budzinski & Gaenssle, 2018](https://doi.org/10.1080/08997764.2020.1849228))</small>
 
 ---
 
@@ -270,13 +270,11 @@ knitr::kable(
 
 - Content producers and users generate huge amounts of data
 
-- Useful for research on media content, communicators, and user interaction
+- These data can be useful for research on media content, communicators, and user interaction
 
-- Data publicly available 
+- The data are publicly available and relatively easy to retrieve via the *YouTube* API
 
-- Relatively easy to retrieve via *YouTube* API
-
-- For an overview, see [Arthurs et al., 2019](https://doi.org/10.1177/1354856517737222); [Baertl, 2018](https://doi.org/10.1177/1354856517736979)
+- For some further reasons and examples, see [Arthurs et al., 2019](https://doi.org/10.1177/1354856517737222); [Baertl, 2018](https://doi.org/10.1177/1354856517736979)
 
 ---
 
@@ -333,6 +331,14 @@ There are many different ways in which data from *YouTube* and other social medi
 
 - Automatically via the *YouTube* API or web scraping
 
+--
+
+Overviews of tools for collecting *YouTube* data
+
+- [YouTube Tools](https://smo-wiki.leibniz-hbi.de/YouTube-Tools) collected by the Leibniz-HBI Social Media Observatory
+
+- [Social Media Research Tookit](https://socialmediadata.org/social-media-research-toolkit/) by the Social Media Lab at Ryerson University
+
 ---
 
 ## Tools for the Automatic Sampling of *YouTube* Data without `R`
@@ -342,12 +348,6 @@ There are many different ways in which data from *YouTube* and other social medi
 - [Facepager](https://github.com/strohne/Facepager/wiki)
 
 - [Webometric Analyst](http://lexiurl.wlv.ac.uk/)
-
-Overviews of tools for collecting *YouTube* data
-
-- [YouTube Tools](https://smo-wiki.leibniz-hbi.de/YouTube-Tools) collected by the Leibniz-HBI Social Media Observatory
-
-- [Social Media Research Tookit](https://socialmediadata.org/social-media-research-toolkit/) by the Social Media Lab at Ryerson University
 
 ---
 
@@ -370,7 +370,7 @@ In this course, we will work with the `tuber` package. The *voson* packages focu
 ```{r tools table 1, echo = F}
 tools <- data.frame(
   "Software" = c("YouTube Data Tools 1.22", "Webometric 4.1", "Tuber 0.9.9", "vosonSML 0.29.13", "youtubecaption 1.0.0"),
-  "Type" = c("Website", "Standalone app", "R-package", "R-package", "R-package"),
+  "Type" = c("Website", "Standalone app", "R package", "R package", "R package"),
   "Can collect" = c("Channel Info, Video Info, Comments", "Channel Info, Video Info, Comments, Video Search", "Channel Info, Video Info, Comments, Subtitles, All searches", "Video IDs, Comments", "Subtitles"),
   "Comment Scope" = c("Only all", "100 most recent or all", "20-100 most recent or all", "1-x top-level", "n/a"),
   "Needs API Key" = c("No", "Yes", "Yes", "Yes", "No")
@@ -393,7 +393,7 @@ knitr::kable(
 usability <- data.frame(
 "Software" = c("YouTube Data Tools 1.22", "Webometric 4.1", "Tuber 0.9.9", "vosonSML 0.29.13"),
   "Ease of Use" = c("High", "Low", "Low", "Low"),
-  "Disadvantages" = c("Lacking flexibility, less information", "Only first 5 follow-up comments, no error feedback, undetectable time-outs", "Only first 5 follow-up comments (bug)", "Lacking flexibility, only comments"),
+  "Disadvantages" = c("Lacking flexibility, less information", "Only first 5 follow-up comments, no error feedback, undetectable time-outs", "Only first 5 follow-up comments", "Lacking flexibility, only comments"),
   "No. of Comments" = c("52,243", "49,150", "49,139", "50,619")
   , stringsAsFactors = FALSE
   , check.names = FALSE
@@ -406,7 +406,7 @@ knitr::kable(
 )
 ```
 
-[Dayum Video](https://www.youtube.com/watch?v=DcJFdCmN98s) / [tuber issue](https://github.com/soodoku/tuber/issues/52)
+Example data source: [Dayum Video](https://www.youtube.com/watch?v=DcJFdCmN98s)
 
 ---
 

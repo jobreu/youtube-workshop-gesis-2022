@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Automatic Sampling and Analysis of YouTube Data</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Julian Kohne Johannes Breuer M. Rohangis Mohseni" />
+    <meta name="date" content="2022-02-22" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <script src="libs/clipboard/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <link href="libs/xaringanExtra-extra-styles/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../workshop.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Automatic Sampling and Analysis of YouTube Data
+## Recap - Outlook - Practice
+### Julian Kohne<br />Johannes Breuer<br />M. Rohangis Mohseni
+### 2022-02-22
+
+---
+
+layout: true
+
+
+
+&lt;div class="my-footer"&gt;
+  &lt;div style="float: left;"&gt;&lt;span&gt;Julian Kohne, Johannes Breuer, M. Rohangis Mohseni&lt;/span&gt;&lt;/div&gt;
+  &lt;div style="float: right;"&gt;&lt;span&gt;GESIS, online, 2022-02-22&lt;/span&gt;&lt;/div&gt;
+  &lt;div style="text-align: center;"&gt;&lt;span&gt;Recap - Outlook - Practice&lt;/span&gt;&lt;/div&gt;
+&lt;/div&gt;
+  
+---
+
+## Course Recap (1)
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Session &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Example content &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Introduction &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Why is YouTube data interesting for research? &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The YouTube API &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; API access, API requests, quota limits &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Collecting data with the tuber package for R &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Collecting channel/video stats &amp; viewer comments &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Processing and cleaning user comments &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Character encoding, string operations, emoji dictionaries &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+
+---
+
+## Course Recap (2)
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Session &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Example content &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Basic text analysis of user comments &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Counting and visualizing the frequencies of words and emojis in comments &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Sentiment analysis of user comments &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Assigning sentiment scores to words and emojis &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Excursus: Retrieving video subtitles &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Retrieving and parsing YouTube video subtitles &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+## Where To Go From Here?
+
+Some topics that we did not cover or only briefly touched upon that you might want to explore next/further:
+
+- Analyses for more than one video: use for-loops, functions from the `apply` family or `map` functions from the [`purrr` package](https://purrr.tidyverse.org/)
+
+--
+
+- Advanced text mining and NLP (going beyond [bag-of-words approaches](https://en.wikipedia.org/wiki/Bag-of-words_model)): check out the introductions/tutorials mentioned in the session on basic text analysis or this [presentation by Cosima Meyer](https://cosimameyer.rbind.io/talk/nlp-rladies-tunis/)
+
+--
+
+- Alternatives to dictionary-based approaches for sentiment analysis: See the publications by [Boukes et al., 2019](https://doi.org/10.1080/19312458.2019.1671966) and [van Atteveldt et al., 2021](https://doi.org/10.1080/19312458.2020.1869198)
+
+--
+
+- Supervised machine learning for text analysis: The online book [Supervised Machine Learning for Text Analysis in R](https://smltar.com/) by Emil Hvitfeldt and Julia Silge is an excellent resource here
+
+--
+
+- Topic models (unsupervised ML): To get started you can, e.g., have a look at the introductions/tutorials by [Rachael Tatman](https://www.kaggle.com/rtatman/nlp-in-r-topic-modelling), [Julia Silge](https://juliasilge.com/blog/sherlock-holmes-stm/), or the [*Pew Research Center*](https://medium.com/pew-research-center-decoded/an-intro-to-topic-models-for-text-analysis-de5aa3e72bdb)
+
+---
+
+## Shameful Self-Promotion 🙈
+
+We have written a book chapter based on this course which should be published later this year:
+
+Breuer, J., Kohne, J., &amp; Mohseni, R. M. (2022). Using YouTube Data for Social Science
+Research. In J. Skopek (Ed.), *Research Handbook of Digital Sociology*. Edward Elgar Publishing.
+
+If you are interested in working with *WhatsApp* data (and/or what else you can do with emojis and emoticons in text data), check out Julian's [`WhatsR` package](https://github.com/gesiscss/WhatsR) (which is also still work in progress).
+
+---
+
+## Acknowledgements ❤️
+
+All slides were created with the `R` package [`xaringan`](https://github.com/yihui/xaringan) which builds on [`remark.js`](https://remarkjs.com), [`knitr`](http://yihui.name/knitr), and [`R Markdown`](https://rmarkdown.rstudio.com). The exercises were created with the [`unilur` package](https://github.com/koncina/unilur).  
+
+The original inspiration for our emoji parsing and analyses came from a [blog post](http://opiateforthemass.es/articles/emoji-analysis/) by [Jessica Peterka-Bonetta](https://github.com/today-is-a-good-day).  
+
+We thank the *GESIS* Training team for taking good care of the organization of this workshop, and all of you for participating!
+
+---
+
+class: center, middle
+
+# Any final questions or comments?
+
+---
+
+class: center, middle
+
+# Practice time
+
+## You now have some time to start or continue working on your own *YouTube* data analysis project. We'll be around, so feel free to ask questions while you work on or get started with your projects. 
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

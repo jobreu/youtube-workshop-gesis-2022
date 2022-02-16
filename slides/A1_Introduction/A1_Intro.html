@@ -57,10 +57,10 @@ After this course you should be able to...
 
 - M.Sc. in Social Psychology, University of Groningen (NL)
 
-- Scientific Advisor in GESIS presidentidal staff / CSS department
-  - Main area: developments of GESIS in the area of digital behavioral data
+- Scientific advisor in GESIS presidential staff / Computational Social Science (CSS) department
+  - Main area: New developments of GESIS in the area of digital behavioral data
 
-- PhD Student at University of Ulm / Stanford Social Media Lab
+- Ph.D. student at University of Ulm
   - Field: Social Psychology
   - Topic: Quantifying interpersonal relationships with chat log data (*WhatsApp*)
 
@@ -126,7 +126,7 @@ After this course you should be able to...
 
 ## Prerequisites for this course
 
-- Working version of `R` &gt;= 4.0.0 including RTools4 and a recent version of [RStudio](https://rstudio.com/products/rstudio/download/#download)
+- Working version of `R` &gt;= 4.0.0 and a recent version of [RStudio](https://rstudio.com/products/rstudio/download/#download)
 
 - Some basic knowledge of `R`  
 
@@ -142,7 +142,7 @@ After this course you should be able to...
 
 [https://github.com/jobreu/youtube-workshop-gesis-2022](https://github.com/jobreu/youtube-workshop-gesis-2022)
 
-We also put the PDF versions of the slides and some other materials on the GESIS Ilias repository for this course.
+We also put the PDF versions of the slides and some other materials on the [GESIS Ilias](https://ilias.gesis.org/) repository for this course.
 
 ---
 
@@ -294,11 +294,11 @@ Another thing you might notice when looking at our code is that we love 🐍 as 
 
 - Important online video platform&lt;br /&gt;&lt;small&gt;([Alexa Traffic Ranks, 2019](https://www.alexa.com/topsites); [Konijn, Veldhuis, &amp; Plaisier, 2013](https://doi.org/10.1089/cyber.2012.0357))&lt;/small&gt;
 
-- Esp. popular among adolescents who use it to watch movies &amp; shows, listen to music, and retrieve information&lt;br /&gt;&lt;small&gt;([Feierabend, Plankenhorn, &amp; Rathgeb, 2016](https://www.mpfs.de/studien/kim-studie/2016/))&lt;/small&gt;
+- Esp. popular among adolescents who use it to, e.g., watch movies &amp; shows, listen to music, and retrieve information&lt;br /&gt;&lt;small&gt;([Feierabend, Plankenhorn, &amp; Rathgeb, 2016](https://www.mpfs.de/studien/kim-studie/2016/))&lt;/small&gt;
 
 - For adolescents, *YouTube* partly replaces TV&lt;br /&gt;&lt;small&gt;([Defy Media, 2017](http://www.newsroom-publicismedia.fr/wp-content/uploads/2017/06/Defi-media-acumen-Youth_Video_Diet-mai-2017.pdf))&lt;/small&gt;
 
-- YouTubers can be Social Media stars&lt;br /&gt;&lt;small&gt;([Budzinski &amp; Gaenssle, 2018](https://doi.org/10.1080/08997764.2020.1849228))&lt;/small&gt;
+- YouTubers can be social media stars&lt;br /&gt;&lt;small&gt;([Budzinski &amp; Gaenssle, 2018](https://doi.org/10.1080/08997764.2020.1849228))&lt;/small&gt;
 
 ---
 
@@ -306,13 +306,11 @@ Another thing you might notice when looking at our code is that we love 🐍 as 
 
 - Content producers and users generate huge amounts of data
 
-- Useful for research on media content, communicators, and user interaction
+- These data can be useful for research on media content, communicators, and user interaction
 
-- Data publicly available 
+- The data are publicly available and relatively easy to retrieve via the *YouTube* API
 
-- Relatively easy to retrieve via *YouTube* API
-
-- For an overview, see [Arthurs et al., 2019](https://doi.org/10.1177/1354856517737222); [Baertl, 2018](https://doi.org/10.1177/1354856517736979)
+- For some further reasons and examples, see [Arthurs et al., 2019](https://doi.org/10.1177/1354856517737222); [Baertl, 2018](https://doi.org/10.1177/1354856517736979)
 
 ---
 
@@ -369,6 +367,14 @@ There are many different ways in which data from *YouTube* and other social medi
 
 - Automatically via the *YouTube* API or web scraping
 
+--
+
+Overviews of tools for collecting *YouTube* data
+
+- [YouTube Tools](https://smo-wiki.leibniz-hbi.de/YouTube-Tools) collected by the Leibniz-HBI Social Media Observatory
+
+- [Social Media Research Tookit](https://socialmediadata.org/social-media-research-toolkit/) by the Social Media Lab at Ryerson University
+
 ---
 
 ## Tools for the Automatic Sampling of *YouTube* Data without `R`
@@ -378,12 +384,6 @@ There are many different ways in which data from *YouTube* and other social medi
 - [Facepager](https://github.com/strohne/Facepager/wiki)
 
 - [Webometric Analyst](http://lexiurl.wlv.ac.uk/)
-
-Overviews of tools for collecting *YouTube* data
-
-- [YouTube Tools](https://smo-wiki.leibniz-hbi.de/YouTube-Tools) collected by the Leibniz-HBI Social Media Observatory
-
-- [Social Media Research Tookit](https://socialmediadata.org/social-media-research-toolkit/) by the Social Media Lab at Ryerson University
 
 ---
 
@@ -430,21 +430,21 @@ In this course, we will work with the `tuber` package. The *voson* packages focu
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:center;"&gt; Tuber 0.9.9 &lt;/td&gt;
-   &lt;td style="text-align:center;"&gt; R-package &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; R package &lt;/td&gt;
    &lt;td style="text-align:center;"&gt; Channel Info, Video Info, Comments, Subtitles, All searches &lt;/td&gt;
    &lt;td style="text-align:center;"&gt; 20-100 most recent or all &lt;/td&gt;
    &lt;td style="text-align:center;"&gt; Yes &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:center;"&gt; vosonSML 0.29.13 &lt;/td&gt;
-   &lt;td style="text-align:center;"&gt; R-package &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; R package &lt;/td&gt;
    &lt;td style="text-align:center;"&gt; Video IDs, Comments &lt;/td&gt;
    &lt;td style="text-align:center;"&gt; 1-x top-level &lt;/td&gt;
    &lt;td style="text-align:center;"&gt; Yes &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:center;"&gt; youtubecaption 1.0.0 &lt;/td&gt;
-   &lt;td style="text-align:center;"&gt; R-package &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; R package &lt;/td&gt;
    &lt;td style="text-align:center;"&gt; Subtitles &lt;/td&gt;
    &lt;td style="text-align:center;"&gt; n/a &lt;/td&gt;
    &lt;td style="text-align:center;"&gt; No &lt;/td&gt;
@@ -481,7 +481,7 @@ In this course, we will work with the `tuber` package. The *voson* packages focu
   &lt;tr&gt;
    &lt;td style="text-align:center;"&gt; Tuber 0.9.9 &lt;/td&gt;
    &lt;td style="text-align:center;"&gt; Low &lt;/td&gt;
-   &lt;td style="text-align:center;"&gt; Only first 5 follow-up comments (bug) &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; Only first 5 follow-up comments &lt;/td&gt;
    &lt;td style="text-align:center;"&gt; 49,139 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
@@ -493,7 +493,7 @@ In this course, we will work with the `tuber` package. The *voson* packages focu
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-[Dayum Video](https://www.youtube.com/watch?v=DcJFdCmN98s) / [tuber issue](https://github.com/soodoku/tuber/issues/52)
+Example data source: [Dayum Video](https://www.youtube.com/watch?v=DcJFdCmN98s)
 
 ---
 

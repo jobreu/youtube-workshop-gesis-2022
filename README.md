@@ -27,6 +27,8 @@ Participants will learn how they can use *YouTube* data for their research. They
 
 Participants should at least have some basic knowledge of `R` and, ideally, also the `tidyverse`. Basic `R` knowledge can, for example, be acquired through the *swirl* course "R Programming" (see https://swirlstats.com/) or the [*RStudio* Primer "Programming basics"](https://rstudio.cloud/learn/primers/1.2), both of which are available for free. There also are many brief online introductions to the `tidyverse`, such as this [blog post by Dominic Royé](https://dominicroye.github.io/en/2020/a-very-short-introduction-to-tidyverse/) or this [workshop by Olivier Gimenez](https://oliviergimenez.github.io/intro_tidyverse/#1).
 
+For the exercises as well as for "coding along" with the slides, access to the *YouTube* API is required. Information on this can be found in the slides on the [*YouTube* API Setup](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/A0_YouTube_API_Setup/A0_YouTubeAPISetup.html).  
+
 ## Timetable
 
 ### Day 1
@@ -35,28 +37,65 @@ Participants should at least have some basic knowledge of `R` and, ideally, also
 | ------------- | --------------------------------------- |
 | 10:00 - 11:00 | Introduction                            |
 | 11:00 - 11:30 | *Break*                                 |
-| 11:00 - 11:30 | The *YouTube* API                       | 
-| 11:00 - 11:30 | *Lunch Break*                           | 
-| 11:00 - 11:30 | Collecting data with `tuber` for `R`    | 
-| 11:00 - 11:30 | *Break*                                 | 
-| 11:00 - 11:30 | Processing and cleaning user comments   | 
+| 11:00 - 12:30 | The *YouTube* API                       | 
+| 12:30 - 13:30 | *Lunch Break*                           | 
+| 13:30 - 15:00 | Collecting data with `tuber` for `R`    | 
+| 15:00 - 15:30 | *Break*                                 | 
+| 15:30 - 17:00 | Processing and cleaning user comments   | 
 
 ### Day 2
 
 | Time          | Topic                                   |
 | ------------- | --------------------------------------- |
-| 10:00 - 11:00 | Basic text analysis of user comments    |
-| 11:00 - 11:30 | *Break*                                 |
-| 11:00 - 11:30 | Sentiment analysis of user comments     | 
-| 11:00 - 11:30 | *Lunch Break*                           | 
+| 09:00 - 10:30 | Basic text analysis of user comments    |
+| 10:30 - 11:30 | *Break*                                 |
+| 11:00 - 12:00 | Sentiment analysis of user comments     | 
+| 13:00 - 14:00 | *Lunch Break*                           | 
 | 11:00 - 11:30 | Excursus: Retrieving video subtitles    | 
-| 11:00 - 11:30 | *Break*                                 | 
-| 11:00 - 11:30 | Practice session, questions, & outlook  | 
+| 14:00 - 14:30 | *Break*                                 | 
+| 14:30 - 16:00 | Practice session, questions, & outlook  | 
 
 ## Materials
 
 ### Slides
 
+[A1 Introduction](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/A1_Introduction/A1_Intro.html)             
+
+[A2 The YouTube API](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/A2_The_YouTube_API/A2_The_YouTube_API.html)
+
+[A3 Collecting data with tuber](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/A3_Collecting_data_with_tuber/A3_Collecting_data_with_the_tuber_package_for_R.html)
+
+[A4 Processing and cleaning user comments](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/A4_Processing_and_cleaning_user_comments/A4_Processing_and_Cleaning_User_Comments.html)
+
+[B1 Basic text analysis](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/B1_Basic_Text_Analysis/B1_Basic_Text_Analysis.html)
+
+[B2 Sentiment analysis of user comments](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/B2_Sentiment_Analysis_of_User_Comments/B2_Sentiment_Analysis_of_User_Comments.html)
+
+[B3 Excursus: Retrieving video subtitles](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/B3_Excursus_Retrieving_Video_Subtitles/B3_Retrieving_Video_Subtitles.html)
+
+[B4 Outlook, Recap, Practice](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/B4_Recap_Outlook_Practice/B4_Recap_Outlook_Practice.html)
+
+
 ### Exercises
 
+[A2 YouTube API exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/A2_The_Youtube_API_exercises_question.html)
+
+[A3 tuber data collection exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/A3_tuber_exercises_question.html)
+
+[A4 Processing and cleaning user comments exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/A4_Preprocessing_and_cleaning_data_question.html)
+
+[B1 Basic text analysis exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/B1_Basic_text_analysis_exercises_question.html)
+
+[B2 Sentiment analysis of user comments exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/B2_Sentiment_analysis_of_user_comments_exercises_question.html)
+
 ### Solutions
+
+[A2 YouTube API exercise solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/A2_The_Youtube_API_exercises_solution.html)
+
+[A3 tuber data collection exercise solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/A3_tuber_exercises_solution.html)
+
+[A4 Processing and cleaning user comments exercise solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/A4_Preprocessing_and_cleaning_data_solution.html)
+
+[B1 Basic text analysis exercise solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/B1_Basic_text_analysis_exercises_solution.html)
+
+[B2 Sentiment analysis of user comments exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/B2_Sentiment_analysis_of_user_comments_exercises_solution.html)
