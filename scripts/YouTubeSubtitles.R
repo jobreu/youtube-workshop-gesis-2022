@@ -1,4 +1,10 @@
+# DISCLAIMER: Due to a change in the YouTube API, the get_captions function from the tuber package only works for videos created with the account that the app used for API access was created with
+# If you want to collect subtitles for videos that you did not create yourself, you should use the youtubecaption package (see below)
+
 #### Setup ####
+
+# Before doing anything else, please run the script "Authentication.R" first
+
 # Install & load packages
 if (!require(youtubecaption)) install.packages("youtubecaption") # Easier option for getting captions; needs Anaconda
 if (!require(remotes)) install.packages("remotes") # for installation from GitHub
@@ -12,14 +18,6 @@ library(tuber)
 library(subtools)
 library(stm)
 library(tm)
-
-# Authorization
-# DISCLAIMER: Due to a change in the YouTube API, the get_captions function from the tuber package only works for videos created with the account that the app used for API access was created with
-# If you want to collect subtitles for videos that you did not create yourself, you should use the youtubecaption package (see below)
-
-appID <- "" # Insert your own app ID here (OAuth 2.0 Client ID created for your project via the Google Developers platform)
-appSecret <- "" # insert your own app Secret here (Client key created for your project via the Google Developers platform)
-# NB: Be careful to NOT share these credentials with anyone else whom you don't want to be able to use this account.
 
 ## Upon running this line, there will be a prompt in the console asking you to save the access token in a file
 ## Select "No" by entering 2 in the console and hitting enter.
