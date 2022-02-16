@@ -130,10 +130,10 @@ For this session, we will use comments from the Emoji Movie Trailer <br>
 The first step is always to explore your data. This is especially crucial for so-called _found data_ because they were not designed with your analysis in mind.
 
 ```{r, echo = TRUE}
-# loading raw data
+# load raw data
 comments <- readRDS("../../data/RawEmojiComments.rds")
 
-# listing all columns
+# list all column names
 colnames(comments)
 ```
 
@@ -194,7 +194,7 @@ unlist(strsplit(comments$textDisplay[6],"(?<=\\?)", perl=TRUE))
 
 ---
 
-## Selecting What You (Don't) need
+## Selecting What You (Don't) Need
 
 Now we can decide on what we need for our analysis
 
@@ -223,7 +223,7 @@ sapply(Selection, class)
 ```
 
 ```{r, echo = TRUE}
-# Summary statistics for like counts
+# summary statistics for like counts
 summary(Selection$likeCount)
 ```
 
@@ -239,11 +239,11 @@ Sys.time() - Selection$publishedAt[1]
 We want the `likeCount` to be a numeric variable and the timestamps to be datetime objects
 
 ```{r, echo = TRUE}
-# Transforming likeCount to numeric
+# transform likeCount to numeric
 # (NB: this overwrites the original column)
 Selection$likeCount <- as.numeric(Selection$likeCount)
 
-# testing
+# check
 summary(Selection$likeCount)
 ```
 
@@ -271,7 +271,7 @@ For these reasons, you should **never** try to code your own time stamp translat
 ## Formatting Timestamps (2)
 
 ```{r, echo = TRUE}
-# transforming timestamps to datetime objects
+# transform timestamps to datetime objects
 Selection$publishedAt[1]
 testtime <- as.POSIXct(Selection$publishedAt[1],
                        format = "%Y-%m-%dT%H:%M:%OSZ",
@@ -279,7 +279,7 @@ testtime <- as.POSIXct(Selection$publishedAt[1],
 testtime
 ```
 ```{r, echo = TRUE}
-# testing whether we can compute a difference
+# test whether we can compute a difference
 # with the datetime object
 Sys.time() - testtime
 ```
@@ -295,7 +295,7 @@ A more convenient way of transforming datetime variables is the [`anytime` packa
 to guess the format from the character string, so you don't have to. This is especially handy for vectors of datetimes in multiple formats.
 
 ```{r, echo = TRUE}
-# transforming datetimes using anytime()
+# transform datetimes using anytime()
 library(anytime)
 Selection$publishedAt <- anytime(Selection$publishedAt,
                                  asUTC = TRUE)
@@ -417,13 +417,13 @@ EmojiList[1:3,c(1,3,4)]
 Next, we need to paste the names of the emojis together while capitalizing the first letter of every word for better readability
 
 ```{r, echo = TRUE}
-# Defining a function for capitalizing and pasting names together
+# Define a function for capitalizing and pasting names together
 simpleCap <- function(x) {
 
-  # Splitting the string
+  # Split the string
   splitted <- strsplit(x, " ")[[1]]
 
-  # Pasting it back together with capital letters
+  # Paste it back together with capital letters
   paste(toupper(substring(splitted, 1,1)),
         substring(splitted, 2),
         sep = "",
@@ -437,7 +437,7 @@ simpleCap <- function(x) {
 ## Extracting Emojis (5)
 
 ```{r, echo = TRUE}
-# Applying the function to all the names
+# Apply the function to all the names
 CamelCaseEmojis <- lapply(jis$name, simpleCap)
 CollapsedEmojis <- lapply(CamelCaseEmojis,
                           function(x){gsub(" ",
@@ -455,11 +455,14 @@ EmojiList[1:3,c(1,3,4)]
 
 After that, we need to order our dictionary from the longest to shortest string, so that we can prevent partial matching of shorter strings later.
 
+.small[
 ```{r, echo = TRUE}
 EmojiList <- EmojiList[rev(order(nchar(jis$emoji))),]
 head(EmojiList[,c(1,3,4)],5)
 ```
-Note that what we are ordering by the `emoji` column, not the `text` or `runes` columns
+]
+
+Note that what we are ordering by the `emoji` column, not the `text` or `runes` columns.
 
 ---
 
@@ -469,10 +472,10 @@ Now we can `loop` through all of our emojis and replace them consecutively in ea
 
 ```{r, warning = FALSE, echo = TRUE}
 
-# Assigning the column to a an object named TextEmoRep
+# Assign the column to a an object named TextEmoRep
 TextEmoRep <- LinkDel
 
-# Looping over all emojis for all comments in LinkDel
+# Loop over all emojis for all comments in LinkDel
 for (i in 1:dim(EmojiList)[1]) {
 
   TextEmoRep <- rm_default(TextEmoRep,
@@ -551,7 +554,7 @@ Emoji[233]
 
 ---
 
-## Removing Emoji
+## Removing Emojis
 
 In addition, we remove the emojis from our `LinkDel` variable to have one _clean_ column that we can use for text mining later. This column will not contain hyperlinks or emojis.
 
@@ -565,7 +568,7 @@ TextEmoDel[233]
 
 ---
 
-# Summary: Extracting Information
+## Summary: Extracting Information
 
 We now have different versions of our text column
 
@@ -608,7 +611,7 @@ As a final step, we can give the columns appropriate names and save the datafram
 
 ```{r, echo = TRUE}
 
-# setting column names
+# set column names
 names(df) <- c("Author",
                "Text",
                "TextEmojiReplaced",
@@ -629,6 +632,6 @@ saveRDS(df, file = "../../data/ParsedEmojiComments.rds")
 
 class: center, middle
 
-# [Exercise](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/A4_Preprocessing_and_cleaning_data_question.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+# [Exercise](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/A4_Preprocessing_and_cleaning_data_exercises_question.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
 
-## [Solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/A4_Preprocessing_and_cleaning_data_solution.html)
+## [Solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/A4_Preprocessing_and_cleaning_data_exercises_solution.html)
