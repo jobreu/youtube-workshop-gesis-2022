@@ -64,7 +64,7 @@ pre {
 # Only necessary for R versions < 4.0.0
 options(stringsAsFactors = FALSE)
 
-# Loading the data set
+# Load the data set
 comments <- readRDS("../../data/ParsedEmojiComments.rds")
 ```
 
@@ -160,13 +160,13 @@ There are more sophisticated methods for sentiment analysis that yield  better r
 First of all, we load the [`syuzhet` package](https://github.com/mjockers/syuzhet) and try out the built-in basic sentiment tagger with an example sentence
 
 ```{r, echo = TRUE}
-# loading data
+# load data
 comments <- readRDS("../../data/ParsedEmojiComments.rds")
 
-# loading package
+# load package
 library(syuzhet)
 
-# testing simple tagger
+# test simple tagger
 get_sentiment("Superb reasoning, you must be really smart!")
 
 ```
@@ -178,10 +178,10 @@ get_sentiment("Superb reasoning, you must be really smart!")
 We can apply the basic sentiment tagger to the whole vector of comments in our data set. Remember that we need to use the text column without hyperlinks and emojis.
 
 ```{r, echo = TRUE}
-# creating basic sentiment scores
+# create basic sentiment scores
 BasicSentiment <- get_sentiment(comments$TextEmojiDeleted)
 
-# summarizing basic sentiment scores
+# summarize basic sentiment scores
 summary(BasicSentiment)
 ```
 
@@ -194,7 +194,7 @@ Checking the documentation for the `get_sentiment()` function reveals that it ca
 Let's compare the results of the different dictionaries
 
 ```{r, echo = TRUE, message = FALSE, warning = FALSE}
-# computing sentiment scores with different dictionaries
+# compute sentiment scores with different dictionaries
 BasicSentimentSyu <- get_sentiment(comments$TextEmojiDeleted,
                                    method = "syuzhet")
 BasicSentimentBing <- get_sentiment(comments$TextEmojiDeleted,
@@ -209,13 +209,13 @@ BasicSentimentNRC <- get_sentiment(comments$TextEmojiDeleted,
 ## Basic Comment Sentiments
 
 ```{r, echo =TRUE}
-# combining them into a dataframe
+# combine them into a dataframe
 Sentiments <- cbind.data.frame(BasicSentimentSyu,
                                BasicSentimentBing,
                                BasicSentimentAfinn,
                                BasicSentimentNRC,
                                1:dim(comments)[1])
-# setting column names
+# set column names
 colnames(Sentiments) <- c("Syuzhet",
                           "Bing",
                           "Afinn",
@@ -228,7 +228,7 @@ colnames(Sentiments) <- c("Syuzhet",
 
 .small.remark-code[
 ```{r, echo =TRUE,out.width="50%"}
-# Correlation matrix
+# correlation matrix
 library(ggcorrplot)
 ggcorrplot(cor(Sentiments[,c(-5)]),
            color=c("red","white","blue"),
@@ -242,14 +242,14 @@ ggcorrplot(cor(Sentiments[,c(-5)]),
 ## Basic Comment Sentiments: Jitter Plot
 
 ```{r, echo = FALSE}
-# load libraries
+# load packages
 library(ggplot2)
 library(dplyr)
 
 # transform data into long format
 SentimentsLong <- pivot_longer(Sentiments, !Comment, names_to = "Dictionary", values_to = "Value")
 
-# Point jitter plot
+# point jitter plot
 ggplot(SentimentsLong, aes(x=Dictionary,
                             y=Value)) + 
   geom_jitter(position=position_jitter(0.2),size=0.5) +
@@ -288,7 +288,7 @@ The choice of the dictionary can have an impact on your sentiment analysis. For 
 In this session, we will continue with the `syuzhet` dictionary.
 
 ```{r, echo = TRUE, results = 'hide'}
-# Adding the Syuzhet sentiments to our dataframe
+# add the syuzhet sentiment scores to our dataframe
 comments$Sentiment <- Sentiments$Syuzhet
 ```
 
@@ -299,7 +299,7 @@ comments$Sentiment <- Sentiments$Syuzhet
 Another pitfall to be aware of is the length of the comments. Let's have a look at the distribution of words per comment.
 
 ```{r, echo = TRUE, warning=FALSE}
-# Computing number of words per comment
+# compute number of words per comment
 comments$Words <- sapply(comments$TextEmojiDeleted,
                          function(x){length(unlist(strsplit(x,
                                                             " ")))})
@@ -307,7 +307,7 @@ comments$Words <- sapply(comments$TextEmojiDeleted,
 
 
 ```{r, echo = TRUE, results = 'hide', fig.show='hide',out.width="80%", warning=FALSE}
-# Histogram
+# histogram
 ggplot(comments, aes(x=Words)) + 
   geom_histogram(binwidth = 5) + 
   geom_vline(aes(xintercept=mean(Words)),
@@ -326,7 +326,7 @@ ggplot(comments, aes(x=Words)) +
 ## Basic Comment Sentiments
 
 ```{r, echo = FALSE, warning=FALSE}
-# Histogram
+# histogram
 ggplot(comments, aes(x=Words)) + 
   geom_histogram(binwidth = 5) + 
   geom_vline(aes(xintercept=mean(Words)),
@@ -354,8 +354,10 @@ comments$TextEmojiDeleted[6704]
 comments$TextEmojiDeleted[29952]
 
 ```
+
 ---
-# 1) Basic Comment Sentiments
+
+## Basic Comment Sentiments
 
 **Positively scored Comment**
 "The emoji movie is a beautifully executed, well layered experience that has been the victim of a barrage of such biased reviews such as “The worst movie of 2017”
@@ -373,7 +375,7 @@ as death hadn't taken us first. Heh, I dunno... Emojis are pretty much a line of
 ## Basic Comment Sentiments
 
 ```{r, echo = FALSE}
-# plotting Sentiment vs. number of words
+# plot sentiment vs. number of words
 ggplot(comments, aes(x = Words, y = Sentiment, col = Sentiment)) + 
     geom_point(size = 0.5) +
     ggtitle("Sentiment Scores vs. Comment length") +
@@ -385,20 +387,20 @@ ggplot(comments, aes(x = Words, y = Sentiment, col = Sentiment)) +
 
 ---
 
-## Basic Comment Sentiment
+## Basic Comment Sentiments
 
 To control for the effect of comment length, we can divide the sentiment score by the number of words in the comment to get a new indicator:  _SentimentPerWord_ 
 
 ```{r, echo = TRUE, results = 'hide'}
-# Normalizing for number of words
+# normalize for number of words
 comments$SentimentPerWord <- comments$Sentiment / comments$Words
 
-# Most positive comment
+# most positive comment
 head(comments$TextEmojiDeleted[comments$Sentiment ==
                                  max(comments$SentimentPerWord,
                                      na.rm = T)],1)
 
-# Most negative comment
+# most negative comment
 head(comments$TextEmojiDeleted[comments$Sentiment ==
                                  min(comments$SentimentPerWord,
                                       na.rm = T)],1)
@@ -406,10 +408,10 @@ head(comments$TextEmojiDeleted[comments$Sentiment ==
 
 ---
 
-## Basic Comment Sentiment
+## Basic Comment Sentiments
 
 ```{r, echo = FALSE, warning=F, message=F}
-# plotting SentimentPerWord vs. Number of Words
+# plot SentimentPerWord vs. Number of Words
 ggplot(comments, aes(x = Words, y = SentimentPerWord, col = Sentiment)) + 
     geom_point(size = 0.5) +
     ggtitle("Sentiment per Word Scores vs. Comment length") +
@@ -420,7 +422,7 @@ ggplot(comments, aes(x = Words, y = SentimentPerWord, col = Sentiment)) +
 
 ---
 
-## More elaborate Method(s)
+## More Elaborate Method(s)
 
 Although no sentiment detection method is perfect, some are more sophisticated than others. Two of those options are
 
@@ -466,7 +468,7 @@ library(sentimentr)
 then we can compute sentiment scores
 
 ```{r, echo = TRUE}
-# computing sentiment scores
+# compute sentiment scores
 Sentences <- get_sentences(comments$TextEmojiDeleted)
 SentDF <- sentiment_by(Sentences)
 comments <- cbind.data.frame(comments,SentDF[,c(2,3,4)])
@@ -482,7 +484,7 @@ colnames(comments)[c(15,16,17)] <- c("word_count",
 Let's check if the sentiment scoring for sentimentR correlates with the simpler approach
 
 ```{r, echo = TRUE, warning = F, message=F, results ='hide', fig.show='hide'}
-# plotting SentimentPerWord vs. SentimentR
+# plot SentimentPerWord vs. SentimentR
 ggplot(comments, aes(x=ave_sentiment, y=SentimentPerWord)) + 
     geom_point(size =0.5) +
     ggtitle("Basic Sentiment Scores vs. `SentimentR`") +
@@ -495,7 +497,7 @@ ggplot(comments, aes(x=ave_sentiment, y=SentimentPerWord)) +
 ## `SentimentR`
 
 ```{r, echo = FALSE, warning = F, message=F}
-# plotting SentimentPerWord vs. SentimentR
+# plot SentimentPerWord vs. SentimentR
 ggplot(comments, aes(x=ave_sentiment, y=SentimentPerWord)) + 
     geom_point(size =0.5) +
     ggtitle("Basic Sentiment Scores vs. `SentimentR`") +
@@ -511,7 +513,7 @@ ggplot(comments, aes(x=ave_sentiment, y=SentimentPerWord)) +
 We can also look at the difference scores for the two methods.
 
 ```{r, echo = TRUE, warning=F,message=F, results = 'hide', fig.show='hide'}
-#computing difference score
+#compute difference score
 comments$SentiDiff <- comments$ave_sentiment-
                       comments$SentimentPerWord
 
@@ -528,7 +530,7 @@ ggplot(comments, aes(x=SentiDiff)) +
 ## `SentimentR`
 
 ```{r, echo=F, warning=F, message=F}
-#Difference score
+# difference score
 ggplot(comments, aes(x=SentiDiff)) + 
   geom_histogram(color="black", fill="white")+
   labs(title="Sentiment Score Difference Distribution",
@@ -545,7 +547,7 @@ Let's check for which comments we get large differences between the two methods.
 *Note*: We use an absolute difference score here and order from largest to smallest difference.
 
 ```{r, echo = TRUE}
-# Illustrating scoring differences
+# illustrate scoring differences
 Diff_comments <- comments[order(-abs(comments$SentiDiff)),
                           ][c(2,12:18)]
 comments[c(4440,2839,37718,136),c(2, Syuzhet = 12, SentimentR = 17)]
@@ -619,7 +621,7 @@ Luckily, we already saved our emojis in a textual description format and can sim
 We will use the emoji sentiment dictionary from the `lexicon` package. It only contains the 734 most frequent emojis, but since the distribution of emojis follows [Zipf's Law](https://en.wikipedia.org/wiki/Zipf%27s_law), it should cover most of the used emojis.
 
 ```{r, echo = TRUE}
-# emoji Sentiments
+# emoji sentiments
 EmojiSentiments <- lexicon::emojis_sentiment
 EmojiSentiments[1:5,c(1,2,4)]
 ```
@@ -663,10 +665,10 @@ EmojiToks[11167]
 We can now replace the emojis that appear in the dictionary with the corresponding sentiment scores.
 
 ```{r, echo = TRUE}
-# Creating the dictionary object
+# create the dictionary object
 EmojiSentDict <- as.dictionary(EmojiSentiment[,1:2])
 
-# Replacing emoji with sentiment scores
+# replace emoji with sentiment scores
 EmojiToksSent <- tokens_lookup(x = EmojiToks,
                                dictionary = EmojiSentDict)
 comments$Text[11167]
@@ -745,7 +747,7 @@ ggplot(comments, aes(x = ave_sentiment,
 ## Emoji Sentiment vs. Word Sentiment
 
 ```{r, echo = FALSE, warning=F,message=F}
-  # plot the relationship
+# plot the relationship
 ggplot(comments, aes(x = ave_sentiment,
                      y = MeanEmojiSentiment))+
   geom_point(shape = 1) +
@@ -782,6 +784,6 @@ From the examples in this data, we have seen multiple things:
 ---
 class: center, middle
 
-# [Exercise](https://jobreu.github.io/youtube-workshop-gesis-2/exercises/B2_Sentiment_Analysis_of_User_Comments_question.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+# [Exercise](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/B2_Sentiment_analysis_of_user_comments_exercises_question.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
 
-## [Solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/B2_Sentiment_Analysis_of_User_Comments.html)
+## [Solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/B2_Sentiment_analysis_of_user_comments_exercises_solution.html)

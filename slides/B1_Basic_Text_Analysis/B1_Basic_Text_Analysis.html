@@ -70,9 +70,26 @@ library(emo)
 
 ---
 
-## Collect &amp; Parse the Data
+## Get the Data
 
-*Note*: To save time and your *YouTube* API quota limit you might not want to "code along" in this session
+As in the last session, we will be working with the - now processed and cleaned - comments for the [Emoji Movie Trailer](https://www.youtube.com/watch?v=r8pJt4dK_s4). In case you have collected and saved the comments before, you can just load them at this point.
+
+
+```r
+FormattedComments &lt;- readRDS("./data/ParsedEmojiComments.rds") 
+```
+
+*Note*: Depending on where you saved the data, how you named the file, and what your current working directory is, you might have to adjust the file path.
+
+
+
+---
+
+## Repetition: Collecting Data
+
+If you have not collected and parsed the comments before, you, of course, need to do that before you can analyse any data.
+
+**NB**: To save time and your *YouTube* API quota limit you might not want to do this now.
 
 Step 1: Collecting the comments
 
@@ -80,11 +97,11 @@ Step 1: Collecting the comments
 Comments &lt;- get_all_comments(video_id="r8pJt4dK_s4") # takes a while
 ```
 
---
+---
 
-Step 2: Parse/process the comments
+## Repetition: Parsing the Comments
 
-For this to work, the script `yt_parse.R` as well as the ones containing the helper functions (`CamelCase.R`, `ExtractEmoji.R`, and `ReplaceEmoji.R`) need to be in the working directory (you can find those files in the `scripts` folder in the workshop materials).
+To run the following code the script `yt_parse.R` as well as the ones containing the helper functions (`CamelCase.R`, `ExtractEmoji.R`, and `ReplaceEmoji.R`) need to be in the working directory (you can find those files in the `scripts` folder in the workshop materials).
 
 
 ```r
@@ -92,9 +109,7 @@ source("yt_parse.R")
 FormattedComments &lt;- yt_parse(Comments) # this will take a while
 ```
 
-
-
-*Note*: As an alternative to sourcing the `yt_parse.R` file you can also "manually" run the code from the slides for the session on *Processing and Cleaning User Comments* on the collected comments.
+*Note*: As an alternative to sourcing the `yt_parse.R` file you could also "manually" run the code from the slides for the session on *Processing and Cleaning User Comments* on the collected comments.
 
 ---
 
@@ -189,15 +204,15 @@ Which comments received the highest number of likes?
 ## 10                                                                   They cancelled the popeye movie for this
 ##    LikeCount           Published
 ## 1       4344 2017-05-16 15:38:40
-## 2       3194 2017-10-16 04:08:12
-## 3       2968 2017-05-16 23:55:38
-## 4       2026 2020-10-30 15:08:17
-## 5       1598 2017-05-16 22:40:13
-## 6       1545 2020-12-23 18:32:29
+## 2       3190 2017-10-16 04:08:12
+## 3       2969 2017-05-16 23:55:38
+## 4       2024 2020-10-30 15:08:17
+## 5       1597 2017-05-16 22:40:13
+## 6       1543 2020-12-23 18:32:29
 ## 7       1413 2017-05-17 03:10:34
 ## 8       1295 2017-05-16 15:32:41
 ## 9        990 2020-06-08 18:29:03
-## 10       809 2020-09-29 14:18:44
+## 10       808 2020-09-29 14:18:44
 ```
 ]
 
@@ -331,26 +346,26 @@ head(TermFreq, n = 20)
 
 ```
 ##     feature frequency rank docfreq group
-## 1     movie      8086    1    6233   all
-## 2     emoji      2448    2    2104   all
-## 3       nom      2239    3       1   all
-## 4      like      1708    4    1481   all
-## 5      just      1534    5    1354   all
-## 6      sony      1246    6    1155   all
-## 7    people       970    7     834   all
-## 8       bad       879    8     806   all
-## 9  dislikes       804    9     787   all
-## 10     good       774   10     708   all
-## 11      see       765   11     664   all
-## 12 &lt;U+07D8&gt;       755   12       1   all
-## 13      one       746   13     659   all
-## 14   emojis       741   14     669   all
-## 15     hate       727   15     666   all
-## 16  trailer       679   16     640   all
-## 17     make       677   17     595   all
-## 18   popeye       670   18     625   all
-## 19      god       658   19     641   all
-## 20    watch       655   20     610   all
+## 1     movie     11701    1    8910   all
+## 2     emoji      3159    2    2746   all
+## 3      like      2819    3    2447   all
+## 4      just      2489    4    2215   all
+## 5       nom      2239    5       1   all
+## 6    people      1546    6    1332   all
+## 7      sony      1530    7    1417   all
+## 8       bad      1407    8    1293   all
+## 9      good      1327    9    1222   all
+## 10      one      1221   10    1105   all
+## 11     hate      1127   11    1031   all
+## 12   emojis      1103   12     993   all
+## 13      see      1050   13     930   all
+## 14    watch      1042   14     959   all
+## 15     make      1025   15     920   all
+## 16    think       990   16     904   all
+## 17     know       960   17     880   all
+## 18   popeye       959   18     883   all
+## 19 dislikes       912   19     891   all
+## 20      can       888   20     778   all
 ```
 ]
 
@@ -362,7 +377,7 @@ We may want to remove additional words (that are not included in the stopwords l
 
 
 ```r
-custom_stopwords &lt;- c("nom", "&lt;U+07D8&gt;")
+custom_stopwords &lt;- c("nom", "just", "one")
 commentsDfm &lt;- dfm(toks, remove = c(quanteda::stopwords("english"),
                                     custom_stopwords))
 ```
@@ -497,16 +512,16 @@ head(EmojiFreq, n = 10)
 
 ```
 ##                         feature frequency rank docfreq group
-## 1               emoji_pileofpoo      3914    1     464   all
-## 2                emoji_eggplant      3428    2     246   all
-## 3            emoji_unamusedface      2367    3     596   all
-## 4      emoji_facewithtearsofjoy      2262    4     620   all
-## 5      emoji_bbutton(bloodtype)      1848    5     115   all
-## 6            emoji_middlefinger      1660    6     257   all
-## 7            emoji_grinningface      1502    7     331   all
-## 8             emoji_flushedface      1188    8     217   all
-## 9              emoji_thumbsdown      1014    9     237   all
-## 10 emoji_facewithsymbolsonmouth       766   10      71   all
+## 1               emoji_pileofpoo      4050    1     531   all
+## 2                emoji_eggplant      3571    2     272   all
+## 3      emoji_facewithtearsofjoy      2856    3     839   all
+## 4            emoji_unamusedface      2473    4     664   all
+## 5      emoji_bbutton(bloodtype)      1873    5     129   all
+## 6            emoji_middlefinger      1845    6     298   all
+## 7            emoji_grinningface      1541    7     362   all
+## 8             emoji_flushedface      1226    8     245   all
+## 9              emoji_thumbsdown      1145    9     261   all
+## 10 emoji_facewithsymbolsonmouth       960   10      89   all
 ```
 
 ---
