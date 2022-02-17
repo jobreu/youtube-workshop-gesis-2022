@@ -25,7 +25,7 @@ Participants will learn how they can use *YouTube* data for their research. They
 
 ## Prerequisites
 
-Participants should at least have some basic knowledge of `R` and, ideally, also the `tidyverse`. Basic `R` knowledge can, for example, be acquired through the *swirl* course "R Programming" (see https://swirlstats.com/) or the [*RStudio* Primer "Programming basics"](https://rstudio.cloud/learn/primers/1.2), both of which are available for free. There also are many brief online introductions to the `tidyverse`, such as this [blog post by Dominic Royé](https://dominicroye.github.io/en/2020/a-very-short-introduction-to-tidyverse/) or this [workshop by Olivier Gimenez](https://oliviergimenez.github.io/intro_tidyverse/#1).
+Participants should at least have some basic knowledge of `R` and, ideally, also the [`tidyverse`](https://www.tidyverse.org/). Basic `R` knowledge can, for example, be acquired through the *swirl* course "R Programming" (see https://swirlstats.com/) or the [*RStudio* Primer "Programming basics"](https://rstudio.cloud/learn/primers/1.2), both of which are available for free. There also are many brief online introductions to the `tidyverse`, such as this [blog post by Dominic Royé](https://dominicroye.github.io/en/2020/a-very-short-introduction-to-tidyverse/) or this [workshop by Olivier Gimenez](https://oliviergimenez.github.io/intro_tidyverse/#1).
 
 For the exercises as well as for "coding along" with the slides, access to the *YouTube* API is required. Information on this can be found in the slides on the [*YouTube* API Setup](https://jobreu.github.io/youtube-workshop-gesis-2022/slides/A0_YouTube_API_Setup/A0_YouTubeAPISetup.html).  
 
@@ -82,7 +82,7 @@ For the exercises as well as for "coding along" with the slides, access to the *
 
 [A3 tuber data collection exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/A3_tuber_exercises_question.html)
 
-[A4 Processing and cleaning user comments exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/A4_Preprocessing_and_cleaning_data_question.html)
+[A4 Processing and cleaning user comments exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/A4_Preprocessing_and_cleaning_data_exercises_question.html)
 
 [B1 Basic text analysis exercises](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/B1_Basic_text_analysis_exercises_question.html)
 
@@ -94,7 +94,7 @@ For the exercises as well as for "coding along" with the slides, access to the *
 
 [A3 tuber data collection exercise solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/A3_tuber_exercises_solution.html)
 
-[A4 Processing and cleaning user comments exercise solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/A4_Preprocessing_and_cleaning_data_solution.html)
+[A4 Processing and cleaning user comments exercise solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/A4_Preprocessing_and_cleaning_data_exercises_solution.html)
 
 [B1 Basic text analysis exercise solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/B1_Basic_text_analysis_exercises_solution.html)
 
