@@ -100,17 +100,17 @@ lexicon::hash_sentiment_jockers[sample(1:10738,10),]
 ```
 
 ```
-##                  x     y
-##  1:        immoral -0.50
-##  2:         seared -0.40
-##  3:       chairman  0.25
-##  4: indoctrination -0.50
-##  5:     insolently -1.00
-##  6:        symptom -0.50
-##  7:   inadequately -1.00
-##  8:      withstand  0.25
-##  9:     inelegance -1.00
-## 10:         oblige -0.10
+##              x     y
+##  1:     esprit  0.80
+##  2:    laidoff -0.60
+##  3:       fine  0.25
+##  4:  worrisome -1.00
+##  5:  isolation -0.50
+##  6:      guide  0.60
+##  7: descendant  0.25
+##  8:   countess  0.25
+##  9: demonizing -1.00
+## 10: blistering -0.50
 ```
 
 ---
@@ -760,7 +760,7 @@ cor(comments$ave_sentiment,
 ```
 
 ```
-## [1] 0.1362132
+## [1] 0.1362876
 ```
 
 
@@ -790,7 +790,7 @@ of the used emojis. This can have multiple reasons:
   - Comments that score very low  (negative) on emoji sentiment typically contain very little text
   - Dictionary-based bag-of-words/-emojis sentiment analysis is not perfect - there is a lot of room for error in both metrics
   - Most comment texts are scored as neutral
-  - Wmojis are very much context-dependent, but we only consider a single sentiment score for each emoji
+  - Emojis are very much context-dependent, but we only consider a single sentiment score for each emoji
   - We only have sentiment scores for the most common emoji
   - If comments contain an emoji, it's usually exactly one emoji
 
