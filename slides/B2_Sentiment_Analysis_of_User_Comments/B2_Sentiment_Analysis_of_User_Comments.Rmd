@@ -765,7 +765,7 @@ of the used emojis. This can have multiple reasons:
   - Comments that score very low  (negative) on emoji sentiment typically contain very little text
   - Dictionary-based bag-of-words/-emojis sentiment analysis is not perfect - there is a lot of room for error in both metrics
   - Most comment texts are scored as neutral
-  - Wmojis are very much context-dependent, but we only consider a single sentiment score for each emoji
+  - Emojis are very much context-dependent, but we only consider a single sentiment score for each emoji
   - We only have sentiment scores for the most common emoji
   - If comments contain an emoji, it's usually exactly one emoji
 
