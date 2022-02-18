@@ -116,7 +116,7 @@ Some topics that we did not cover or only briefly touched upon that you might wa
 
 We have written a book chapter based on this course which should be published later this year:
 
-Breuer, J., Kohne, J., & Mohseni, R. M. (2022). Using YouTube Data for Social Science
+Breuer, J., Kohne, J., & Mohseni, M. R. (2022). Using YouTube Data for Social Science
 Research. In J. Skopek (Ed.), *Research Handbook of Digital Sociology*. Edward Elgar Publishing.
 
 If you are interested in working with *WhatsApp* data (and/or what else you can do with emojis and emoticons in text data), check out Julian's [`WhatsR` package](https://github.com/gesiscss/WhatsR) (which is also still work in progress).
