@@ -282,7 +282,7 @@ Sys.time() - Selection$publishedAt[1]
 ```
 
 ```
-## Error in unclass(e1) - e2: nicht-numerisches Argument für binären Operator
+## Error in unclass(e1) - e2: non-numeric argument to binary operator
 ```
 
 ---
@@ -357,7 +357,7 @@ Sys.time() - testtime
 ```
 
 ```
-## Time difference of 6.614284 days
+## Time difference of 10.65124 days
 ```
 
 This internal representation of time objects will be extremely important for plotting trends over time
@@ -426,7 +426,7 @@ Selection$textOriginal[26]
 ```
 
 ```
-## [1] "Here him &lt;U+0001F644&gt;&lt;U+0001F644&gt;&lt;U+0001F644&gt;&lt;U+0001F644&gt;&lt;U+0001F644&gt;&lt;U+0001F644&gt;"
+## [1] "Here him 🙄🙄🙄🙄🙄🙄"
 ```
 There are two issues exemplified by these comments:
 
@@ -521,7 +521,7 @@ Essentially, we want to replace this:
 
 
 ```
-## &lt;U+0001F604&gt;
+## 😄
 ```
 
 with this
@@ -545,12 +545,12 @@ EmojiList[1:3,c(1,3,4)]
 ```
 
 ```
-## # A tibble: 3 x 3
-##   runes emoji        name                          
-##   &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt;                         
-## 1 1F600 "\U0001f600" grinning face                 
-## 2 1F601 "\U0001f601" beaming face with smiling eyes
-## 3 1F602 "\U0001f602" face with tears of joy
+## # A tibble: 3 × 3
+##   runes emoji name                          
+##   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;                         
+## 1 1F600 😀    grinning face                 
+## 2 1F601 😁    beaming face with smiling eyes
+## 3 1F602 😂    face with tears of joy
 ```
 
 ---
@@ -593,12 +593,12 @@ EmojiList[1:3,c(1,3,4)]
 ```
 
 ```
-## # A tibble: 3 x 3
-##   runes emoji        name                      
-##   &lt;chr&gt; &lt;chr&gt;        &lt;chr&gt;                     
-## 1 1F600 "\U0001f600" GrinningFace              
-## 2 1F601 "\U0001f601" BeamingFaceWithSmilingEyes
-## 3 1F602 "\U0001f602" FaceWithTearsOfJoy
+## # A tibble: 3 × 3
+##   runes emoji name                      
+##   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;                     
+## 1 1F600 😀    GrinningFace              
+## 2 1F601 😁    BeamingFaceWithSmilingEyes
+## 3 1F602 😂    FaceWithTearsOfJoy
 ```
 
 
@@ -616,14 +616,14 @@ head(EmojiList[,c(1,3,4)],5)
 ```
 
 ```
-## # A tibble: 5 x 3
-##   runes                     emoji                                     name      
-##   &lt;chr&gt;                     &lt;chr&gt;                                     &lt;chr&gt;     
-## 1 1F469 200D 2764 FE0F 200~ "\U0001f469&lt;U+200D&gt;&lt;U+2764&gt;&lt;U+FE0F&gt;&lt;U+200D&gt;\U0001f48b&lt;U+200D&gt;\U0001f469"        Kiss:Woma~
-## 2 1F468 200D 2764 FE0F 200~ "\U0001f468&lt;U+200D&gt;&lt;U+2764&gt;&lt;U+FE0F&gt;&lt;U+200D&gt;\U0001f48b&lt;U+200D&gt;\U0001f468"        Kiss:Man,~
-## 3 1F469 200D 2764 FE0F 200~ "\U0001f469&lt;U+200D&gt;&lt;U+2764&gt;&lt;U+FE0F&gt;&lt;U+200D&gt;\U0001f48b&lt;U+200D&gt;\U0001f468"        Kiss:Woma~
-## 4 1F3F4 E0067 E0062 E0077 ~ "\U0001f3f4\U000e0067\U000e0062\U000e007~ Wales     
-## 5 1F3F4 E0067 E0062 E0073 ~ "\U0001f3f4\U000e0067\U000e0062\U000e007~ Scotland
+## # A tibble: 5 × 3
+##   runes                                      emoji name            
+##   &lt;chr&gt;                                      &lt;chr&gt; &lt;chr&gt;           
+## 1 1F469 200D 2764 FE0F 200D 1F48B 200D 1F469 👩‍❤️‍💋‍👩    Kiss:Woman,Woman
+## 2 1F468 200D 2764 FE0F 200D 1F48B 200D 1F468 👨‍❤️‍💋‍👨    Kiss:Man,Man    
+## 3 1F469 200D 2764 FE0F 200D 1F48B 200D 1F468 👩‍❤️‍💋‍👨    Kiss:Woman,Man  
+## 4 1F3F4 E0067 E0062 E0077 E006C E0073 E007F  🏴󠁧󠁢󠁷󠁬󠁳󠁿    Wales           
+## 5 1F3F4 E0067 E0062 E0073 E0063 E0074 E007F  🏴󠁧󠁢󠁳󠁣󠁴󠁿    Scotland
 ```
 ]
 
@@ -666,7 +666,7 @@ Selection$textOriginal[233]
 ```
 
 ```
-## [1] "Current like to dislike ratio:\n&lt;U+0001F44D&gt;47K  &lt;U+0001F44E&gt;167K"
+## [1] "Current like to dislike ratio:\n👍47K  👎167K"
 ```
 
 ```r
@@ -725,7 +725,7 @@ LinkDel[233]
 ```
 
 ```
-## [1] "Current like to dislike ratio: &lt;U+0001F44D&gt;47K &lt;U+0001F44E&gt;167K"
+## [1] "Current like to dislike ratio: 👍47K 👎167K"
 ```
 
 ```r
@@ -750,7 +750,7 @@ LinkDel[233]
 ```
 
 ```
-## [1] "Current like to dislike ratio: &lt;U+0001F44D&gt;47K &lt;U+0001F44E&gt;167K"
+## [1] "Current like to dislike ratio: 👍47K 👎167K"
 ```
 
 ```r

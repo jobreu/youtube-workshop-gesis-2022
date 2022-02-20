@@ -4,8 +4,8 @@ title: 'Exercises Preprocessing and Data Cleaning - Solutions'
 author: 'Julian Kohne, Johannes Breuer, M. Rohangis Mohseni'
 date: 'Automatic sampling and analysis of YouTube data, February 21-22, 2022'
 output:
-  #unilur::tutorial_html: default
-  unilur::tutorial_html_solution: default
+  unilur::tutorial_html: default
+  #unilur::tutorial_html_solution: default
 ---
 
 ```{r knitr_init, echo=FALSE, cache=FALSE, include=FALSE}
