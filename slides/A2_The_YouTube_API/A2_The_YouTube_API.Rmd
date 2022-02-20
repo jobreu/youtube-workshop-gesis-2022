@@ -246,7 +246,7 @@ If you can, use an API, if you must, use screen scraping instead.
 
 ---
 
-## Let's Check Out the *YouYube* API!
+## Let's Check Out the *YouTube* API!
 
 - Google provides a sandbox for their API that we can use to get a grasp of how it operates
 
@@ -257,28 +257,6 @@ If you can, use an API, if you must, use screen scraping instead.
 - Keep in mind: We have to log in with the *Google* account we used to create the app for accessing the API
 
 - What we get back is a JSON-formatted response with the information we requested in the API sandbox
-
----
-
-## API Key vs. OAuth2.0
-
-- There are two different ways to authenticate with the YouTube API
-
-  - API Key: Text string identifying the app and user, grants access to public data
-  
-  - OAuth2.0: Token created from Client secret and Client ID, grants access to everything the user can access
-  
-- For most API calls, the API key is enough
-
-- the `tuber` package for `R`, however, uses OAuth2.0 authentification because you can also use it to, e.g., change your account information from `R`
-
----
-
-## Constructing API calls
-
- We can construct all calls to the API according to the following logic
-
-![plot](Images/API-call-construction.png)
 
 ---
 
@@ -323,6 +301,27 @@ If you can, use an API, if you must, use screen scraping instead.
   "sex": "male"
 }'
 ```
+---
+
+## API Key vs. OAuth2.0
+
+- There are two different ways to authenticate with the YouTube API
+
+  - API Key: Text string identifying the app and user, grants access to public data
+  
+  - OAuth2.0: Token created from Client secret and Client ID, grants access to everything the user can access
+  
+- For most API calls, the API key is enough
+
+- the `tuber` package for `R`, however, uses OAuth2.0 authentification because you can also use it to, e.g., change your account information from `R`
+
+---
+
+## Constructing API calls
+
+ We can construct all calls to the API according to the following logic
+
+![plot](Images/API-call-construction.png)
 
 ---
 
@@ -397,15 +396,20 @@ If you can, use an API, if you must, use screen scraping instead.
 ## Exceeding the API Rate Limit
 
 Once you reach your rate limit, the API will start to send back the following response until your rate limit is reset
-
+.mini[
 ```
 {
   "error": {
     "code": 403,
-    "message": "The request cannot be completed because you have exceeded your \u003ca href=\"/youtube/v3/getting-started#quota\"\u003equota\u003c/a\u003e.",
+    "message": "The request cannot be completed because you
+    have exceeded your \u003ca href=\"/youtube/v3/getting-started#quota\"
+    \u003equota\u003c/a\u003e.",
     "errors": [
       {
-        "message": "The request cannot be completed because you have exceeded your \u003ca href=\"/youtube/v3/getting-started#quota\"\u003equota\u003c/a\u003e.",
+        "message": "The request cannot be completed because
+        you have exceeded your \u003ca href=\"/youtube/v3/
+        getting-started#quota\
+        "\u003equota\u003c/a\u003e.",
         "domain": "youtube.quota",
         "reason": "quotaExceeded"
       }
@@ -414,7 +418,7 @@ Once you reach your rate limit, the API will start to send back the following re
 }
 
 ```
-
+]
 ---
 
 ## Can I Increase my Rate Limit? A "Short" Story
