@@ -318,7 +318,7 @@ names(dayum_full_info)
 
 There are two `tuber` functions for collecting viewer comments for specific videos (both return a dataframe by default):
 
-1. `get_comment_threads()` collects comments for a video. By default, it collects the 100 most recent comments. The number of comments can be changed with the argument `max_results` (needs to be >= 20). If the number is > 100, the function fetches all results (see `?get_comment_threads`). **NB:** This function does not collect replies to comments. Also, when we tested it, the resulting dataframe only contained repetitions of the 100 most recent comments when `max_results` > 100.
+1. `get_comment_threads()` collects comments for a video. By default, it collects the 100 most recent comments. The number of comments can be changed with the argument `max_results` (needs to be >= 20). **NB:** If the number is > 100, the function should fetch all results (see `?get_comment_threads`). However, when we tested it, the resulting dataframe only contained repetitions of the 100 most recent comments when `max_results` > 100. Also, this function does not collect replies to comments. 
 
 --
 
@@ -349,14 +349,6 @@ You can then export the resulting dataframe in a format of your choice for later
 ```{r save-comments-1, eval=FALSE}
 saveRDS(emoji_movie_comments, file = "./data/RawEmojiComments.rds")
 ```
-
----
-
-class: center, middle
-
-# [Exercise](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/A3_tuber_exercises_question.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
-
-## [Solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/A3_tuber_exercises_solution.html)
 
 ---
 
@@ -576,7 +568,7 @@ a) Estimate the costs based on costs for the specific query and the number of re
 
 --
 
-b) If you want to check your API quota use, you can use the [*Google* Developer Console](https://console.developers.google.com): Choose your project, then select *IAM & Admin* -> *Quotas* from the menu on the left-hand side. The important information in the table is the one for the *YouTube Data API v3* quota for *Queries per day* (the limit should be 10000). If you want a more detailed visualizatioon, you can get that via the *Dashboard* in the *API & Services*  menu: Click on the name of the API in the list on the bottom (*YouTube Data API v3*), select *Quotas* from the menu on the left, and choose *Queries per minute* from the dropdown-menu for *Queries* as well as an appropriate timeframe (e.g., 6 hrs). **NB**: It takes a bit for the numbers to update after sending your API calls.
+b) If you want to check your API quota use, you can use the [*Google* Developer Console](https://console.developers.google.com): Choose your project, then select *IAM & Admin* -> *Quotas* from the menu on the left-hand side. The important information in the table is the one for the *YouTube Data API v3* quota for *Queries per day* (the limit should be 10000). If you want a more detailed visualization, you can get that via the *Dashboard* in the *API & Services*  menu: Click on the name of the API in the list on the bottom (*YouTube Data API v3*), select *Quotas* from the menu on the left, and choose *Queries per minute* from the dropdown-menu for *Queries* as well as an appropriate timeframe (e.g., 6 hrs). **NB**: It takes a bit for the numbers to update after sending your API calls.
 
 ---
 
@@ -704,3 +696,10 @@ saveRDS(comments, file = "./data/comments.rds")
 readr::write_csv(comments, file = "./data/comments.csv")
 ```
 
+---
+
+class: center, middle
+
+# [Exercise](https://jobreu.github.io/youtube-workshop-gesis-2022/exercises/A3_tuber_exercises_question.html) time `r ji("weight_lifting_woman")``r ji("muscle")``r ji("running_man")``r ji("biking_man")`
+
+## [Solutions](https://jobreu.github.io/youtube-workshop-gesis-2022/solutions/A3_tuber_exercises_solution.html)

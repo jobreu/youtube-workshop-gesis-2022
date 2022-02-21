@@ -55,7 +55,7 @@ yt_oauth(app_id = "my_app_id", # paste your app ID here
 While going through the following exercises you might want to monitor your API quota usage via the [*Google Cloud Platform*](https://console.cloud.google.com) dashboard for your app:  Select IAM & Admin -> Quotas and look for YouTube Data Api v3 - Queries per day.
 
 ```{block, box.title = "Exercise 2", box.body = list(fill = "white"), box.icon = "fa-star"}
-How many views, subscribers, and videos does the [Computerphile channel](https://www.youtube.com/user/Computerphile) currently have?
+How many views, subscribers, and videos does the [Computerphile channel](https://www.youtube.com/channel/UC9-y-6csu5WGm29I7JiwpnA) currently have?
 ```
 
 ```{block, opts.label = "clues"}
@@ -71,7 +71,7 @@ How many views, likes, and comments does the music video ["Data Science" by Baba
 ```
 
 ```{block, opts.label = "clues"}
-To answer this question you can use `get_stats` and need the ID of the video.
+To answer this question you can use `get_stats` and need the ID of the video. The video IDs are the characters after the "v=" parameter in the video URL.
 ```
 
 ```{r video-stats, solution = TRUE, eval = F}
@@ -79,7 +79,7 @@ get_stats("uHGlCi9jOWY")
 ```
 
 ```{block, box.title = "Exercise 4", box.body = list(fill = "white"), box.icon = "fa-star"}
-Collect all comments (including replies) for the [video on "The Census" by *Last Week Tonight* with John Oliver](https://www.youtube.com/watch?v=1aheRpmurAo&t=1s). As we want to use the comments for later exercises, please assign the results to an object called `comments_lwt_census`.
+Collect all comments (including replies) for the [video on "The Census" by *Last Week Tonight* with John Oliver](https://www.youtube.com/watch?v=1aheRpmurAo). As we want to use the comments for later exercises, please assign the results to an object called `comments_lwt_census`.
 ```
 
 ```{block, opts.label = "clues"}
