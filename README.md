@@ -48,10 +48,10 @@ For the exercises as well as for "coding along" with the slides, access to the *
 | Time          | Topic                                   |
 | ------------- | --------------------------------------- |
 | 09:00 - 10:30 | Basic text analysis of user comments    |
-| 10:30 - 11:30 | *Break*                                 |
+| 10:30 - 11:00 | *Break*                                 |
 | 11:00 - 12:00 | Sentiment analysis of user comments     | 
-| 13:00 - 14:00 | *Lunch Break*                           | 
-| 11:00 - 11:30 | Excursus: Retrieving video subtitles    | 
+| 12:00 - 13:00 | *Lunch Break*                           | 
+| 13:00 - 14:00 | Excursus: Retrieving video subtitles    | 
 | 14:00 - 14:30 | *Break*                                 | 
 | 14:30 - 16:00 | Practice session, questions, & outlook  | 
 
