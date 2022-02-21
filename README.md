@@ -37,7 +37,7 @@ For the exercises as well as for "coding along" with the slides, access to the *
 | ------------- | --------------------------------------- |
 | 10:00 - 11:00 | Introduction                            |
 | 11:00 - 11:30 | *Break*                                 |
-| 11:00 - 12:30 | The *YouTube* API                       | 
+| 11:30 - 12:30 | The *YouTube* API                       | 
 | 12:30 - 13:30 | *Lunch Break*                           | 
 | 13:30 - 15:00 | Collecting data with `tuber` for `R`    | 
 | 15:00 - 15:30 | *Break*                                 | 

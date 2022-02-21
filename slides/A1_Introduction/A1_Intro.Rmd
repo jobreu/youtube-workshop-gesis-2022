@@ -180,14 +180,9 @@ tweet_embed("https://twitter.com/PhdExhausted/status/1331956737683853318",
 
 In this course, we will use a mixture of base `R` and `tidyverse` code as Julian prefers base `R`, Johannes prefers the `tidyverse`, and Ro is agnostic.
 
+.small[
 ICYC, here are some opinions [for](http://varianceexplained.org/r/teach-tidyverse/) and [against](https://blog.ephorie.de/why-i-dont-use-the-tidyverse) using/teaching the `tidyverse`.
-
---
-
-Johannes' experience with learning and teaching the `tidyverse` is something like this...
-```{r tidyverse meme, out.width = "60%"}
-include_graphics("./images/tidyverse_vs_baseR_meme.jpg")
-```
+]
 
 ---
 
@@ -361,7 +356,7 @@ Overviews of tools for collecting *YouTube* data
 
 - [`youtubecaption`](https://cran.r-project.org/web/packages/youtubecaption/)
 
-In this course, we will work with the `tuber` package. The *voson* packages focus more on network data (and analysis) and the `youtubecaption` is for collecting captions (which we will also briefly discuss later on in the workshop).
+In this course, we will work with the `tuber` package. The *voson* packages focus more on network data (and analysis) and the `youtubecaption` package is for collecting captions (which we will also briefly discuss later on in the workshop).
 
 ---
 
@@ -412,7 +407,7 @@ Example data source: [Dayum Video](https://www.youtube.com/watch?v=DcJFdCmN98s)
 
 ## A note on using FOSS
 
-The tools listed before are free and open source software (FOSS). Using FOSS has many advantages (availability, adaptability, etc.). However, one risk associated with using FOSS is that tools are not maintained anymore and, hence, cease to function. After all, people create and maintain these tools in their spare time or as side projects and this work is often not recognized enough (esp. within academia). For this reason it is especially important to acknowledge the work that goes into these tools, e.g., by properly citing them.
+The tools listed before are free and open source software (FOSS). Using FOSS has many advantages (availability, adaptability, etc.). However, one risk associated with using FOSS is that tools are not maintained anymore and, hence, cease to function. After all, people create and maintain these tools in their spare time or as side projects and this work is often not recognized enough (esp. within academia). For this reason it is especially important to acknowledge the work that goes into these tools by properly citing them.
 
 .small[
 ```{r cite-pkg, echo=TRUE}
