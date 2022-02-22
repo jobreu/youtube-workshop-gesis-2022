@@ -59,19 +59,23 @@ pre {
 
 ## Types of *YouTube* Subtitles
 
-- Videos with automatically created subtitles (&lt;i&gt;ASR&lt;/i&gt;)
+- Videos with automatically created subtitles (*ASR*)
 
   - Always in English, even if video language is not English
 
   - Can be downloaded, but text quality can be bad (especially if translated)
 
+--
+
 - Videos without any subtitles
 
-  - Not sure if even possible because there always seems to be an &lt;i&gt;ASR&lt;/i&gt;
+  - Not sure if even possible because there always seems to be an *ASR*
+  
+--
   
 - Videos with more than one set of subtitles
 
-  - Examples: &lt;i&gt;ASR&lt;/i&gt; and regular subtitle, more than one language, more than one subtitle for the same language
+  - Examples: *ASR* and regular subtitle, more than one language, more than one subtitle for the same language
 
   - Can be downloaded, but subtitle for analysis must be selected
 
@@ -107,7 +111,7 @@ Next, we need to get the ID of the subtitles we want to collect.
 ID &lt;- caption_list[1,"id"]
 ```
   
-*Note*: You can adapt the number to select the subtitle that you want (ASR = automatic sub)
+*Note*: You can adapt the number to select the subtitle that you want. The 1 in this example corresponds to the *ASR* captions (ASR = automatic sub).
 
 ---
 
@@ -143,6 +147,7 @@ write(text, file = "Captions.sbv", sep="\n")
 
 
 ```r
+remotes::install_github("fkeck/subtools")
 library(subtools)
 
 subs &lt;- read_subtitles("Captions.sbv", format = "subviewer")
@@ -165,28 +170,31 @@ Now the text is ready for further analysis (see the previous sessions for exampl
 
 - **Pros**:
 
-  - No credentials necessary, therefore no quota reduction
+  - No credentials necessary, therefore no quota reduction (package uses web scraping)
   
-  - Subtitles are automatically converted into a dataframe including texts and timestamps, so no manual conversion is needed
+  - Subtitles are automatically converted into a dataframe, including texts and timestamps, so no manual conversion is needed
   
 - **Cons**:
 
-  - If there is more than one subtitle version per language, there is no way to select a specific one
+  - If there is more than one subtitle version per language, there is no way to select a specific one in `R` (by default, the manually generated ones are selected; if you want the ASR subtitles instead, you would need to adapt the [underlying `Python` script](https://pypi.org/project/youtube-transcript-api/))
   
   - You need to install [*Anaconda*](https://www.anaconda.com/products/individual)
 
 ---
 
-## Time for a Short Live Demo
+## Demo: Collecting &amp; processing subtitles with `tuber` &amp; `subtools`
 
-
-```r
-include_graphics("./Images/youtubesubtitles.jpg")
-```
+You can find the code for collecting subtitles for *YouTube* videos in the `YouTubeSubtitles.R` file in the `scripts` folder.
 
 &lt;img src="./Images/youtubesubtitles.jpg" width="75%" style="display: block; margin: auto;" /&gt;
 
-**Note**: You can find the code for collecting subtitles for *YouTube* videos in the `YouTubeSubtitles.R` file in the `scripts` folder.
+---
+
+## Our Recommendation for Collecting Subtitels
+
+If you want to collect subtitles for videos that have been created/uploaded with an account that you have or can easily get access to (e.g., from your institution or a project partner), you can use the functions from the `tuber` package as shown in the demo script.
+
+If you want to collect subtitles from other videos, we suggest that you use the `list_caption_tracks()` function from the `tuber` package to check which subtitles are available and the `get_caption` function from the `youtubecaption` package for collecting them (given that you can properly set up *Anaconda* for using this package).
 
 ---
 
