@@ -84,9 +84,7 @@ In this workshop, we will focus on accessing and working with data for individua
 ## Setup
 
 ```{r packages, eval = F}
-remotes::install_github("soodoku/tuber", build_vignettes = TRUE)
-# this installs the development version of tuber from GitHub
-install.packages("tidyverse")
+install.packages(c("tidyverse", "tuber"))
 library(tuber)
 library(tidyverse)
 ```
@@ -286,31 +284,38 @@ dayum_stats_df
 
 Using its ID, you can also get other information about a particular video, such as its description, using the `tuber` function `get_video_details()`.
 
-.small[
 ```{r video-details}
-dayum_details <- get_video_details("DcJFdCmN98s",
-                                   as.data.frame = TRUE)
-# NB: The as.data.frame argument is only available in the development version of tuber
+dayum_details <- get_video_details("DcJFdCmN98s")
 
-names(dayum_details)
 ```
-]
 
 ---
 
-## Video Details & Statistics
+## Video Details
 
-Using `get_video_details()` and specifying one additional argument, you can also get a dataframe including the video details as well as the video stats.
+`get_video_details()` returns a list. If we want to turn that into a dataframe, we can make use of two helper functions that were created for the development version of `tuber` (see this [commit](https://github.com/soodoku/tuber/commit/42a8131098856c8aeb0fcbad70ed5f0e33b9652b)). We have stored these functions in the script `video_details_to_df.R` which we need to source here.
 
-.small[
-```{r video-details-stats}
-dayum_full_info <- get_video_details("DcJFdCmN98s",
-                                   part = c("snippet", "statistics"),
-                                   as.data.frame = TRUE)
+```{r video-details-df, eval=FALSE}
+source("../../scripts/video_details_to_df.R")
 
-names(dayum_full_info)
+dayum_details_df <- dayum_details %>% 
+  video_details_to_df()
+
+glimpse(dayum_details_df[1:9])
 ```
-]
+
+---
+
+## Video Details
+
+```{r video-details-df-print, echo=FALSE}
+source("../../scripts/video_details_to_df.R")
+
+dayum_details_df <- dayum_details %>% 
+  video_details_to_df()
+
+glimpse(dayum_details_df[1:9])
+```
 
 ---
 

@@ -78,9 +78,7 @@ In this workshop, we will focus on accessing and working with data for individua
 
 
 ```r
-remotes::install_github("soodoku/tuber", build_vignettes = TRUE)
-# this installs the development version of tuber from GitHub
-install.packages("tidyverse")
+install.packages(c("tidyverse", "tuber"))
 library(tuber)
 library(tidyverse)
 ```
@@ -235,13 +233,9 @@ gesis_stats &lt;- get_channel_stats("UCiQ98odXlAkX63EaFWNjH0g")
 ```
 
 ```
-## Auto-refreshing stale OAuth token.
-```
-
-```
 ## Channel Title: GESIS - Leibniz-Institut für Sozialwissenschaften 
-## No. of Views: 17570 
-## No. of Subscribers: 460 
+## No. of Views: 17595 
+## No. of Subscribers: 461 
 ## No. of Videos: 71
 ```
 
@@ -271,7 +265,7 @@ gesis_stats_df
 ## # A tibble: 1 x 7
 ##   viewCount subscriberCount hiddenSubscriber~ videoCount channel_id channel_name
 ##       &lt;dbl&gt;           &lt;dbl&gt; &lt;lgl&gt;                  &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       
-## 1     17570             460 FALSE                     71 UCiQ98odX~ GESIS - Lei~
+## 1     17595             461 FALSE                     71 UCiQ98odX~ GESIS - Lei~
 ## # ... with 1 more variable: channel_published &lt;chr&gt;
 ```
 ]
@@ -299,7 +293,7 @@ dayum_stats_df
 ## # A tibble: 1 x 5
 ##   id          viewCount likeCount favoriteCount commentCount
 ##   &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;        &lt;dbl&gt;
-## 1 DcJFdCmN98s  43534500    637136             0        52654
+## 1 DcJFdCmN98s  43539015    637227             0        52655
 ```
 
 *Note*: Until July 2021 it was also possible to get the dislike counts for videos. However, [access to that via the *YouTube* API has been disabled since then](https://support.google.com/youtube/thread/134791097/update-to-youtube-dislike-counts?hl=en). Those are also not visible anymore on the public video pages, only for the content creators.
@@ -310,75 +304,45 @@ dayum_stats_df
 
 Using its ID, you can also get other information about a particular video, such as its description, using the `tuber` function `get_video_details()`.
 
-.small[
 
 ```r
-dayum_details &lt;- get_video_details("DcJFdCmN98s",
-                                   as.data.frame = TRUE)
-# NB: The as.data.frame argument is only available in the development version of tuber
-
-names(dayum_details)
+dayum_details &lt;- get_video_details("DcJFdCmN98s")
 ```
-
-```
-##  [1] "response_kind"              "response_etag"             
-##  [3] "items_kind"                 "items_etag"                
-##  [5] "id"                         "publishedAt"               
-##  [7] "channelId"                  "title"                     
-##  [9] "description"                "thumbnails_default_url"    
-## [11] "thumbnails_default_width"   "thumbnails_default_height" 
-## [13] "thumbnails_medium_url"      "thumbnails_medium_width"   
-## [15] "thumbnails_medium_height"   "thumbnails_high_url"       
-## [17] "thumbnails_high_width"      "thumbnails_high_height"    
-## [19] "thumbnails_standard_url"    "thumbnails_standard_width" 
-## [21] "thumbnails_standard_height" "thumbnails_maxres_url"     
-## [23] "thumbnails_maxres_width"    "thumbnails_maxres_height"  
-## [25] "channelTitle"               "tags"                      
-## [27] "categoryId"                 "liveBroadcastContent"      
-## [29] "defaultLanguage"            "localized_title"           
-## [31] "localized_description"      "defaultAudioLanguage"      
-## [33] "pageInfo_totalResults"      "pageInfo_resultsPerPage"
-```
-]
 
 ---
 
-## Video Details &amp; Statistics
+## Video Details
 
-Using `get_video_details()` and specifying one additional argument, you can also get a dataframe including the video details as well as the video stats.
+`get_video_details()` returns a list. If we want to turn that into a dataframe, we can make use of two helper functions that were created for the development version of `tuber` (see this [commit](https://github.com/soodoku/tuber/commit/42a8131098856c8aeb0fcbad70ed5f0e33b9652b)). We have stored these functions in the script `video_details_to_df.R` which we need to source here.
 
-.small[
 
 ```r
-dayum_full_info &lt;- get_video_details("DcJFdCmN98s",
-                                   part = c("snippet", "statistics"),
-                                   as.data.frame = TRUE)
+source("../../scripts/video_details_to_df.R")
 
-names(dayum_full_info)
+dayum_details_df &lt;- dayum_details %&gt;% 
+  video_details_to_df()
+
+glimpse(dayum_details_df[1:9])
 ```
 
+---
+
+## Video Details
+
+
 ```
-##  [1] "response_kind"              "response_etag"             
-##  [3] "items_kind"                 "items_etag"                
-##  [5] "id"                         "publishedAt"               
-##  [7] "channelId"                  "title"                     
-##  [9] "description"                "thumbnails_default_url"    
-## [11] "thumbnails_default_width"   "thumbnails_default_height" 
-## [13] "thumbnails_medium_url"      "thumbnails_medium_width"   
-## [15] "thumbnails_medium_height"   "thumbnails_high_url"       
-## [17] "thumbnails_high_width"      "thumbnails_high_height"    
-## [19] "thumbnails_standard_url"    "thumbnails_standard_width" 
-## [21] "thumbnails_standard_height" "thumbnails_maxres_url"     
-## [23] "thumbnails_maxres_width"    "thumbnails_maxres_height"  
-## [25] "channelTitle"               "tags"                      
-## [27] "categoryId"                 "liveBroadcastContent"      
-## [29] "defaultLanguage"            "localized_title"           
-## [31] "localized_description"      "defaultAudioLanguage"      
-## [33] "statistics_viewCount"       "statistics_likeCount"      
-## [35] "statistics_favoriteCount"   "statistics_commentCount"   
-## [37] "pageInfo_totalResults"      "pageInfo_resultsPerPage"
+## Rows: 1
+## Columns: 9
+## $ response_kind &lt;chr&gt; "youtube#videoListResponse"
+## $ response_etag &lt;chr&gt; "Wx6slptepyjw8e6WyWvly_t_XDE"
+## $ items_kind    &lt;chr&gt; "youtube#video"
+## $ items_etag    &lt;chr&gt; "WUlnGjkKetGpAOtrY7fkyFG6o-Y"
+## $ id            &lt;chr&gt; "DcJFdCmN98s"
+## $ publishedAt   &lt;chr&gt; "2012-08-15T22:04:48Z"
+## $ channelId     &lt;chr&gt; "UCNYrK4tc5i1-eL8TXesH2pg"
+## $ title         &lt;chr&gt; "OH MY DAYUM ft. @Daym Drops"
+## $ description   &lt;chr&gt; "the track on itunes- https://itunes.apple.com/us/album/~
 ```
-]
 
 ---
 
@@ -631,7 +595,7 @@ get_stats
 ##     stat_res &lt;- res$statistics
 ##     c(id = res$id, stat_res)
 ## }
-## &lt;bytecode: 0x0000000029fc5de8&gt;
+## &lt;bytecode: 0x000000002a07a908&gt;
 ## &lt;environment: namespace:tuber&gt;
 ```
 

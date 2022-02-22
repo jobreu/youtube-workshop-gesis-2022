@@ -1,5 +1,6 @@
 # check if packages are installed and install them if that is not the case
-packages <- c("remotes", 
+packages <- c("remotes",
+              "tuber",
               "tidyverse",
               "anytime",
               "qdapRegex",
@@ -18,7 +19,6 @@ install.packages(setdiff(packages,
 # some packages need to be installed from GitHub
 library(remotes)
 
-install_github("soodoku/tuber", build_vignettes = TRUE)
 install_github("hadley/emo")
 install_github("dill/emoGG")
 install_github("jooyoungseo/youtubecaption")
