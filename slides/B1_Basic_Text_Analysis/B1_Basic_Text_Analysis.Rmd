@@ -1,6 +1,6 @@
 ---
 title: "Automatic Sampling and Analysis of YouTubeData"
-subtitle: "Collecting Data With the tuber Package for R"
+subtitle: "Basic Text Analysis of User Comments"
 author: "Julian Kohne<br /><b><i>Johannes Breuer</b></i><br />M. Rohangis Mohseni"
 date: "2022-02-22"
 location: "GESIS, online"
