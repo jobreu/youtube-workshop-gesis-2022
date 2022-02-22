@@ -137,7 +137,7 @@ If you're finished with tasks 1-4 and/or want to do/try out something else, you 
 ```
 
 ```{r source mapping function}
-source("../Scripts/emoji_mapping_function.R")
+source("../scripts/emoji_mapping_function.R")
 ```
 
 
